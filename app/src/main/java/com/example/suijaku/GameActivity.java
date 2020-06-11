@@ -12,7 +12,7 @@ enum mark{heart,spade,dia,club}
 
 class Player{
     private String name;
-    private ArrayList<Card> card_list;
+    private ArrayList<Card> card_list=new ArrayList<Card>();
     public void set_name(String name_in){
         name=name_in;
     }
@@ -144,11 +144,11 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_avtivity);
 
         // text_view： activity_main.xml の TextView の id
-        TextView textView = findViewById(R.id.editTextTextPersonName);
+        TextView player_card_siaplay = findViewById(R.id.textView2);
 
         // テキストを設定
         // R.string.textは"Test TextView"のこと
-        textView.setText(mark_display);
+        player_card_siaplay.setText(mark_display+card_in.return_number());
     }
 
     @Override
