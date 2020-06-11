@@ -1,6 +1,7 @@
 package com.example.suijaku;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +12,7 @@ enum mark{heart,spade,dia,club}
 
 class Player{
     private String name;
-    private ArrayList card_list;
+    private ArrayList<Card> card_list;
     public void set_name(String name_in){
         name=name_in;
     }
@@ -28,19 +29,25 @@ class Card{
     private String number;
     private int strength;
 //    private int serial_number;
-    public class card_for_display{
-        private mark mark_for_display;
-        private String number_for_display;
-    }
+//    public class card_for_display{
+//        private mark mark_for_display;
+//        private String number_for_display;
+//    }
     public int return_strength(){
         return strength;
     }
-    public card_for_display display_card() {
-        card_for_display card_for_display_class = new card_for_display();
-        card_for_display_class.mark_for_display = mark_use;
-        card_for_display_class.number_for_display = number;
-        return card_for_display_class;
+    public mark return_mark(){
+        return mark_use;
     }
+    public String return_number(){
+        return number;
+    }
+//    public card_for_display display_card() {
+//        card_for_display card_for_display_class = new card_for_display();
+//        card_for_display_class.mark_for_display = mark_use;
+//        card_for_display_class.number_for_display = number;
+//        return card_for_display_class;
+//    }
     public void give_mark(mark mark_in) {
         mark_use = mark_in;
     }
@@ -115,6 +122,35 @@ public class GameActivity extends AppCompatActivity {
         man_in.set_card(card_in);
     }
 
+    private void show_card(Card card_in){
+        String mark_display;
+        switch(card_in.return_mark()){
+            case heart:
+                mark_display="♥";
+                break;
+            case spade:
+                mark_display="♠";
+                break;
+            case dia:
+                mark_display="◆";
+                break;
+            case club:
+                mark_display="♣";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + card_in.return_mark());
+        }mark_display.concat((String)card_in.return_number());
+        // activity_main.xml にUIコンポーネントを配置する
+        setContentView(R.layout.activity_game_avtivity);
+
+        // text_view： activity_main.xml の TextView の id
+        TextView textView = findViewById(R.id.editTextTextPersonName);
+
+        // テキストを設定
+        // R.string.textは"Test TextView"のこと
+        textView.setText(mark_display);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +162,7 @@ public class GameActivity extends AppCompatActivity {
             devide_card(man, generate_random_card());
         }
         for(counter=0;counter<7;counter++){
-            man.show_and_list().get(counter);
+            show_card(((Card) man.show_and_list().get(counter)));
         }
     }
 
