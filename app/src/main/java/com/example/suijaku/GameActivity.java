@@ -1,6 +1,9 @@
 package com.example.suijaku;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -122,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
         man_in.set_card(card_in);
     }
 
-    private void show_card(Card card_in){
+    private String show_card(Card card_in){
         String mark_display;
         switch(card_in.return_mark()){
             case heart:
@@ -140,21 +143,16 @@ public class GameActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("Unexpected value: " + card_in.return_mark());
         }mark_display.concat((String)card_in.return_number());
-        // activity_main.xml にUIコンポーネントを配置する
-        setContentView(R.layout.activity_game_avtivity);
 
-        // text_view： activity_main.xml の TextView の id
-        TextView player_card_siaplay = findViewById(R.id.textView2);
-
-        // テキストを設定
-        // R.string.textは"Test TextView"のこと
-        player_card_siaplay.setText(mark_display+card_in.return_number());
+        return mark_display+card_in.return_number();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
+        // text_view： activity_main.xml の TextView の id
+        final TextView player_card = findViewById(R.id.textView2);
         initialize_array(already_used);
         Player man=new Player();
         int counter;
@@ -162,7 +160,13 @@ public class GameActivity extends AppCompatActivity {
             devide_card(man, generate_random_card());
         }
         for(counter=0;counter<7;counter++){
-            show_card(((Card) man.show_and_list().get(counter)));
+            player_card.setText(show_card(((Card) man.show_and_list().get(counter))));
+        }
+        player_card.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                player_card.setTextColor(Color.RED);
+                player_card.setTypeface(Typeface.DEFAULT_BOLD);
+            }
         }
     }
 
