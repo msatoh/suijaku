@@ -167,7 +167,7 @@ public class GameActivity extends AppCompatActivity {
                 player_card.setTextColor(Color.RED);
                 player_card.setTypeface(Typeface.DEFAULT_BOLD);
             }
-        }
+        });
     }
 
 }
