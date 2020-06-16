@@ -188,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
             player_card[counter].setText(show_card(((Card) man[0].show_and_list().get(counter))));
         }
         for(counter=1;counter<5;counter++){
-            com_card[counter].setText(man[counter].number_of_cards());//bugる
+            com_card[counter].setText(""+man[counter].number_of_cards());
         }
         for(counter=0;counter<52/5;counter++) {
             final int finalCounter = counter;
