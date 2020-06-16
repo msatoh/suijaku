@@ -152,22 +152,37 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
         // text_view： activity_main.xml の TextView の id
-        final TextView player_card = findViewById(R.id.textView2);
+        String[] id_name= new String[11];
+        int counter;
+        final TextView[] player_card=new TextView[11];
+        for(counter=0;counter<11;counter++) {
+            id_name[counter]="player_card_in_hand_"+counter;
+            player_card[counter] = findViewById(getResources().getIdentifier(id_name[counter], "id", getPackageName()));
+        }
         initialize_array(already_used);
         Player man=new Player();
-        int counter;
-        for(counter=0;counter<7;counter++) {
+        final boolean[] clicked=new boolean[11];
+        for(counter=0;counter<11;counter++) {
             devide_card(man, generate_random_card());
+            clicked[counter]=false;
+            player_card[counter].setText(show_card(((Card) man.show_and_list().get(counter))));
         }
-        for(counter=0;counter<7;counter++){
-            player_card.setText(show_card(((Card) man.show_and_list().get(counter))));
-        }
-        player_card.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                player_card.setTextColor(Color.RED);
-                player_card.setTypeface(Typeface.DEFAULT_BOLD);
-            }
-        });
-    }
+        for(counter=0;counter<11;counter++) {
+            final int finalCounter = counter;
+            player_card[counter].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if(!clicked[finalCounter]) {
+                        player_card[finalCounter].setTextColor(Color.BLUE);
+                        player_card[finalCounter].setTypeface(Typeface.DEFAULT_BOLD);
+                        clicked[finalCounter]=true;
+                    }else {
+                        player_card[finalCounter].setTextColor(Color.BLACK);
+                        player_card[finalCounter].setTypeface(Typeface.DEFAULT);
+                        clicked[finalCounter]=false;
+                    }
+                }
+            });
+        }}
+
 
 }
