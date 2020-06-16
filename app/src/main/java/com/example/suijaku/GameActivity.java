@@ -179,18 +179,18 @@ public class GameActivity extends AppCompatActivity {
         for(counter=1;counter<5;counter++){
             man[counter].set_name("COM"+counter);
         }
-        final boolean[] clicked=new boolean[52/5];
+        final boolean[] clicked=new boolean[52/5+1];
         for(counter=0;counter<52;counter++) {
             devide_card(man[counter % 5], generate_random_card());
         }
-        for(counter=0;counter<52/5;counter++){
+        for(counter=0;counter<52/5+1;counter++){
             clicked[counter] = false;
             player_card[counter].setText(show_card(((Card) man[0].show_and_list().get(counter))));
         }
         for(counter=1;counter<5;counter++){
             com_card[counter].setText(""+man[counter].number_of_cards());
         }
-        for(counter=0;counter<52/5;counter++) {
+        for(counter=0;counter<52/5+1;counter++) {
             final int finalCounter = counter;
             player_card[counter].setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
