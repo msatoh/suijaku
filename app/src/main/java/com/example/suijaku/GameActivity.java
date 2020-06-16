@@ -16,6 +16,9 @@ enum mark{heart,spade,dia,club}
 class Player{
     private String name;
     private ArrayList<Card> card_list=new ArrayList<Card>();
+    public int number_of_cards(){
+        return card_list.size();
+    }
     public void set_name(String name_in){
         name=name_in;
     }
@@ -82,11 +85,13 @@ class Card{
 public class GameActivity extends AppCompatActivity {
 
     private boolean[] already_used=new boolean[52];
+    private ArrayList<Integer> already_used_list=new ArrayList<Integer>();
 
-    private void initialize_array(boolean[] already_used_in){
+    private void initialize_array(boolean[] already_used_in,ArrayList<Integer> already_used_list_in){
         int counter;
         for(counter=0;counter<52;counter++) {
             already_used_in[counter]=false;
+            already_used_list_in.add(counter);
         }
     }
 
@@ -94,12 +99,12 @@ public class GameActivity extends AppCompatActivity {
         mark mark_in;
         Card one_card=new Card();
         Random mark_number_seed=new Random();
-        int mark_number=mark_number_seed.nextInt(4);
-        int strength_number=mark_number_seed.nextInt(13)+1;
-        while(already_used[mark_number * 4 + strength_number - 1]){
-            mark_number=mark_number_seed.nextInt(4);
-            strength_number=mark_number_seed.nextInt(13)+1;
-        }already_used[mark_number * 4 + strength_number - 1]=true;
+        int random_seed=mark_number_seed.nextInt(already_used_list.size());
+        int random_parameter=already_used_list.get(random_seed);
+        int mark_number=random_parameter/13;
+        int strength_number=random_parameter%13+1;
+        already_used_list.remove(already_used_list.indexOf(random_parameter));
+        already_used[random_parameter]=true;
         switch(mark_number) {
             case 0:
                 mark_in = mark.heart;
@@ -144,7 +149,7 @@ public class GameActivity extends AppCompatActivity {
                 throw new IllegalStateException("Unexpected value: " + card_in.return_mark());
         }mark_display.concat((String)card_in.return_number());
 
-        return mark_display+card_in.return_number();
+        return "["+mark_display+card_in.return_number()+"]";
     }
 
     @Override
@@ -153,21 +158,39 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_avtivity);
         // text_view： activity_main.xml の TextView の id
         String[] id_name= new String[11];
+        String[] com_name=new String[5];
         int counter;
         final TextView[] player_card=new TextView[11];
+        TextView[] com_card=new TextView[5];
         for(counter=0;counter<11;counter++) {
             id_name[counter]="player_card_in_hand_"+counter;
             player_card[counter] = findViewById(getResources().getIdentifier(id_name[counter], "id", getPackageName()));
         }
-        initialize_array(already_used);
-        Player man=new Player();
-        final boolean[] clicked=new boolean[11];
-        for(counter=0;counter<11;counter++) {
-            devide_card(man, generate_random_card());
-            clicked[counter]=false;
-            player_card[counter].setText(show_card(((Card) man.show_and_list().get(counter))));
+        for(counter=1;counter<5;counter++){
+            com_name[counter]="COM"+counter+"_card";
+            com_card[counter]=findViewById(getResources().getIdentifier(com_name[counter],"id",getPackageName()));
         }
-        for(counter=0;counter<11;counter++) {
+        initialize_array(already_used,already_used_list);
+        Player man[]=new Player[5];
+        for(counter=0;counter<5;counter++){
+            man[counter]=new Player();
+        }
+        man[0].set_name("user");
+        for(counter=1;counter<5;counter++){
+            man[counter].set_name("COM"+counter);
+        }
+        final boolean[] clicked=new boolean[52/5];
+        for(counter=0;counter<52;counter++) {
+            devide_card(man[counter % 5], generate_random_card());
+        }
+        for(counter=0;counter<52/5;counter++){
+            clicked[counter] = false;
+            player_card[counter].setText(show_card(((Card) man[0].show_and_list().get(counter))));
+        }
+        for(counter=1;counter<5;counter++){
+            com_card[counter].setText(man[counter].number_of_cards());//bugる
+        }
+        for(counter=0;counter<52/5;counter++) {
             final int finalCounter = counter;
             player_card[counter].setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
