@@ -33,6 +33,9 @@ class Player{
     public void remove_selected_card(Card card_in){
         selected_card.remove(selected_card.indexOf(card_in));
     }
+    public void clear_selected_card(){
+        selected_card.clear();
+    }
     public ArrayList return_selected_card(){
         return selected_card;
     }
@@ -218,6 +221,7 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     if (check_if_decideable(man[0].return_selected_card())) {
                         player_card[finalCounter].setText("");
+                        man[0].clear_selected_card();
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
