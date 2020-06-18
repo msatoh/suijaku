@@ -14,10 +14,21 @@ import java.util.Random;
 
 enum mark{heart,spade,dia,club};
 
+class SelectedCardList{
+    private ArrayList<Integer> card_id_for_textview= new ArrayList<>();
+    private ArrayList<Card> selected_card=new ArrayList<Card>();
+    public ArrayList return_selected_card(){
+        return selected_card;
+    }
+    public ArrayList return_card_id_for_textwiew(){
+        return card_id_for_textview;
+    }
+}
+
 class Player{
     private String name;
     private ArrayList<Card> card_list=new ArrayList<Card>();
-    private ArrayList<Card> selected_card=new ArrayList<Card>();
+    private SelectedCardList players_selected_card_list;
     public void set_name(String name_in){
         name=name_in;
     }
@@ -27,17 +38,8 @@ class Player{
     public ArrayList show_and_list(){
         return card_list;
     }
-    public void add_selected_card(Card card_in){
-        selected_card.add(card_in);
-    }
-    public void remove_selected_card(Card card_in){
-        selected_card.remove(selected_card.indexOf(card_in));
-    }
-    public void clear_selected_card(){
-        selected_card.clear();
-    }
-    public ArrayList return_selected_card(){
-        return selected_card;
+    public SelectedCardList return_players_selected_card_list(){
+        return players_selected_card_list;
     }
 }
 
@@ -149,16 +151,12 @@ public class GameActivity extends AppCompatActivity {
 
     private boolean check_if_decideable(ArrayList<Card> selected_card_in){
         int localcounter=0;
-        if(selected_card_in.size()==1){
-            return true;
-        }else{
-            for(localcounter=0;localcounter<selected_card_in.size();localcounter++){
-                if(selected_card_in.get(localcounter).return_strength()!=selected_card_in.get(localcounter+1).return_strength()){
-                    return false;
-                }
+        for(localcounter=1;localcounter<selected_card_in.size();localcounter++){
+            if(selected_card_in.get(localcounter-1).return_strength()!=selected_card_in.get(localcounter).return_strength()){
+                return false;
             }
-            return true;
         }
+        return true;
     }
 
     @Override
@@ -207,21 +205,22 @@ public class GameActivity extends AppCompatActivity {
                         player_card[finalCounter].setTextColor(Color.BLUE);
                         player_card[finalCounter].setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalCounter]=true;
-                        man[0].add_selected_card((Card) man[0].show_and_list().get(finalCounter));
+                        man[0].return_players_selected_card_list().return_selected_card().add((Card) man[0].show_and_list().get(finalCounter));
+                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().add(finalCounter);
                     }else {
                         player_card[finalCounter].setTextColor(Color.BLACK);
                         player_card[finalCounter].setTypeface(Typeface.DEFAULT);
                         clicked[finalCounter]=false;
-                        man[0].remove_selected_card((Card) man[0].show_and_list().get(finalCounter));
+                        man[0].return_players_selected_card_list().return_selected_card().remove((Card) man[0].show_and_list().get(finalCounter));
                     }
                 }
             });
             player_card[counter].setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View v) {
-                    if (check_if_decideable(man[0].return_selected_card())) {
+                    if (check_if_decideable(man[0].return_players_selected_card_list().return_selected_card())) {
                         player_card[finalCounter].setText("");
-                        man[0].clear_selected_card();
+                        man[0].return_players_selected_card_list().return_selected_card().clear();
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
