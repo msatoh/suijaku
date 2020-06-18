@@ -28,12 +28,9 @@ class SelectedCardList{
 class Player{
     private String name;
     private ArrayList<Card> card_list=new ArrayList<Card>();
-    private SelectedCardList players_selected_card_list;
+    private SelectedCardList players_selected_card_list=new SelectedCardList();
     public void set_name(String name_in){
         name=name_in;
-    }
-    public void set_card(Card card_in){
-        card_list.add(card_in);
     }
     public ArrayList show_and_list(){
         return card_list;
@@ -169,6 +166,7 @@ public class GameActivity extends AppCompatActivity {
         int counter;
         final TextView[] player_card=new TextView[NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1];
         TextView[] com_card=new TextView[NUMBER_OF_PLAYERS];
+        final TextView fieldtext=findViewById(getResources().getIdentifier("field","id",getPackageName()));
         for(counter=0;counter<NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1;counter++) {
             id_name[counter]="player_card_in_hand_"+counter;
             player_card[counter] = findViewById(getResources().getIdentifier(id_name[counter], "id", getPackageName()));
@@ -177,6 +175,7 @@ public class GameActivity extends AppCompatActivity {
             com_name[counter]="COM"+counter+"_card";
             com_card[counter]=findViewById(getResources().getIdentifier(com_name[counter],"id",getPackageName()));
         }
+
         initialize_array(already_used_list);
         final Player man[]=new Player[NUMBER_OF_PLAYERS];
         for(counter=0;counter<NUMBER_OF_PLAYERS;counter++){
@@ -188,7 +187,7 @@ public class GameActivity extends AppCompatActivity {
         }
         final boolean[] clicked=new boolean[NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1];
         for(counter=0;counter<NUMBER_OF_CARDS;counter++) {
-            man[counter % 5].set_card(generate_random_card());
+            man[counter % 5].show_and_list().add(generate_random_card());
         }
         for(counter=0;counter<NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1;counter++){
             clicked[counter] = false;
@@ -212,15 +211,23 @@ public class GameActivity extends AppCompatActivity {
                         player_card[finalCounter].setTypeface(Typeface.DEFAULT);
                         clicked[finalCounter]=false;
                         man[0].return_players_selected_card_list().return_selected_card().remove((Card) man[0].show_and_list().get(finalCounter));
+                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().remove(man[0].return_players_selected_card_list().return_card_id_for_textwiew().indexOf(finalCounter));
                     }
                 }
             });
             player_card[counter].setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View v) {
+                    int localcounter;
+                    String fieldtext_buffer="";
                     if (check_if_decideable(man[0].return_players_selected_card_list().return_selected_card())) {
-                        player_card[finalCounter].setText("");
+                        for(localcounter=0;localcounter<man[0].return_players_selected_card_list().return_card_id_for_textwiew().size();localcounter++) {
+                            player_card[(int) man[0].return_players_selected_card_list().return_card_id_for_textwiew().get(localcounter)].setText("");
+                            fieldtext_buffer+=show_card((Card) man[0].return_players_selected_card_list().return_selected_card().get(localcounter));
+                        }
+                        fieldtext.setText(fieldtext_buffer);
                         man[0].return_players_selected_card_list().return_selected_card().clear();
+                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().clear();
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
