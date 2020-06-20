@@ -15,95 +15,112 @@ import java.util.Random;
 enum mark{heart,spade,dia,club};
 
 class SelectedCardList{
-    private ArrayList<Integer> card_id_for_textview= new ArrayList<>();
+    private ArrayList<Integer> card_id_for_txtview= new ArrayList<>();
     private ArrayList<Card> selected_card=new ArrayList<Card>();
-    public ArrayList return_selected_card(){
+    public ArrayList rtn_selected_card(){
         return selected_card;
     }
-    public ArrayList return_card_id_for_textwiew(){
-        return card_id_for_textview;
+    public ArrayList rtn_card_id_for_txtview(){
+        return card_id_for_txtview;
     }
 }
 
 class Player{
     private String name;
-    private ArrayList<Card> card_list=new ArrayList<Card>();
-    private SelectedCardList players_selected_card_list=new SelectedCardList();
+    private ArrayList<Card> card_lis=new ArrayList<Card>();
+    private SelectedCardList players_selected_card_lis=new SelectedCardList();
     public void set_name(String name_in){
         name=name_in;
     }
-    public ArrayList show_and_list(){
-        return card_list;
+    public ArrayList show_and_lis(){
+        return card_lis;
     }
-    public SelectedCardList return_players_selected_card_list(){
-        return players_selected_card_list;
+    public SelectedCardList rtn_players_selected_card_lis(){
+        return players_selected_card_lis;
     }
 }
 
 class Card{
     private mark mark_use;
-    private String number;
+    private String num;
     private int strength;
-    public int return_strength(){
+    public int rtn_strength(){
         return strength;
     }
-    public mark return_mark(){
+    public mark rtn_mark(){
         return mark_use;
     }
-    public String return_number(){
-        return number;
+    public String rtn_num(){
+        return num;
     }
     public void give_mark(mark mark_in) {
         mark_use = mark_in;
     }
     public void give_strength(int strength_in) {
-        int number_before_convertion;
+        int num_before_conv;
         strength = strength_in;
-        number_before_convertion = (strength_in + 14) % 13 + 1;
-        switch (number_before_convertion) {
+        num_before_conv = (strength_in + 14) % 13 + 1;
+        switch (num_before_conv) {
             case 11:
-                number = "J";
+                num = "J";
                 break;
             case 12:
-                number = "Q";
+                num = "Q";
                 break;
             case 13:
-                number = "K";
+                num = "K";
                 break;
             case 1:
-                number = "A";
+                num = "A";
                 break;
             default:
-                number = String.valueOf(number_before_convertion);
+                num = String.valueOf(num_before_conv);
                 break;
         }
     }
 
 }
 
+class Field{
+    TextView txt;
+    ArrayList<Card> field_card=new ArrayList<Card>();
+    public ArrayList<Card> rtn_value(){
+        return field_card;
+    }
+    public void give_value(ArrayList<Card> cards_in){
+        field_card=cards_in;
+    }
+    public TextView rtn_txtview(){
+        return txt;
+    }
+    public void give_txtview(TextView txtview_in){
+        txt=txtview_in;
+    }
+}
+
 public class GameActivity extends AppCompatActivity {
-    final int NUMBER_OF_CARDS=52;
-    final int NUMBER_OF_PLAYERS=5;
+    final int num_OF_CARDS=52;
+    final int num_OF_PLAYERS=5;
 
-    private ArrayList<Integer> already_used_list=new ArrayList<Integer>();
+    private ArrayList<Integer> used_lis=new ArrayList<Integer>();
 
-    private void initialize_array(ArrayList<Integer> already_used_list_in){
-        int counter;
-        for(counter=0;counter<NUMBER_OF_CARDS;counter++) {
-            already_used_list_in.add(counter);
+    private void init_array(ArrayList<Integer> used_lis_in){
+        int cnt;
+        for(cnt=0;cnt<num_OF_CARDS;cnt++) {
+            used_lis_in.add(cnt);
         }
     }
 
-    private Card generate_random_card(){
+    private Card gen_random_card(){
         mark mark_in;
-        Card one_card=new Card();
-        Random mark_number_seed=new Random();
-        int random_seed=mark_number_seed.nextInt(already_used_list.size());
-        int random_parameter=already_used_list.get(random_seed);
-        int mark_number=random_parameter/13;
-        int strength_number=random_parameter%13+1;
-        already_used_list.remove(already_used_list.indexOf(random_parameter));
-        switch(mark_number) {
+        Card a_card=new Card();
+        Random mark_num_seed=new Random();
+        int random_seed=mark_num_seed.nextInt(used_lis.size());
+        int random_param=used_lis.get(random_seed);
+        int mark_num=random_param/13;
+        int strength_num=random_param%13+1;
+        used_lis.remove(used_lis.indexOf(random_param));
+        switch(mark_num) {
             case 0:
                 mark_in = mark.heart;
                 break;
@@ -117,42 +134,56 @@ public class GameActivity extends AppCompatActivity {
                 mark_in = mark.club;
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + mark_number);
+                throw new IllegalStateException("Unexpected value: " + mark_num);
         }
-        one_card.give_mark(mark_in);
-        one_card.give_strength(strength_number);
-        return one_card;
+        a_card.give_mark(mark_in);
+        a_card.give_strength(strength_num);
+        return a_card;
     }
 
     private String show_card(Card card_in){
-        String mark_display;
-        switch(card_in.return_mark()){
+        String mark_disp;
+        switch(card_in.rtn_mark()){
             case heart:
-                mark_display="♥";
+                mark_disp="♥";
                 break;
             case spade:
-                mark_display="♠";
+                mark_disp="♠";
                 break;
             case dia:
-                mark_display="◆";
+                mark_disp="◆";
                 break;
             case club:
-                mark_display="♣";
+                mark_disp="♣";
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + card_in.return_mark());
-        }mark_display.concat(card_in.return_number());
+                throw new IllegalStateException("Unexpected value: " + card_in.rtn_mark());
+        }mark_disp.concat(card_in.rtn_num());
 
-        return "["+mark_display+card_in.return_number()+"]";
+        return "["+mark_disp+card_in.rtn_num()+"]";
+    }
+    private String show_cards(ArrayList<Card> cards_in){
+        int localcnt;
+        String cards_disp="";
+        for(localcnt=0;localcnt<cards_in.size();localcnt++) {
+            cards_disp+=show_card(cards_in.get(localcnt));
+        }
+        return cards_disp;
     }
 
-    private boolean check_if_decideable(ArrayList<Card> selected_card_in){
-        int localcounter=0;
-        for(localcounter=1;localcounter<selected_card_in.size();localcounter++){
-            if(selected_card_in.get(localcounter-1).return_strength()!=selected_card_in.get(localcounter).return_strength()){
+    private boolean check_if_decideable(ArrayList<Card> selected_card_in,ArrayList<Card> field_card_in){
+        int localcnt=0;
+        if(field_card_in.size()!=0) {
+            if (selected_card_in.size() != field_card_in.size()) {
                 return false;
             }
         }
+            for (localcnt = 1; localcnt < selected_card_in.size(); localcnt++) {
+                if (selected_card_in.get(localcnt - 1).rtn_strength() != selected_card_in.get(localcnt).rtn_strength()) {
+                    return false;
+                }
+            }
+
         return true;
     }
 
@@ -160,74 +191,74 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
-        // text_view： activity_main.xml の TextView の id
-        String[] id_name= new String[NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1];
-        String[] com_name=new String[NUMBER_OF_PLAYERS];
-        int counter;
-        final TextView[] player_card=new TextView[NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1];
-        TextView[] com_card=new TextView[NUMBER_OF_PLAYERS];
-        final TextView fieldtext=findViewById(getResources().getIdentifier("field","id",getPackageName()));
-        for(counter=0;counter<NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1;counter++) {
-            id_name[counter]="player_card_in_hand_"+counter;
-            player_card[counter] = findViewById(getResources().getIdentifier(id_name[counter], "id", getPackageName()));
+        String[] id_name= new String[num_OF_CARDS/num_OF_PLAYERS+1];
+        String[] com_name=new String[num_OF_PLAYERS];
+        int cnt;
+        final TextView[] player_card=new TextView[num_OF_CARDS/num_OF_PLAYERS+1];
+        TextView[] com_card=new TextView[num_OF_PLAYERS];
+        final Field field_entity=new Field();
+        field_entity.give_txtview((TextView) findViewById(getResources().getIdentifier("field","id",getPackageName())));
+        for(cnt=0;cnt<num_OF_CARDS/num_OF_PLAYERS+1;cnt++) {
+            id_name[cnt]="player_card_in_hand_"+cnt;
+            player_card[cnt] = findViewById(getResources().getIdentifier(id_name[cnt], "id", getPackageName()));
         }
-        for(counter=1;counter<NUMBER_OF_PLAYERS;counter++){
-            com_name[counter]="COM"+counter+"_card";
-            com_card[counter]=findViewById(getResources().getIdentifier(com_name[counter],"id",getPackageName()));
+        for(cnt=1;cnt<num_OF_PLAYERS;cnt++){
+            com_name[cnt]="COM"+cnt+"_card";
+            com_card[cnt]=findViewById(getResources().getIdentifier(com_name[cnt],"id",getPackageName()));
         }
 
-        initialize_array(already_used_list);
-        final Player man[]=new Player[NUMBER_OF_PLAYERS];
-        for(counter=0;counter<NUMBER_OF_PLAYERS;counter++){
-            man[counter]=new Player();
+        init_array(used_lis);
+        final Player man[]=new Player[num_OF_PLAYERS];
+        for(cnt=0;cnt<num_OF_PLAYERS;cnt++){
+            man[cnt]=new Player();
         }
         man[0].set_name("user");
-        for(counter=1;counter<NUMBER_OF_PLAYERS;counter++){
-            man[counter].set_name("COM"+counter);
+        for(cnt=1;cnt<num_OF_PLAYERS;cnt++){
+            man[cnt].set_name("COM"+cnt);
         }
-        final boolean[] clicked=new boolean[NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1];
-        for(counter=0;counter<NUMBER_OF_CARDS;counter++) {
-            man[counter % 5].show_and_list().add(generate_random_card());
+        final boolean[] clicked=new boolean[num_OF_CARDS/num_OF_PLAYERS+1];
+        for(cnt=0;cnt<num_OF_CARDS;cnt++) {
+            man[cnt % 5].show_and_lis().add(gen_random_card());
         }
-        for(counter=0;counter<NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1;counter++){
-            clicked[counter] = false;
-            player_card[counter].setText(show_card(((Card) man[0].show_and_list().get(counter))));
+        for(cnt=0;cnt<num_OF_CARDS/num_OF_PLAYERS+1;cnt++){
+            clicked[cnt] = false;
+            player_card[cnt].setText(show_card(((Card) man[0].show_and_lis().get(cnt))));
         }
-        for(counter=1;counter<NUMBER_OF_PLAYERS;counter++){
-            com_card[counter].setText(""+man[counter].show_and_list().size()+"枚");
+        for(cnt=1;cnt<num_OF_PLAYERS;cnt++){
+            com_card[cnt].setText(""+man[cnt].show_and_lis().size()+"枚");
         }
-        for(counter=0;counter<NUMBER_OF_CARDS/NUMBER_OF_PLAYERS+1;counter++) {
-            final int finalCounter = counter;
-            player_card[counter].setOnClickListener(new View.OnClickListener() {
+        for(cnt=0;cnt<num_OF_CARDS/num_OF_PLAYERS+1;cnt++) {
+            final int finalcnt = cnt;
+            player_card[cnt].setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    if(!clicked[finalCounter]) {
-                        player_card[finalCounter].setTextColor(Color.BLUE);
-                        player_card[finalCounter].setTypeface(Typeface.DEFAULT_BOLD);
-                        clicked[finalCounter]=true;
-                        man[0].return_players_selected_card_list().return_selected_card().add((Card) man[0].show_and_list().get(finalCounter));
-                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().add(finalCounter);
+                    if(!clicked[finalcnt]) {
+                        player_card[finalcnt].setTextColor(Color.BLUE);
+                        player_card[finalcnt].setTypeface(Typeface.DEFAULT_BOLD);
+                        clicked[finalcnt]=true;
+                        man[0].rtn_players_selected_card_lis().rtn_selected_card().add((Card) man[0].show_and_lis().get(finalcnt));
+                        man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().add(finalcnt);
                     }else {
-                        player_card[finalCounter].setTextColor(Color.BLACK);
-                        player_card[finalCounter].setTypeface(Typeface.DEFAULT);
-                        clicked[finalCounter]=false;
-                        man[0].return_players_selected_card_list().return_selected_card().remove((Card) man[0].show_and_list().get(finalCounter));
-                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().remove(man[0].return_players_selected_card_list().return_card_id_for_textwiew().indexOf(finalCounter));
+                        player_card[finalcnt].setTextColor(Color.BLACK);
+                        player_card[finalcnt].setTypeface(Typeface.DEFAULT);
+                        clicked[finalcnt]=false;
+                        man[0].rtn_players_selected_card_lis().rtn_selected_card().remove((Card) man[0].show_and_lis().get(finalcnt));
+                        man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().remove(man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().indexOf(finalcnt));
                     }
                 }
             });
-            player_card[counter].setOnLongClickListener(new View.OnLongClickListener(){
+            player_card[cnt].setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View v) {
-                    int localcounter;
-                    String fieldtext_buffer="";
-                    if (check_if_decideable(man[0].return_players_selected_card_list().return_selected_card())) {
-                        for(localcounter=0;localcounter<man[0].return_players_selected_card_list().return_card_id_for_textwiew().size();localcounter++) {
-                            player_card[(int) man[0].return_players_selected_card_list().return_card_id_for_textwiew().get(localcounter)].setText("");
-                            fieldtext_buffer+=show_card((Card) man[0].return_players_selected_card_list().return_selected_card().get(localcounter));
+                    int localcnt;
+                    if (check_if_decideable(man[0].rtn_players_selected_card_lis().rtn_selected_card(),field_entity.rtn_value())) {
+                        field_entity.rtn_txtview().setText(show_cards(man[0].rtn_players_selected_card_lis().rtn_selected_card()));
+                        field_entity.give_value((man[0].rtn_players_selected_card_lis().rtn_selected_card()));
+                        for(localcnt=0;localcnt<man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().size();localcnt++) {
+                            player_card[(int) man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().get(localcnt)].setText("");
                         }
-                        fieldtext.setText(fieldtext_buffer);
-                        man[0].return_players_selected_card_list().return_selected_card().clear();
-                        man[0].return_players_selected_card_list().return_card_id_for_textwiew().clear();
+
+                        man[0].rtn_players_selected_card_lis().rtn_selected_card().clear();
+                        man[0].rtn_players_selected_card_lis().rtn_card_id_for_txtview().clear();
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
