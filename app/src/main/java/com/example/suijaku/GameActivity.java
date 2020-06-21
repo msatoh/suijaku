@@ -3,6 +3,7 @@ package com.example.suijaku;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,7 +107,10 @@ public class GameActivity extends AppCompatActivity {
     final int num_OF_CARDS=52;
     final int NUM_OF_PLAYERS=5;
     final Field field_entity=new Field();
-
+    final Player man[]=new Player[NUM_OF_PLAYERS];
+    final TextView[] player_card=new TextView[num_OF_CARDS/NUM_OF_PLAYERS+1];
+    final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
+    Handler pass_card;
     private ArrayList<Integer> used_lis=new ArrayList<Integer>();
 
     private void init_array(ArrayList<Integer> used_lis_in){
@@ -176,6 +180,36 @@ public class GameActivity extends AppCompatActivity {
         return cards_disp;
     }
 
+    class MyThread extends Thread {
+        @Override
+        public void run() {
+            final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
+            int localcnt;
+            final int[] inner_localcnt = new int[1];
+            for(localcnt=1;localcnt<NUM_OF_PLAYERS;localcnt++){
+                try {
+                    Thread.sleep(370);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                final int finalLocalcnt = localcnt;
+                pass_card.post(new Runnable() {
+                    public void run() {
+                        chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
+                        if (chosen_card[0].size() > 0) {
+                            for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
+                                man[finalLocalcnt].show_and_lis().remove(man[finalLocalcnt].show_and_lis().indexOf(chosen_card[0].get(inner_localcnt[0])));
+                            }
+                            field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
+                            field_entity.give_value(chosen_card[0]);
+                            com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,8 +217,7 @@ public class GameActivity extends AppCompatActivity {
         String[] id_name= new String[num_OF_CARDS/NUM_OF_PLAYERS+1];
         String[] com_name=new String[NUM_OF_PLAYERS];
         int cnt;
-        final TextView[] player_card=new TextView[num_OF_CARDS/NUM_OF_PLAYERS+1];
-        final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
+        pass_card =new Handler();
         field_entity.give_txtview((TextView) findViewById(getResources().getIdentifier("field","id",getPackageName())));
         for(cnt=0;cnt<num_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
             id_name[cnt]="player_card_in_hand_"+cnt;
@@ -196,7 +229,6 @@ public class GameActivity extends AppCompatActivity {
         }
 
         init_array(used_lis);
-        final Player man[]=new Player[NUM_OF_PLAYERS];
         for(cnt=0;cnt<NUM_OF_PLAYERS;cnt++){
             man[cnt]=new Player();
         }
@@ -251,29 +283,9 @@ public class GameActivity extends AppCompatActivity {
                         for(inner_localcnt=0;inner_localcnt<man[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++) {
                             man[0].show_and_lis().remove(man[0].rtn_players_select_card_lis().rtn_select_card().indexOf(man[0].rtn_players_select_card_lis().rtn_select_card().get(inner_localcnt)));
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<Card> chosen_card=new ArrayList<>();
-                                int localcnt,inner_localcnt;
-                                for(localcnt=1;localcnt<NUM_OF_PLAYERS;localcnt++){
-                                    try {
-                                        Thread.sleep(370);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    chosen_card=man[localcnt].choose_card(man[(localcnt+1)%5].show_and_lis().size(),man[(localcnt+2)%5].show_and_lis().size(),man[(localcnt+3)%5].show_and_lis().size(),man[(localcnt+4)%5].show_and_lis().size(),man[localcnt].show_and_lis(),field_entity.rtn_value());
-                                    if(chosen_card.size()>0) {
-                                        for (inner_localcnt = 0; inner_localcnt < chosen_card.size(); inner_localcnt++) {
-                                            man[localcnt].show_and_lis().remove(man[localcnt].show_and_lis().indexOf(chosen_card.get(inner_localcnt)));
-                                        }
-                                        field_entity.rtn_txtview().setText(show_cards(chosen_card));
-                                        field_entity.give_value(chosen_card);
-                                        com_card[localcnt].setText("" + man[localcnt].show_and_lis().size() + "枚");
-                                    }
-                                }
-                            }
-                        });
+                        MyThread passing_card=new MyThread();
+                        passing_card.start();
+
 
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
