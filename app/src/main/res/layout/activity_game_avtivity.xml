@@ -294,10 +294,10 @@
         app:srcCompat="@drawable/frame_style" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/PLAYER_turn"
         android:layout_width="409dp"
         android:layout_height="187dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

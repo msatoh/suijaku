@@ -1,13 +1,11 @@
 package com.example.suijaku;
 
-import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +111,7 @@ public class GameActivity extends AppCompatActivity {
     final Player man[]=new Player[NUM_OF_PLAYERS];
     final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
+    final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
     Handler pass_card;
     private ArrayList<Integer> used_lis=new ArrayList<Integer>();
 
@@ -198,6 +197,7 @@ public class GameActivity extends AppCompatActivity {
                 final int finalLocalcnt = localcnt;
                 pass_card.post(new Runnable() {
                     public void run() {
+
                         chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
                         if (chosen_card[0].size() > 0) {
                             for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
@@ -206,6 +206,10 @@ public class GameActivity extends AppCompatActivity {
                             field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
                             field_entity.give_value(chosen_card[0]);
                             com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
+                            com_turn[finalLocalcnt].setVisibility(View.INVISIBLE);
+                            if(finalLocalcnt<4){
+                                com_turn[finalLocalcnt + 1].setVisibility(View.VISIBLE);
+                            }
                         }
 
                     }
@@ -220,18 +224,16 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
-        String[] id_name= new String[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
-        String[] com_name=new String[NUM_OF_PLAYERS];
         int cnt;
         pass_card =new Handler();
-        field_entity.give_txtview((TextView) findViewById(getResources().getIdentifier("field","id",getPackageName())));
+        field_entity.give_txtview((TextView) findViewById(R.id.field));
+        final ImageView player_turn=this.findViewById(R.id.PLAYER_turn);
         for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
-            id_name[cnt]="player_card_in_hand_"+cnt;
-            player_card[cnt] = findViewById(getResources().getIdentifier(id_name[cnt], "id", getPackageName()));
+            player_card[cnt] = findViewById(getResources().getIdentifier("player_card_in_hand_"+cnt, "id", getPackageName()));
         }
         for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
-            com_name[cnt]="COM"+cnt+"_card";
-            com_card[cnt]=findViewById(getResources().getIdentifier(com_name[cnt],"id",getPackageName()));
+            com_card[cnt]=findViewById(getResources().getIdentifier("COM"+cnt+"_card","id",getPackageName()));
+            com_turn[cnt]=findViewById(getResources().getIdentifier("COM"+cnt+"_turn","id",getPackageName()));
         }
 
         init_array(used_lis);
@@ -279,6 +281,7 @@ public class GameActivity extends AppCompatActivity {
                     int localcnt,inner_localcnt;
 
                     if (checker.check_if_decideable(man[0].rtn_players_select_card_lis().rtn_select_card(),field_entity.rtn_value())) {
+                        player_turn.setVisibility(View.INVISIBLE);
                         field_entity.rtn_txtview().setText(show_cards(man[0].rtn_players_select_card_lis().rtn_select_card()));
                         field_entity.give_value((man[0].rtn_players_select_card_lis().rtn_select_card()));
                         for(localcnt=0;localcnt<man[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().size();localcnt++) {
@@ -289,10 +292,10 @@ public class GameActivity extends AppCompatActivity {
                         for(inner_localcnt=0;inner_localcnt<man[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++) {
                             man[0].show_and_lis().remove(man[0].rtn_players_select_card_lis().rtn_select_card().indexOf(man[0].rtn_players_select_card_lis().rtn_select_card().get(inner_localcnt)));
                         }
+                        com_turn[1].setVisibility(View.INVISIBLE);
                         MyThread passing_card=new MyThread();
                         passing_card.start();
-
-
+                        player_turn.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
