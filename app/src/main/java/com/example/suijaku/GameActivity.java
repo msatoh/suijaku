@@ -1,6 +1,9 @@
 package com.example.suijaku;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -104,18 +107,18 @@ class Field{
 }
 
 public class GameActivity extends AppCompatActivity {
-    final int num_OF_CARDS=52;
+    final int NUM_OF_CARDS=52;
     final int NUM_OF_PLAYERS=5;
     final Field field_entity=new Field();
     final Player man[]=new Player[NUM_OF_PLAYERS];
-    final TextView[] player_card=new TextView[num_OF_CARDS/NUM_OF_PLAYERS+1];
+    final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
     Handler pass_card;
     private ArrayList<Integer> used_lis=new ArrayList<Integer>();
 
     private void init_array(ArrayList<Integer> used_lis_in){
         int cnt;
-        for(cnt=0;cnt<num_OF_CARDS;cnt++) {
+        for(cnt=0;cnt<NUM_OF_CARDS;cnt++) {
             used_lis_in.add(cnt);
         }
     }
@@ -204,22 +207,25 @@ public class GameActivity extends AppCompatActivity {
                             field_entity.give_value(chosen_card[0]);
                             com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
                         }
+
                     }
                 });
             }
         }
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
-        String[] id_name= new String[num_OF_CARDS/NUM_OF_PLAYERS+1];
+        String[] id_name= new String[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
         String[] com_name=new String[NUM_OF_PLAYERS];
         int cnt;
         pass_card =new Handler();
         field_entity.give_txtview((TextView) findViewById(getResources().getIdentifier("field","id",getPackageName())));
-        for(cnt=0;cnt<num_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
+        for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
             id_name[cnt]="player_card_in_hand_"+cnt;
             player_card[cnt] = findViewById(getResources().getIdentifier(id_name[cnt], "id", getPackageName()));
         }
@@ -236,18 +242,18 @@ public class GameActivity extends AppCompatActivity {
         for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
             man[cnt].set_name("COM"+cnt);
         }
-        final boolean[] clicked=new boolean[num_OF_CARDS/NUM_OF_PLAYERS+1];
-        for(cnt=0;cnt<num_OF_CARDS;cnt++) {
+        final boolean[] clicked=new boolean[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
+        for(cnt=0;cnt<NUM_OF_CARDS;cnt++) {
             man[cnt % 5].show_and_lis().add(gen_random_card());
         }
-        for(cnt=0;cnt<num_OF_CARDS/NUM_OF_PLAYERS+1;cnt++){
+        for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++){
             clicked[cnt] = false;
             player_card[cnt].setText(show_card(((Card) man[0].show_and_lis().get(cnt))));
         }
         for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
             com_card[cnt].setText(""+man[cnt].show_and_lis().size()+"枚");
         }
-        for(cnt=0;cnt<num_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
+        for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
             final int finalcnt = cnt;
             player_card[cnt].setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
