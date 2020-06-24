@@ -12,7 +12,7 @@ public class Check {
             if (select_card_in.size() != field_card_in.size()) {
                 return false;
             }
-            if(select_card_in.get(0).rtn_strength()<field_card_in.get(0).rtn_strength()){
+            if(select_card_in.get(0).rtn_strength()<=field_card_in.get(0).rtn_strength()){
                 return false;
             }
         }
