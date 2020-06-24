@@ -107,12 +107,16 @@ class Field{
 public class GameActivity extends AppCompatActivity {
     final int NUM_OF_CARDS=52;
     final int NUM_OF_PLAYERS=5;
+    final int TRASH_TIME=170;
+    final int THINKING_TIME=370;
     final Field field_entity=new Field();
     final Player man[]=new Player[NUM_OF_PLAYERS];
     final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
     final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
+    ImageView player_turn;
     Handler pass_card;
+    Handler trash_card;
     private ArrayList<Integer> used_lis=new ArrayList<Integer>();
 
     private void init_array(ArrayList<Integer> used_lis_in){
@@ -188,16 +192,32 @@ public class GameActivity extends AppCompatActivity {
             final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
             int localcnt;
             final int[] inner_localcnt = new int[1];
-            for(localcnt=1;localcnt<NUM_OF_PLAYERS;localcnt++){
-                try {
-                    Thread.sleep(370);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
+            try {
+                Thread.sleep(TRASH_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (localcnt = 1; localcnt < NUM_OF_PLAYERS; localcnt++) {
                 final int finalLocalcnt = localcnt;
                 pass_card.post(new Runnable() {
                     public void run() {
-
+                        if (finalLocalcnt == 1) {
+                            player_turn.setVisibility(View.INVISIBLE);
+                        } else {
+                            com_turn[finalLocalcnt - 1].setVisibility(View.INVISIBLE);
+                        }
+                        com_turn[finalLocalcnt].setVisibility(View.VISIBLE);
+                    }
+                });
+                try {
+                    Thread.sleep(THINKING_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                trash_card.post(new Runnable() {
+                    @Override
+                    public void run() {
                         chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
                         if (chosen_card[0].size() > 0) {
                             for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
@@ -206,14 +226,18 @@ public class GameActivity extends AppCompatActivity {
                             field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
                             field_entity.give_value(chosen_card[0]);
                             com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
-                            com_turn[finalLocalcnt].setVisibility(View.INVISIBLE);
-                            if(finalLocalcnt<4){
-                                com_turn[finalLocalcnt + 1].setVisibility(View.VISIBLE);
-                            }
                         }
-
+                        if (finalLocalcnt == 4) {
+                            com_turn[finalLocalcnt].setVisibility(View.INVISIBLE);
+                            player_turn.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
+                try {
+                    Thread.sleep(TRASH_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -226,8 +250,9 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_avtivity);
         int cnt;
         pass_card =new Handler();
+        trash_card=new Handler();
         field_entity.give_txtview((TextView) findViewById(R.id.field));
-        final ImageView player_turn=this.findViewById(R.id.PLAYER_turn);
+        this.player_turn=findViewById(R.id.PLAYER_turn);
         for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
             player_card[cnt] = findViewById(getResources().getIdentifier("player_card_in_hand_"+cnt, "id", getPackageName()));
         }
@@ -279,9 +304,7 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Check checker=new Check();
                     int localcnt,inner_localcnt;
-
                     if (checker.check_if_decideable(man[0].rtn_players_select_card_lis().rtn_select_card(),field_entity.rtn_value())) {
-                        player_turn.setVisibility(View.INVISIBLE);
                         field_entity.rtn_txtview().setText(show_cards(man[0].rtn_players_select_card_lis().rtn_select_card()));
                         field_entity.give_value((man[0].rtn_players_select_card_lis().rtn_select_card()));
                         for(localcnt=0;localcnt<man[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().size();localcnt++) {
@@ -292,10 +315,8 @@ public class GameActivity extends AppCompatActivity {
                         for(inner_localcnt=0;inner_localcnt<man[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++) {
                             man[0].show_and_lis().remove(man[0].rtn_players_select_card_lis().rtn_select_card().indexOf(man[0].rtn_players_select_card_lis().rtn_select_card().get(inner_localcnt)));
                         }
-                        com_turn[1].setVisibility(View.INVISIBLE);
                         MyThread passing_card=new MyThread();
                         passing_card.start();
-                        player_turn.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
