@@ -209,67 +209,68 @@ public class GameActivity extends AppCompatActivity {
             final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
             int localcnt;
             final int[] inner_localcnt = new int[1];
-
-            try {
-                Thread.sleep(TRASH_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (localcnt = 1; localcnt < NUM_OF_PLAYERS; localcnt++) {
-                final int finalLocalcnt = localcnt;
-                pass_card.post(new Runnable() {
-                    public void run() {
-                        if (finalLocalcnt == 1) {
-                            player_turn.setVisibility(View.INVISIBLE);
-                        } else {
-                            com_turn[finalLocalcnt - 1].setVisibility(View.INVISIBLE);
-                        }
-                        com_turn[finalLocalcnt].setVisibility(View.VISIBLE);
-                        if(man[(finalLocalcnt+1)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt+2)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt+3)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt+4)%NUM_OF_PLAYERS].if_pass()) {
-                            field_entity.rtn_txtview().setText("");
-                            field_entity.rtn_value().clear();
-                            reset_all_pass();
-                        }
-                    }
-                });
-                try {
-                    Thread.sleep(THINKING_TIME);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                trash_card.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!man[finalLocalcnt].if_pass()) {
-                            chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
-                            if (chosen_card[0].size() > 0) {
-                                for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
-                                    man[finalLocalcnt].show_and_lis().remove(man[finalLocalcnt].show_and_lis().indexOf(chosen_card[0].get(inner_localcnt[0])));
-                                }
-                                field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
-                                field_entity.give_value(chosen_card[0]);
-                                com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
-                            } else {
-                                man[finalLocalcnt].reg_pass();
-                            }
-                        }
-                        if (finalLocalcnt == 4) {
-                            com_turn[finalLocalcnt].setVisibility(View.INVISIBLE);
-                            player_turn.setVisibility(View.VISIBLE);
-                            if(man[(finalLocalcnt+1)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt+2)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt+3)%NUM_OF_PLAYERS].if_pass()&&man[(finalLocalcnt)%NUM_OF_PLAYERS].if_pass()) {
-                                field_entity.rtn_txtview().setText("");
-                                field_entity.rtn_value().clear();
-                                reset_all_pass();
-                            }
-                        }
-                    }
-                });
+            do {
                 try {
                     Thread.sleep(TRASH_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+                for (localcnt = 1; localcnt < NUM_OF_PLAYERS; localcnt++) {
+                    final int finalLocalcnt = localcnt;
+                    pass_card.post(new Runnable() {
+                        public void run() {
+                            if (finalLocalcnt == 1) {
+                                player_turn.setVisibility(View.INVISIBLE);
+                            } else {
+                                com_turn[finalLocalcnt - 1].setVisibility(View.INVISIBLE);
+                            }
+                            com_turn[finalLocalcnt].setVisibility(View.VISIBLE);
+                            if (man[(finalLocalcnt + 1) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 2) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 3) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 4) % NUM_OF_PLAYERS].if_pass()) {
+                                field_entity.rtn_txtview().setText("");
+                                field_entity.rtn_value().clear();
+                                reset_all_pass();
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(THINKING_TIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    trash_card.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!man[finalLocalcnt].if_pass()) {
+                                chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
+                                if (chosen_card[0].size() > 0) {
+                                    for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
+                                        man[finalLocalcnt].show_and_lis().remove(man[finalLocalcnt].show_and_lis().indexOf(chosen_card[0].get(inner_localcnt[0])));
+                                    }
+                                    field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
+                                    field_entity.give_value(chosen_card[0]);
+                                    com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
+                                } else {
+                                    man[finalLocalcnt].reg_pass();
+                                }
+                            }
+                            if (finalLocalcnt == 4) {
+                                com_turn[finalLocalcnt].setVisibility(View.INVISIBLE);
+                                player_turn.setVisibility(View.VISIBLE);
+                                if (man[(finalLocalcnt + 1) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 2) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 3) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt) % NUM_OF_PLAYERS].if_pass()) {
+                                    field_entity.rtn_txtview().setText("");
+                                    field_entity.rtn_value().clear();
+                                    reset_all_pass();
+                                }
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(TRASH_TIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }while(man[0].if_pass());
         }
     }
 
@@ -357,17 +358,8 @@ public class GameActivity extends AppCompatActivity {
     }
     public void turn_pass(View view){
         man[0].reg_pass();
-        while(man[0].if_pass()) {
-            MyThread passing_card = new MyThread();
-            passing_card.start();
-            // ThreadTestクラスの処理が終了するまで待機の指示
-            try {
-                passing_card.join();
-            } catch (InterruptedException e) {
-                // 例外処理
-                e.printStackTrace();
-            }
-        }
+        MyThread passing_card = new MyThread();
+        passing_card.start();
     }
 
 
