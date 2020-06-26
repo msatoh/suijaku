@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -39,6 +41,7 @@ class Player{
     public void set_name(String name_in){
         name=name_in;
     }
+    public String rtn_name(){return name;}
     public ArrayList show_and_lis(){
         return card_lis;
     }
@@ -123,7 +126,9 @@ public class GameActivity extends AppCompatActivity {
     final Player man[]=new Player[NUM_OF_PLAYERS];
     final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
+    final TextView[] man_name=new TextView[NUM_OF_PLAYERS];
     final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
+    final TextView[] man_status=new TextView[NUM_OF_PLAYERS];
     ImageView player_turn;
     Handler pass_card;
     Handler trash_card;
@@ -176,7 +181,7 @@ public class GameActivity extends AppCompatActivity {
                 mark_disp="♠";
                 break;
             case dia:
-                mark_disp="◆";
+                mark_disp="♦";
                 break;
             case club:
                 mark_disp="♣";
@@ -200,6 +205,7 @@ public class GameActivity extends AppCompatActivity {
         int cnt;
         for(cnt=0;cnt<NUM_OF_PLAYERS;cnt++){
             man[cnt].reset_pass();
+            man_status[cnt].setText("");
         }
     }
 
@@ -221,6 +227,9 @@ public class GameActivity extends AppCompatActivity {
                         public void run() {
                             if (finalLocalcnt == 1) {
                                 player_turn.setVisibility(View.INVISIBLE);
+                                if(man[0].if_pass()){
+                                    man_status[0].setText("pass");
+                                }
                             } else {
                                 com_turn[finalLocalcnt - 1].setVisibility(View.INVISIBLE);
                             }
@@ -251,6 +260,7 @@ public class GameActivity extends AppCompatActivity {
                                     com_card[finalLocalcnt].setText("" + man[finalLocalcnt].show_and_lis().size() + "枚");
                                 } else {
                                     man[finalLocalcnt].reg_pass();
+                                    man_status[finalLocalcnt].setText("pass");
                                 }
                             }
                             if (finalLocalcnt == 4) {
@@ -295,11 +305,17 @@ public class GameActivity extends AppCompatActivity {
         init_array(used_lis);
         for(cnt=0;cnt<NUM_OF_PLAYERS;cnt++){
             man[cnt]=new Player();
+            man_name[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_name","id",getPackageName()));
+            man_status[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_status","id",getPackageName()));
+            man_status[cnt].setText("");
+            if(cnt==0){
+                man[0].set_name("user");
+            }else{
+                man[cnt].set_name("COM"+cnt);
+            }
+            man_name[cnt].setText(man[cnt].rtn_name());
         }
-        man[0].set_name("user");
-        for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
-            man[cnt].set_name("COM"+cnt);
-        }
+
         final boolean[] clicked=new boolean[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
         for(cnt=0;cnt<NUM_OF_CARDS;cnt++) {
             man[cnt % 5].show_and_lis().add(gen_random_card());
