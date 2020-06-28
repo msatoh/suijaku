@@ -15,10 +15,8 @@
         android:layout_marginTop="180dp"
         android:layout_marginEnd="152dp"
         android:layout_marginRight="152dp"
-        android:layout_marginBottom="92dp"
         android:onClick="train_npc"
         android:text="NPCを鍛える"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -43,10 +41,8 @@
         android:layout_marginTop="90dp"
         android:layout_marginEnd="162dp"
         android:layout_marginRight="162dp"
-        android:layout_marginBottom="43dp"
         android:onClick="game_start"
         android:text="スタート"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

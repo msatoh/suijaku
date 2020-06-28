@@ -2,6 +2,8 @@ package com.example.suijaku;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.min;
+
 public class Brain {
     public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field,int size){
         Check checker = new Check();
@@ -77,7 +79,7 @@ public class Brain {
         int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
         if(card_field.size()==0){
-            for(cnt=4;cnt>0;cnt--){
+            for(cnt=min(4,mycard.size());cnt>0;cnt--){
                 if(select_card_by_sheets(mycard,card_field,cnt).size()!=0){
                     return select_card_by_sheets(mycard,card_field,cnt);
                 }
