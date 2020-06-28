@@ -3,12 +3,12 @@ package com.example.suijaku;
 import java.util.ArrayList;
 
 public class Brain {
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field,int size){
         Check checker = new Check();
         ArrayList<Card> empty_card = new ArrayList<>();
         int first = 1, second = 2, third = 3, fourth = 4;
         ArrayList<Card> candidate_card = new ArrayList<>();
-        switch (card_field.size()) {
+        switch (size) {
             case 1:
                 for (first = 0; first < mycard.size(); first++) {
                     candidate_card.clear();
@@ -70,6 +70,20 @@ public class Brain {
                     }
                     candidate_card.remove(mycard.get(first));
                 }
+        }
+        return empty_card;
+    }
+    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        int cnt;
+        ArrayList<Card> empty_card = new ArrayList<>();
+        if(card_field.size()==0){
+            for(cnt=4;cnt>0;cnt--){
+                if(select_card_by_sheets(mycard,card_field,cnt).size()!=0){
+                    return select_card_by_sheets(mycard,card_field,cnt);
+                }
+            }
+        }else{
+            return select_card_by_sheets(mycard,card_field,card_field.size());
         }
         return empty_card;
     }
