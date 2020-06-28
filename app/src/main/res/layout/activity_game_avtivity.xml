@@ -358,12 +358,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginLeft="17dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginRight="130dp"
         android:layout_marginBottom="8dp"
         android:text="COM1の名前"
         app:layout_constraintBottom_toBottomOf="@+id/COM1_turn"
-        app:layout_constraintEnd_toStartOf="@+id/divider2"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
