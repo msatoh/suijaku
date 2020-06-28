@@ -25,33 +25,28 @@ public class Brain {
                 return candidate_card;
             }
             for(second=second+first-1;second<mycard.size();second++){
-<<<<<<< HEAD
-                if(candidate_card.indexOf(mycard.get(second))!=-1) {
-=======
+
+
                 if(candidate_card.indexOf(mycard.get(second))==-1) {
->>>>>>> unko
+
                     candidate_card.add(mycard.get(second));
                 }
                 if(checker.check_if_decideable(candidate_card,card_field)){
                     return candidate_card;
                 }
                 for(third=third+second-2;third<mycard.size();third++){
-<<<<<<< HEAD
-                    if(candidate_card.indexOf(mycard.get(third))!=-1) {
-=======
+
                     if(candidate_card.indexOf(mycard.get(third))==-1) {
->>>>>>> unko
+
                         candidate_card.add(mycard.get(third));
                     }
                     if(checker.check_if_decideable(candidate_card,card_field)){
                         return candidate_card;
                     }
                     for(fourth=fourth+third-3;fourth<mycard.size();fourth++){
-<<<<<<< HEAD
-                        if(candidate_card.indexOf(mycard.get(fourth))!=-1) {
-=======
+
                         if(candidate_card.indexOf(mycard.get(fourth))==-1) {
->>>>>>> unko
+
                             candidate_card.add(mycard.get(fourth));
                         }
                         if(checker.check_if_decideable(candidate_card,card_field)){

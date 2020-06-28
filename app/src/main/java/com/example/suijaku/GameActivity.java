@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -140,15 +138,9 @@ public class GameActivity extends AppCompatActivity {
     final Player pus[]=new Player[NUM_OF_PLAYERS];
     final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
-<<<<<<< HEAD
-    final TextView[] man_name=new TextView[NUM_OF_PLAYERS];
-    final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
-    final TextView[] man_status=new TextView[NUM_OF_PLAYERS];
-=======
     final TextView[] pus_name=new TextView[NUM_OF_PLAYERS];
     final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
     final TextView[] pus_status=new TextView[NUM_OF_PLAYERS];
->>>>>>> unko
     ImageView player_turn;
     Handler pass_card;
     Handler trash_card;
@@ -225,13 +217,8 @@ public class GameActivity extends AppCompatActivity {
     private void reset_all_pass(){
         int cnt;
         for(cnt=0;cnt<NUM_OF_PLAYERS;cnt++){
-<<<<<<< HEAD
-            man[cnt].reset_pass();
-            man_status[cnt].setText("");
-=======
             pus[cnt].reset_pass();
             pus_status[cnt].setText("");
->>>>>>> unko
         }
     }
 
@@ -247,41 +234,6 @@ public class GameActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-<<<<<<< HEAD
-                for (localcnt = 1; localcnt < NUM_OF_PLAYERS; localcnt++) {
-                    final int finalLocalcnt = localcnt;
-                    pass_card.post(new Runnable() {
-                        public void run() {
-                            if (finalLocalcnt == 1) {
-                                player_turn.setVisibility(View.INVISIBLE);
-                                if(man[0].if_pass()){
-                                    man_status[0].setText("pass");
-                                }
-                            } else {
-                                com_turn[finalLocalcnt - 1].setVisibility(View.INVISIBLE);
-                            }
-                            com_turn[finalLocalcnt].setVisibility(View.VISIBLE);
-                            if (man[(finalLocalcnt + 1) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 2) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 3) % NUM_OF_PLAYERS].if_pass() && man[(finalLocalcnt + 4) % NUM_OF_PLAYERS].if_pass()) {
-                                field_entity.rtn_txtview().setText("");
-                                field_entity.rtn_value().clear();
-                                reset_all_pass();
-                            }
-                        }
-                    });
-                    try {
-                        Thread.sleep(THINKING_TIME);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    trash_card.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!man[finalLocalcnt].if_pass()) {
-                                chosen_card[0] = man[finalLocalcnt].choose_card(man[(finalLocalcnt + 1) % 5].show_and_lis().size(), man[(finalLocalcnt + 2) % 5].show_and_lis().size(), man[(finalLocalcnt + 3) % 5].show_and_lis().size(), man[(finalLocalcnt + 4) % 5].show_and_lis().size(), man[finalLocalcnt].show_and_lis(), field_entity.rtn_value());
-                                if (chosen_card[0].size() > 0) {
-                                    for (inner_localcnt[0] = 0; inner_localcnt[0] < chosen_card[0].size(); inner_localcnt[0]++) {
-                                        man[finalLocalcnt].show_and_lis().remove(man[finalLocalcnt].show_and_lis().indexOf(chosen_card[0].get(inner_localcnt[0])));
-=======
                 for (person_num = 1; person_num < NUM_OF_PLAYERS; person_num++) {
                     final int finalperson_num = person_num;
                     if(!pus[person_num].is_end()) {
@@ -291,15 +243,9 @@ public class GameActivity extends AppCompatActivity {
                                     player_turn.setVisibility(View.INVISIBLE);
                                     if (pus[0].if_pass()) {
                                         pus_status[0].setText("pass");
->>>>>>> unko
                                     }
                                 } else {
-<<<<<<< HEAD
-                                    man[finalLocalcnt].reg_pass();
-                                    man_status[finalLocalcnt].setText("pass");
-=======
                                     com_turn[finalperson_num - 1].setVisibility(View.INVISIBLE);
->>>>>>> unko
                                 }
                                 com_turn[finalperson_num].setVisibility(View.VISIBLE);
                                 if (pus[(finalperson_num + 1) % NUM_OF_PLAYERS].if_pass() && pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_pass() && pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_pass() && pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_pass()) {
@@ -378,18 +324,6 @@ public class GameActivity extends AppCompatActivity {
 
         init_array(used_lis);
         for(cnt=0;cnt<NUM_OF_PLAYERS;cnt++){
-<<<<<<< HEAD
-            man[cnt]=new Player();
-            man_name[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_name","id",getPackageName()));
-            man_status[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_status","id",getPackageName()));
-            man_status[cnt].setText("");
-            if(cnt==0){
-                man[0].set_name("user");
-            }else{
-                man[cnt].set_name("COM"+cnt);
-            }
-            man_name[cnt].setText(man[cnt].rtn_name());
-=======
             pus[cnt]=new Player();
             pus_name[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_name","id",getPackageName()));
             pus_status[cnt]=findViewById(getResources().getIdentifier("man"+cnt+"_status","id",getPackageName()));
@@ -400,7 +334,6 @@ public class GameActivity extends AppCompatActivity {
                 pus[cnt].set_name("COM"+cnt);
             }
             pus_name[cnt].setText(pus[cnt].rtn_name());
->>>>>>> unko
         }
 
         final boolean[] clicked=new boolean[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
