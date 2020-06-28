@@ -1,12 +1,10 @@
 package com.example.suijaku;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Brain {
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field){
         Check checker=new Check();
-        //Random num_seed=new Random();
         ArrayList<Card> empty_card=new ArrayList<>();
         int candidate;
         int first=1,second=mycard.size()-1,third=mycard.size()-1,fourth=mycard.size()-1;
@@ -27,21 +25,33 @@ public class Brain {
                 return candidate_card;
             }
             for(second=second+first-1;second<mycard.size();second++){
+<<<<<<< HEAD
                 if(candidate_card.indexOf(mycard.get(second))!=-1) {
+=======
+                if(candidate_card.indexOf(mycard.get(second))==-1) {
+>>>>>>> unko
                     candidate_card.add(mycard.get(second));
                 }
                 if(checker.check_if_decideable(candidate_card,card_field)){
                     return candidate_card;
                 }
                 for(third=third+second-2;third<mycard.size();third++){
+<<<<<<< HEAD
                     if(candidate_card.indexOf(mycard.get(third))!=-1) {
+=======
+                    if(candidate_card.indexOf(mycard.get(third))==-1) {
+>>>>>>> unko
                         candidate_card.add(mycard.get(third));
                     }
                     if(checker.check_if_decideable(candidate_card,card_field)){
                         return candidate_card;
                     }
                     for(fourth=fourth+third-3;fourth<mycard.size();fourth++){
+<<<<<<< HEAD
                         if(candidate_card.indexOf(mycard.get(fourth))!=-1) {
+=======
+                        if(candidate_card.indexOf(mycard.get(fourth))==-1) {
+>>>>>>> unko
                             candidate_card.add(mycard.get(fourth));
                         }
                         if(checker.check_if_decideable(candidate_card,card_field)){
