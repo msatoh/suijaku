@@ -137,7 +137,7 @@ public class GameActivity extends AppCompatActivity {
     final int THINKING_TIME=370;
     final Field field_entity=new Field();
     final Player pussy[]=new Player[NUM_OF_PLAYERS];
-    final TextView[] player_card=new TextView[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
+    final ArrayList<TextView>player_card=new ArrayList<>();
     final TextView[] com_card=new TextView[NUM_OF_PLAYERS];
     final TextView[] pussy_name=new TextView[NUM_OF_PLAYERS];
     final ImageView[] com_turn=new ImageView[NUM_OF_PLAYERS];
@@ -225,6 +225,7 @@ public class GameActivity extends AppCompatActivity {
 
     class MyThread extends Thread {
         Button button_pass=findViewById(R.id.pass);
+        TextView rank_view=findViewById(R.id.player_card_in_hand_0);
         @Override
         public void run() {
             final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
@@ -249,7 +250,7 @@ public class GameActivity extends AppCompatActivity {
                                     }
                                     if(pussy[0].show_and_lis().size()==0){
                                         pussy[0].reg_end();
-                                        player_card[0].setText(rank_use.set_rank());
+                                        rank_view.setText(rank_use.set_rank());
                                     }
                                 } else {
                                     com_turn[finalperson_num - 1].setVisibility(View.INVISIBLE);
@@ -315,6 +316,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.os.Debug.waitForDebugger();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
         int cnt;
@@ -323,7 +325,7 @@ public class GameActivity extends AppCompatActivity {
         field_entity.give_txtview((TextView) findViewById(R.id.field));
         this.player_turn=findViewById(R.id.PLAYER_turn);
         for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
-            player_card[cnt] = findViewById(getResources().getIdentifier("player_card_in_hand_"+cnt, "id", getPackageName()));
+            player_card.add((TextView) findViewById(getResources().getIdentifier("player_card_in_hand_"+cnt, "id", getPackageName())));
         }
         for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
             com_card[cnt]=findViewById(getResources().getIdentifier("COM"+cnt+"_card","id",getPackageName()));
@@ -344,37 +346,38 @@ public class GameActivity extends AppCompatActivity {
             pussy_name[cnt].setText(pussy[cnt].rtn_name());
         }
 
-        final boolean[] clicked=new boolean[NUM_OF_CARDS/NUM_OF_PLAYERS+1];
+
         for(cnt=0;cnt<NUM_OF_CARDS;cnt++) {
             pussy[cnt % 5].show_and_lis().add(gen_random_card());
         }
-        for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++){
+        final boolean[] clicked=new boolean[pussy[0].show_and_lis().size()];
+        for(cnt=0;cnt<pussy[0].show_and_lis().size();cnt++){
             clicked[cnt] = false;
-            player_card[cnt].setText(show_card(((Card) pussy[0].show_and_lis().get(cnt))));
+            player_card.get(cnt).setText(show_card(((Card) pussy[0].show_and_lis().get(cnt))));
         }
         for(cnt=1;cnt<NUM_OF_PLAYERS;cnt++){
             com_card[cnt].setText(""+pussy[cnt].show_and_lis().size()+"枚");
         }
         for(cnt=0;cnt<NUM_OF_CARDS/NUM_OF_PLAYERS+1;cnt++) {
             final int finalcnt = cnt;
-            player_card[cnt].setOnClickListener(new View.OnClickListener() {
+            player_card.get(cnt).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if(!clicked[finalcnt]) {
-                        player_card[finalcnt].setTextColor(Color.BLUE);
-                        player_card[finalcnt].setTypeface(Typeface.DEFAULT_BOLD);
+                        player_card.get(finalcnt).setTextColor(Color.BLUE);
+                        player_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt]=true;
                         pussy[0].rtn_players_select_card_lis().rtn_select_card().add((Card) pussy[0].show_and_lis().get(finalcnt));
-                        pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().add(finalcnt);
+                        pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().add(pussy[0].show_and_lis().indexOf(pussy[0].show_and_lis().get(finalcnt)));
                     }else {
-                        player_card[finalcnt].setTextColor(Color.BLACK);
-                        player_card[finalcnt].setTypeface(Typeface.DEFAULT);
+                        player_card.get(finalcnt).setTextColor(Color.BLACK);
+                        player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt]=false;
                         pussy[0].rtn_players_select_card_lis().rtn_select_card().remove((Card) pussy[0].show_and_lis().get(finalcnt));
                         pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().remove(pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().indexOf(finalcnt));
                     }
                 }
             });
-            player_card[cnt].setOnLongClickListener(new View.OnLongClickListener(){
+            player_card.get(cnt).setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View v) {
                     Check checker=new Check();
@@ -383,13 +386,24 @@ public class GameActivity extends AppCompatActivity {
                         field_entity.rtn_txtview().setText(show_cards(pussy[0].rtn_players_select_card_lis().rtn_select_card()));
                         field_entity.give_value((pussy[0].rtn_players_select_card_lis().rtn_select_card()));
                         for(localcnt=0;localcnt<pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().size();localcnt++) {
-                            player_card[(int) pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().get(localcnt)].setText("");
+                            //player_card.get((int) pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().get(localcnt)).setText("");
+                            player_card.remove((Integer) pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().get(localcnt));
                         }
-                        pussy[0].rtn_players_select_card_lis().rtn_select_card().clear();
                         pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().clear();
                         for(inner_localcnt=0;inner_localcnt<pussy[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++) {
-                            pussy[0].show_and_lis().remove(pussy[0].rtn_players_select_card_lis().rtn_select_card().indexOf(pussy[0].rtn_players_select_card_lis().rtn_select_card().get(inner_localcnt)));
+                            pussy[0].show_and_lis().remove(pussy[0].rtn_players_select_card_lis().rtn_select_card().get(inner_localcnt));
                         }
+                        for(inner_localcnt=0;inner_localcnt<pussy[0].show_and_lis().size();inner_localcnt++){
+                            player_card.get(inner_localcnt).setText(show_card(((Card) pussy[0].show_and_lis().get(inner_localcnt))));
+                            clicked[inner_localcnt]=false;
+                            player_card.get(finalcnt).setTextColor(Color.BLACK);
+                            player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
+                        }
+                        for(inner_localcnt=pussy[0].show_and_lis().size();inner_localcnt<pussy[0].show_and_lis().size()+pussy[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++){
+                            player_card.get(inner_localcnt).setText("");
+                        }
+                        pussy[0].rtn_players_select_card_lis().rtn_select_card().clear();
+
                         MyThread passing_card=new MyThread();
                         passing_card.start();
                     } else {
