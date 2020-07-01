@@ -396,8 +396,8 @@ public class GameActivity extends AppCompatActivity {
                         for(inner_localcnt=0;inner_localcnt<pussy[0].show_and_lis().size();inner_localcnt++){
                             player_card.get(inner_localcnt).setText(show_card(((Card) pussy[0].show_and_lis().get(inner_localcnt))));
                             clicked[inner_localcnt]=false;
-                            player_card.get(finalcnt).setTextColor(Color.BLACK);
-                            player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
+                            player_card.get(inner_localcnt).setTextColor(Color.BLACK);
+                            player_card.get(inner_localcnt).setTypeface(Typeface.DEFAULT);
                         }
                         for(inner_localcnt=pussy[0].show_and_lis().size();inner_localcnt<pussy[0].show_and_lis().size()+pussy[0].rtn_players_select_card_lis().rtn_select_card().size();inner_localcnt++){
                             player_card.get(inner_localcnt).setText("");
