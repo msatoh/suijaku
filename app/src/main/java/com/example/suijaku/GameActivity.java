@@ -248,7 +248,7 @@ public class GameActivity extends AppCompatActivity {
                                     if (pussy[0].if_pass()) {
                                         pussy_status[0].setText("pass");
                                     }
-                                    if(pussy[0].show_and_lis().size()==0){
+                                    if(pussy[0].show_and_lis().size()==0&&!pussy[0].is_end()){
                                         pussy[0].reg_end();
                                         rank_view.setText(rank_use.set_rank());
                                     }
@@ -279,7 +279,7 @@ public class GameActivity extends AppCompatActivity {
                                         }
                                         field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
                                         field_entity.give_value(chosen_card[0]);
-                                        if (pussy[finalperson_num].show_and_lis().size() == 0) {
+                                        if (pussy[finalperson_num].show_and_lis().size() == 0&&!pussy[finalperson_num].is_end()) {
                                             pussy[finalperson_num].reg_end();
                                             com_card[finalperson_num].setText(rank_use.set_rank());
                                         } else {
