@@ -3,7 +3,7 @@ package com.example.suijaku;
 import java.util.ArrayList;
 
 public class Check {
-    boolean check_if_decideable(ArrayList<Card> select_card_in, ArrayList<Card> field_card_in){
+    boolean chk_if_decideable(ArrayList<Card> select_card_in, ArrayList<Card> field_card_in){
         int localcnt=0;
         if(select_card_in.size()==0){
             return false;

@@ -32,7 +32,7 @@ class Player{
     private String name;
     private ArrayList<Card> card_lis= new ArrayList<>();
     private SelectedCardList players_select_card_lis=new SelectedCardList();
-    private Brain algorhythm_to_choose_card=new Brain();
+    private Brain algorhythm_to_choose_card;
     private boolean if_end=false;
     private boolean is_pass=false;
     public ArrayList<Card> choose_card(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field){
@@ -60,6 +60,9 @@ class Player{
     public boolean is_end(){return if_end;}
     public void reg_end(){
         if_end=true;
+    }
+    public void set_brain(Brain brain_in){
+        algorhythm_to_choose_card=brain_in;
     }
 }
 
@@ -119,7 +122,7 @@ class Field{
     public ArrayList<Card> rtn_value(){
         return field_card;
     }
-    public void give_value(ArrayList<Card> cards_in){
+    public void give_val(ArrayList<Card> cards_in){
         field_card= (ArrayList<Card>) cards_in.clone();
     }
     public TextView rtn_txtview(){
@@ -226,7 +229,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     class MyThread extends Thread {
-        Button button_pass = findViewById(R.id.pass);
+        Button btn_pass = findViewById(R.id.pass);
         TextView rank_view = findViewById(R.id.player_card_in_hand_0);
 
         @Override
@@ -245,7 +248,7 @@ public class GameActivity extends AppCompatActivity {
                     if (!pussy[person_num].is_end()) {
                         pass_card.post(new Runnable() {
                             public void run() {
-                                button_pass.setVisibility(View.INVISIBLE);
+                                btn_pass.setVisibility(View.INVISIBLE);
                                 if (finalperson_num == 1) {
                                     player_turn.setVisibility(View.INVISIBLE);
                                     if (pussy[0].if_pass()) {
@@ -281,7 +284,7 @@ public class GameActivity extends AppCompatActivity {
                                             pussy[finalperson_num].show_and_lis().remove(pussy[finalperson_num].show_and_lis().indexOf(chosen_card[0].get(inner_person_num[0])));
                                         }
                                         field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
-                                        field_entity.give_value(chosen_card[0]);
+                                        field_entity.give_val(chosen_card[0]);
                                         if (pussy[finalperson_num].show_and_lis().size() == 0 && !pussy[finalperson_num].is_end()) {
                                             pussy[finalperson_num].reg_end();
                                             com_card[finalperson_num].setText(rank_use.set_rank());
@@ -296,7 +299,7 @@ public class GameActivity extends AppCompatActivity {
                                 if (finalperson_num == 4) {
                                     com_turn[finalperson_num].setVisibility(View.INVISIBLE);
                                     player_turn.setVisibility(View.VISIBLE);
-                                    button_pass.setVisibility(View.VISIBLE);
+                                    btn_pass.setVisibility(View.VISIBLE);
                                     if ((pussy[(finalperson_num + 2) % NUM_OF_PLAYERS].if_pass() || pussy[(finalperson_num + 2) % NUM_OF_PLAYERS].is_end()) && (pussy[(finalperson_num + 3) % NUM_OF_PLAYERS].if_pass() || pussy[(finalperson_num + 3) % NUM_OF_PLAYERS].is_end()) && (pussy[(finalperson_num + 4) % NUM_OF_PLAYERS].if_pass() || pussy[(finalperson_num + 4) % NUM_OF_PLAYERS].is_end()) && (pussy[(finalperson_num) % NUM_OF_PLAYERS].if_pass() || pussy[(finalperson_num) % NUM_OF_PLAYERS].is_end())) {
                                         field_entity.rtn_txtview().setText("");
                                         field_entity.rtn_value().clear();
@@ -344,6 +347,7 @@ public class GameActivity extends AppCompatActivity {
                 pussy[0].set_name("user");
             } else {
                 pussy[cnt].set_name("COM" + cnt);
+                pussy[cnt].set_brain(new BasicBrain());
             }
             pussy_name[cnt].setText(pussy[cnt].rtn_name());
         }
@@ -382,9 +386,9 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
                     int localcnt, inner_localcnt;
-                    if (checker.check_if_decideable(pussy[0].rtn_players_select_card_lis().rtn_select_card(), field_entity.rtn_value())) {
+                    if (checker.chk_if_decideable(pussy[0].rtn_players_select_card_lis().rtn_select_card(), field_entity.rtn_value())) {
                         field_entity.rtn_txtview().setText(show_cards(pussy[0].rtn_players_select_card_lis().rtn_select_card()));
-                        field_entity.give_value((pussy[0].rtn_players_select_card_lis().rtn_select_card()));
+                        field_entity.give_val((pussy[0].rtn_players_select_card_lis().rtn_select_card()));
                         for (localcnt = 0; localcnt < pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().size(); localcnt++) {
                             player_card.remove((Integer) pussy[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().get(localcnt));
                         }
