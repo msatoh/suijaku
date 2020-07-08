@@ -344,10 +344,14 @@ public class GameActivity extends AppCompatActivity {
             pussy_status[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_status", "id", getPackageName()));
             pussy_status[cnt].setText("");
             if (cnt == 0) {
-                pussy[0].set_name("user");
+                pussy[cnt].set_name("user");
             } else {
                 pussy[cnt].set_name("COM" + cnt);
-                pussy[cnt].set_brain(new BasicBrain());
+                if(cnt==4){
+                    pussy[cnt].set_brain(new StrongerBrain());
+                }else {
+                    pussy[cnt].set_brain(new BasicBrain());
+                }
             }
             pussy_name[cnt].setText(pussy[cnt].rtn_name());
         }
