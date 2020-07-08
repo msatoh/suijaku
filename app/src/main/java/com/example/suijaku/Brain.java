@@ -113,12 +113,14 @@ class StrongerBrain extends Brain{
                     candidate_card.clear();
                     candidate_card.add(mycard.get(first));
                     if (checker.chk_if_decideable(candidate_card, card_field)) {
-                        if(buf_card.size()==0) {
-                            buf_card = candidate_card;
-                        }else if(stronger&&buf_card.get(0).rtn_strength()<candidate_card.get(0).rtn_strength()){
-                            buf_card=candidate_card;
-                        }else if(buf_card.get(0).rtn_strength()>candidate_card.get(0).rtn_strength()){
-                            buf_card=candidate_card;
+                        if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                            if (buf_card.size() == 0) {
+                                buf_card = candidate_card;
+                            } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                buf_card = candidate_card;
+                            } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                buf_card = candidate_card;
+                            }
                         }
                     }
                 }
@@ -130,18 +132,21 @@ class StrongerBrain extends Brain{
                     for (second = first + 1; second < mycard.size(); second++) {
                         candidate_card.add(mycard.get(second));
                         if (checker.chk_if_decideable(candidate_card, card_field)) {
-                            if(buf_card.size()==0) {
-                                buf_card = candidate_card;
-                            }else if(stronger&&buf_card.get(0).rtn_strength()<candidate_card.get(0).rtn_strength()){
-                                buf_card=candidate_card;
-                            }else if(buf_card.get(0).rtn_strength()>candidate_card.get(0).rtn_strength()){
-                                buf_card=candidate_card;
+                            if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                                if (buf_card.size() == 0) {
+                                    buf_card = candidate_card;
+                                } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                    buf_card = candidate_card;
+                                } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                    buf_card = candidate_card;
+                                }
                             }
                         }
                         candidate_card.remove(mycard.get(second));
                     }
                     candidate_card.remove(mycard.get(first));
                 }
+                break;
             case 3:
                 candidate_card.clear();
                 for (first = 0; first < second; first++) {
@@ -151,12 +156,14 @@ class StrongerBrain extends Brain{
                         for (third = second + 1; third < mycard.size(); third++) {
                             candidate_card.add(mycard.get(third));
                             if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                if(buf_card.size()==0) {
-                                    buf_card = candidate_card;
-                                }else if(stronger&&buf_card.get(0).rtn_strength()<candidate_card.get(0).rtn_strength()){
-                                    buf_card=candidate_card;
-                                }else if(buf_card.get(0).rtn_strength()>candidate_card.get(0).rtn_strength()){
-                                    buf_card=candidate_card;
+                                if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                                    if (buf_card.size() == 0) {
+                                        buf_card = candidate_card;
+                                    } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                        buf_card = candidate_card;
+                                    } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                        buf_card = candidate_card;
+                                    }
                                 }
                             }
                             candidate_card.remove(mycard.get(third));
@@ -165,6 +172,7 @@ class StrongerBrain extends Brain{
                     }
                     candidate_card.remove(mycard.get(first));
                 }
+                break;
             case 4:
                 candidate_card.clear();
                 for (first = 0; first < second; first++) {
@@ -176,12 +184,14 @@ class StrongerBrain extends Brain{
                             for(fourth=third+1;fourth<mycard.size();fourth++) {
                                 candidate_card.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                    if(buf_card.size()==0) {
-                                        buf_card = candidate_card;
-                                    }else if(stronger&&buf_card.get(0).rtn_strength()<candidate_card.get(0).rtn_strength()){
-                                        buf_card=candidate_card;
-                                    }else if(buf_card.get(0).rtn_strength()>candidate_card.get(0).rtn_strength()){
-                                        buf_card=candidate_card;
+                                    if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                                        if (buf_card.size() == 0) {
+                                            buf_card = candidate_card;
+                                        } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                            buf_card = candidate_card;
+                                        } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                            buf_card = candidate_card;
+                                        }
                                     }
                                 }
                                 candidate_card.remove(mycard.get(fourth));
@@ -192,6 +202,7 @@ class StrongerBrain extends Brain{
                     }
                     candidate_card.remove(mycard.get(first));
                 }
+                break;
         }
         return buf_card;
     }
@@ -203,7 +214,11 @@ class StrongerBrain extends Brain{
         if(card_field.size()==0){
             for(cnt=min(4,mycard.size());cnt>0;cnt--){
                 if(select_card_by_sheets(mycard,card_field,cnt,false).size()!=0){
-                    return select_card_by_sheets(mycard,card_field,cnt,true);
+                    if (min(min(min(min(card_player1,card_player2),card_player3),card_player4),mycard.size())<=2) {
+                        return select_card_by_sheets(mycard, card_field, cnt, true);
+                    }else {
+                        return select_card_by_sheets(mycard, card_field, cnt, false);
+                    }
                 }
             }
         }else{
