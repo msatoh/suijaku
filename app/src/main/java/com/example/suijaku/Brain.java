@@ -198,7 +198,7 @@ class StrongerBrain extends Brain{
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         Random random=new Random();
-        int cnt,roulette=random.nextInt(10);
+        int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
         if(card_field.size()==0){
             for(cnt=min(4,mycard.size());cnt>0;cnt--){
@@ -208,7 +208,7 @@ class StrongerBrain extends Brain{
             }
         }else{
             if(mycard.size()>=card_field.size()) {
-                if (roulette == 1) {
+                if (min(min(min(min(card_player1,card_player2),card_player3),card_player4),mycard.size())<=2) {
                     return select_card_by_sheets(mycard, card_field, card_field.size(), true);
                 } else {
                     return select_card_by_sheets(mycard, card_field, card_field.size(), false);
