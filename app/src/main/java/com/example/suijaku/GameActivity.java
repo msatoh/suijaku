@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.suijaku.Cst.NUM_OF_CARDS;
+import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
+
 enum mark{heart,spade,dia,club};
 
 class SelectedCardList{
@@ -134,8 +137,6 @@ class Field{
 }
 
 public class GameActivity extends AppCompatActivity {
-    final int NUM_OF_CARDS = 52;
-    final int NUM_OF_PLAYERS = 5;
     final int TRASH_TIME = 170;
     final int THINKING_TIME = 370;
     final Field field_entity = new Field();
@@ -347,7 +348,7 @@ public class GameActivity extends AppCompatActivity {
                 pussy[cnt].set_name("user");
             } else {
                 pussy[cnt].set_name("COM" + cnt);
-                if(cnt==4){
+                if(cnt==2){
                     pussy[cnt].set_brain(new StrongerBrain());
                 }else {
                     pussy[cnt].set_brain(new BasicBrain());

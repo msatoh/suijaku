@@ -3,7 +3,12 @@ package com.example.suijaku;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static java.lang.Math.exp;
+import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
+import static com.example.suijaku.Cst.NUM_OF_CARDS;
+import static java.lang.Math.random;
 
 public class Brain {
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
@@ -231,5 +236,97 @@ class StrongerBrain extends Brain{
             }
         }
         return empty_card;
+    }
+}
+
+class NNBrain extends Brain{
+    public NNBrain(){
+        NN nn=new NN();
+    }
+//    public float sigmoid(float a){
+//
+//    }
+    public float sigmoid(float param){
+        return max(0,param);
+    }
+    class Newron{
+        float bias[];
+        float weight[][];
+        float out_put[];
+        public void set_params(int num_of_input,int num_of_output){
+            bias=new float[num_of_output];
+            weight=new float[num_of_output][num_of_input];
+            out_put=new float[num_of_output];
+        }
+        public void set_weight(int num_of_input,int num_of_output,float param){
+            weight[num_of_output][num_of_input]=param;
+        }
+        public void set_bias(int cnt,float param){
+            bias[cnt]=param;
+        }
+        public void calc(int order,int[] in_put){
+            int cnt;
+            float sum=0.0f;
+            sum+=bias[order];
+            for(cnt=0;cnt<in_put.length;cnt++){
+                sum+=weight[order][cnt]*in_put[cnt];
+            }
+            out_put[order]=sigmoid(sum);
+        }
+        public float rtn_calc(int order){
+            return out_put[order];
+        }
+        public void initialize(){
+            Random random=new Random();
+            int innerout_cnt,inner_cnt;
+            for(innerout_cnt=0;innerout_cnt<bias.length;innerout_cnt++) {
+                bias[innerout_cnt]= random.nextFloat() * 2 - 1;
+                for(inner_cnt=0;inner_cnt<weight[innerout_cnt].length;inner_cnt++){
+                    weight[innerout_cnt][inner_cnt]=random.nextFloat()*2-1;
+                }
+            }
+        }
+    }
+    class NN{
+        ArrayList<Card> out_put=new ArrayList<>();
+        int newral_out[]=new int[NUM_OF_CARDS/NUM_OF_PLAYERS];
+        Newron[] perceptron1st=new Newron[13];
+        Newron[] perceptron2nd=new Newron[12];
+        Newron[] perceptron3rd=new Newron[11];
+
+        public NN(){
+            int cnt,innerout_cnt,inner_cnt;
+            for(cnt=0;cnt<13;cnt++){
+                perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2,12);
+                perceptron1st[cnt].initialize();
+            }
+            for(cnt=0;cnt<12;cnt++){
+                perceptron2nd[cnt].set_params(13,11);
+                perceptron2nd[cnt].initialize();
+            }
+            for(cnt=0;cnt<11;cnt++){
+                perceptron3rd[cnt].set_params(11,NUM_OF_CARDS/NUM_OF_PLAYERS);
+                perceptron3rd[cnt].initialize();
+            }
+        }
+        public ArrayList<Card> calc(int[] in_put){
+            ArrayList<Card> lists=new ArrayList<>();
+            return lists;
+        }
+    }
+    @Override
+    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        int in_put[]=new int[NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2],cnt;
+        in_put[0]=card_player1;
+        in_put[1]=card_player2;
+        in_put[2]=card_player3;
+        in_put[3]=card_player4;
+        for(cnt=4;cnt<4+mycard.size();cnt++){
+            in_put[cnt]=mycard.get(cnt-4).rtn_strength();
+        }
+        for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
+            in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
+        }
+        return nn.calc(in_put);
     }
 }
