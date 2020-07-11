@@ -232,7 +232,7 @@ public class GameActivity extends AppCompatActivity {
     class MyThread extends Thread {
         Button btn_pass = findViewById(R.id.pass);
         TextView rank_view = findViewById(R.id.player_card_in_hand_0);
-
+        Check checker=new Check();
         @Override
         public void run() {
             final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
@@ -280,7 +280,7 @@ public class GameActivity extends AppCompatActivity {
                             public void run() {
                                 if (!pus[finalperson_num].if_pass() && !pus[finalperson_num].is_end()) {
                                     chosen_card[0] = pus[finalperson_num].choose_card(pus[(finalperson_num + 1) % 5].show_and_lis().size(), pus[(finalperson_num + 2) % 5].show_and_lis().size(), pus[(finalperson_num + 3) % 5].show_and_lis().size(), pus[(finalperson_num + 4) % 5].show_and_lis().size(), pus[finalperson_num].show_and_lis(), field_entity.rtn_value());
-                                    if (chosen_card[0].size() > 0) {
+                                    if (checker.chk_if_decideable(chosen_card[0],field_entity.rtn_value())) {
                                         for (inner_person_num[0] = 0; inner_person_num[0] < chosen_card[0].size(); inner_person_num[0]++) {
                                             pus[finalperson_num].show_and_lis().remove(pus[finalperson_num].show_and_lis().indexOf(chosen_card[0].get(inner_person_num[0])));
                                         }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Check {
     boolean chk_if_decideable(ArrayList<Card> select_card_in, ArrayList<Card> field_card_in){
-        int localcnt=0;
+        int localcnt;
         if(select_card_in.size()==0){
             return false;
         }
