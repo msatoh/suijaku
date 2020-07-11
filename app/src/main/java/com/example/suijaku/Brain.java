@@ -240,83 +240,88 @@ class StrongerBrain extends Brain{
 }
 
 class NNBrain extends Brain{
-    public NNBrain(){
-        NN nn=new NN();
-    }
-//    public float sigmoid(float a){
-//
-//    }
+    Random random = new Random();
     public float sigmoid(float param){
         return max(0,param);
     }
-    class Newron{
-        float bias[];
-        float weight[][];
-        float out_put[];
-        public void set_params(int num_of_input,int num_of_output){
-            bias=new float[num_of_output];
-            weight=new float[num_of_output][num_of_input];
-            out_put=new float[num_of_output];
+    class Newron {
+        float bias;
+        float weight[];
+        float out_put;
+
+        public void set_params(int num_of_input) {
+            weight = new float[num_of_input];
         }
-        public void set_weight(int num_of_input,int num_of_output,float param){
-            weight[num_of_output][num_of_input]=param;
+
+        public void set_weight(int num_of_input, int num_of_output, float param) {
+            weight[num_of_input] = param;
         }
-        public void set_bias(int cnt,float param){
-            bias[cnt]=param;
+
+        public void set_bias(int cnt, float param) {
+            bias = param;
         }
-        public void calc(int order,int[] in_put){
+
+        public float calc(float[] in_put) {
             int cnt;
-            float sum=0.0f;
-            sum+=bias[order];
-            for(cnt=0;cnt<in_put.length;cnt++){
-                sum+=weight[order][cnt]*in_put[cnt];
+            float sum = 0.0f;
+            sum += bias;
+            for (cnt = 0; cnt < in_put.length; cnt++) {
+                sum += weight[cnt] * in_put[cnt];
             }
-            out_put[order]=sigmoid(sum);
+            out_put = sigmoid(sum);
+            return out_put;
         }
-        public float rtn_calc(int order){
-            return out_put[order];
-        }
-        public void initialize(){
-            Random random=new Random();
-            int innerout_cnt,inner_cnt;
-            for(innerout_cnt=0;innerout_cnt<bias.length;innerout_cnt++) {
-                bias[innerout_cnt]= random.nextFloat() * 2 - 1;
-                for(inner_cnt=0;inner_cnt<weight[innerout_cnt].length;inner_cnt++){
-                    weight[innerout_cnt][inner_cnt]=random.nextFloat()*2-1;
-                }
+
+        public void initialize() {
+            int inner_cnt;
+            bias = random.nextFloat() * 2 - 1;
+            for (inner_cnt = 0; inner_cnt < weight.length; inner_cnt++) {
+                weight[inner_cnt] = random.nextFloat() * 2 - 1;
             }
         }
     }
-    class NN{
-        ArrayList<Card> out_put=new ArrayList<>();
-        int newral_out[]=new int[NUM_OF_CARDS/NUM_OF_PLAYERS];
-        Newron[] perceptron1st=new Newron[13];
-        Newron[] perceptron2nd=new Newron[12];
-        Newron[] perceptron3rd=new Newron[11];
 
-        public NN(){
-            int cnt,innerout_cnt,inner_cnt;
-            for(cnt=0;cnt<13;cnt++){
-                perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2,12);
-                perceptron1st[cnt].initialize();
-            }
-            for(cnt=0;cnt<12;cnt++){
-                perceptron2nd[cnt].set_params(13,11);
-                perceptron2nd[cnt].initialize();
-            }
-            for(cnt=0;cnt<11;cnt++){
-                perceptron3rd[cnt].set_params(11,NUM_OF_CARDS/NUM_OF_PLAYERS);
-                perceptron3rd[cnt].initialize();
+    Newron[] perceptron1st=new Newron[13];
+    Newron[] perceptron2nd=new Newron[12];
+    Newron[] perceptron3rd=new Newron[11];
+    float finalbias=random.nextFloat();
+    public ArrayList<Card> calc(float[] in_put,ArrayList<Card> mycard){
+        int cnt;
+        ArrayList<Card>out_put=new ArrayList<>();
+        float[] previous_layer_result_odd=new float[13],previous_layer_result_even=new float[12];
+        for(cnt=0;cnt<13;cnt++){
+            previous_layer_result_odd[cnt]=perceptron1st[cnt].calc(in_put);
+        }
+        for(cnt=0;cnt<12;cnt++){
+            previous_layer_result_even[cnt]=perceptron2nd[cnt].calc(previous_layer_result_odd);
+        }
+        for(cnt=0;cnt<12;cnt++){
+            previous_layer_result_odd[cnt]=perceptron3rd[cnt].calc(previous_layer_result_even);
+            if(previous_layer_result_odd[cnt]>finalbias){
+                out_put.add(mycard.get(cnt));
             }
         }
-        public ArrayList<Card> calc(int[] in_put){
-            ArrayList<Card> lists=new ArrayList<>();
-            return lists;
+        return out_put;
+    }
+    public NNBrain(){
+        int cnt;
+        for(cnt=0;cnt<13;cnt++){
+            perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
+            perceptron1st[cnt].initialize();
+        }
+        for(cnt=0;cnt<12;cnt++){
+            perceptron2nd[cnt].set_params(13);
+            perceptron2nd[cnt].initialize();
+        }
+        for(cnt=0;cnt<11;cnt++){
+            perceptron3rd[cnt].set_params(11);
+            perceptron3rd[cnt].initialize();
         }
     }
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        int in_put[]=new int[NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2],cnt;
+        float in_put[]=new float[NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2];
+        int cnt;
         in_put[0]=card_player1;
         in_put[1]=card_player2;
         in_put[2]=card_player3;
@@ -327,6 +332,6 @@ class NNBrain extends Brain{
         for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
             in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
         }
-        return nn.calc(in_put);
+        return calc(in_put,mycard);
     }
 }

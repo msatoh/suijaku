@@ -348,12 +348,11 @@ public class GameActivity extends AppCompatActivity {
                 pussy[cnt].set_name("user");
             } else {
                 pussy[cnt].set_name("COM" + cnt);
-                if(cnt==2){
-                    pussy[cnt].set_brain(new StrongerBrain());
-                }else {
-                    pussy[cnt].set_brain(new BasicBrain());
-                }
             }
+            pussy[1].set_brain(new BasicBrain());
+            pussy[2].set_brain(new StrongerBrain());
+            pussy[3].set_brain(new NNBrain());
+            pussy[4].set_brain(new BasicBrain());
             pussy_name[cnt].setText(pussy[cnt].rtn_name());
         }
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
