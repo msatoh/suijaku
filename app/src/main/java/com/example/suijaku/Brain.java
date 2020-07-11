@@ -253,7 +253,7 @@ class NNBrain extends Brain{
             weight = new float[num_of_input];
         }
 
-        public void set_weight(int num_of_input, int num_of_output, float param) {
+        public void set_weight(int num_of_input, float param) {
             weight[num_of_input] = param;
         }
 
@@ -305,7 +305,7 @@ class NNBrain extends Brain{
             }
             for(cnt=0;cnt<11;cnt++){
                 perceptron3rd[cnt].calc(result_2nd_layer);
-                if(perceptron3rd[cnt].rtn_output()>finalbias||!(cnt>mycard.size())){
+                if(perceptron3rd[cnt].rtn_output()>finalbias&&cnt<mycard.size()){
                     out_put.add(mycard.get(cnt));
                 }
             }
