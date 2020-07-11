@@ -261,7 +261,7 @@ class NNBrain extends Brain{
             bias = param;
         }
 
-        public float calc(float[] in_put) {
+        public void calc(float[] in_put) {
             int cnt;
             float sum = 0.0f;
             sum += bias;
@@ -269,6 +269,8 @@ class NNBrain extends Brain{
                 sum += weight[cnt] * in_put[cnt];
             }
             out_put = sigmoid(sum);
+        }
+        public float rtn_output(){
             return out_put;
         }
 
@@ -281,42 +283,52 @@ class NNBrain extends Brain{
         }
     }
 
-    Newron[] perceptron1st=new Newron[13];
-    Newron[] perceptron2nd=new Newron[12];
-    Newron[] perceptron3rd=new Newron[11];
-    float finalbias=random.nextFloat();
-    public ArrayList<Card> calc(float[] in_put,ArrayList<Card> mycard){
-        int cnt;
-        ArrayList<Card>out_put=new ArrayList<>();
-        float[] previous_layer_result_odd=new float[13],previous_layer_result_even=new float[12];
-        for(cnt=0;cnt<13;cnt++){
-            previous_layer_result_odd[cnt]=perceptron1st[cnt].calc(in_put);
-        }
-        for(cnt=0;cnt<12;cnt++){
-            previous_layer_result_even[cnt]=perceptron2nd[cnt].calc(previous_layer_result_odd);
-        }
-        for(cnt=0;cnt<12;cnt++){
-            previous_layer_result_odd[cnt]=perceptron3rd[cnt].calc(previous_layer_result_even);
-            if(previous_layer_result_odd[cnt]>finalbias){
-                out_put.add(mycard.get(cnt));
+    class NN{
+        Newron[] perceptron1st;
+        Newron[] perceptron2nd;
+        Newron[] perceptron3rd;
+        float result_1st_layer[];
+        float result_2nd_layer[];
+        float finalbias;
+        public ArrayList<Card> calc(float[] in_put,ArrayList<Card> mycard){
+            int cnt;
+            ArrayList<Card>out_put=new ArrayList<>();
+            result_1st_layer=new float[13];
+            result_2nd_layer=new float[12];
+            for(cnt=0;cnt<13;cnt++){
+                perceptron1st[cnt].calc(in_put);
+                result_1st_layer[cnt]=perceptron1st[cnt].rtn_output();
             }
+            for(cnt=0;cnt<12;cnt++){
+                perceptron2nd[cnt].calc(result_1st_layer);
+                result_2nd_layer[cnt]=perceptron2nd[cnt].rtn_output();
+            }
+            for(cnt=0;cnt<12;cnt++){
+                perceptron3rd[cnt].calc(result_2nd_layer);
+                if(perceptron3rd[cnt].rtn_output()>finalbias||!(perceptron3rd[cnt].rtn_output()>mycard.size())){
+                    out_put.add(mycard.get(cnt));
+                }
+            }
+            return out_put;
         }
-        return out_put;
     }
+    NN nn;
     public NNBrain(){
         int cnt;
+        nn=new NN();
         for(cnt=0;cnt<13;cnt++){
-            perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
-            perceptron1st[cnt].initialize();
+            nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
+            nn.perceptron1st[cnt].initialize();
         }
         for(cnt=0;cnt<12;cnt++){
-            perceptron2nd[cnt].set_params(13);
-            perceptron2nd[cnt].initialize();
+            nn.perceptron2nd[cnt].set_params(13);
+            nn.perceptron2nd[cnt].initialize();
         }
         for(cnt=0;cnt<11;cnt++){
-            perceptron3rd[cnt].set_params(11);
-            perceptron3rd[cnt].initialize();
+            nn.perceptron3rd[cnt].set_params(11);
+            nn.perceptron3rd[cnt].initialize();
         }
+        nn.finalbias=random.nextFloat();
     }
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
@@ -332,6 +344,7 @@ class NNBrain extends Brain{
         for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
             in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
         }
-        return calc(in_put,mycard);
+        //checker_check
+        return nn.calc(in_put,mycard);
     }
 }
