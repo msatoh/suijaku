@@ -349,10 +349,15 @@ public class GameActivity extends AppCompatActivity {
             } else {
                 pussy[cnt].set_name("COM" + cnt);
             }
+            pussy[0].set_name("Masato");
             pussy[1].set_brain(new BasicBrain());
+            pussy[1].set_name("ザコ");
             pussy[2].set_brain(new StrongerBrain());
+            pussy[0].set_name("強い");
             pussy[3].set_brain(new NNBrain());
+            pussy[0].set_name("ニューラルネットワーク");
             pussy[4].set_brain(new BasicBrain());
+            pussy[0].set_name("ふつう");
             pussy_name[cnt].setText(pussy[cnt].rtn_name());
         }
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
