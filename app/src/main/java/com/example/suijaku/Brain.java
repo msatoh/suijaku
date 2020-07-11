@@ -303,9 +303,9 @@ class NNBrain extends Brain{
                 perceptron2nd[cnt].calc(result_1st_layer);
                 result_2nd_layer[cnt]=perceptron2nd[cnt].rtn_output();
             }
-            for(cnt=0;cnt<12;cnt++){
+            for(cnt=0;cnt<11;cnt++){
                 perceptron3rd[cnt].calc(result_2nd_layer);
-                if(perceptron3rd[cnt].rtn_output()>finalbias||!(perceptron3rd[cnt].rtn_output()>mycard.size())){
+                if(perceptron3rd[cnt].rtn_output()>finalbias||!(cnt>mycard.size())){
                     out_put.add(mycard.get(cnt));
                 }
             }
@@ -316,16 +316,22 @@ class NNBrain extends Brain{
     public NNBrain(){
         int cnt;
         nn=new NN();
+        nn.perceptron1st=new Newron[13];
+        nn.perceptron2nd=new Newron[12];
+        nn.perceptron3rd=new Newron[11];
         for(cnt=0;cnt<13;cnt++){
+            nn.perceptron1st[cnt]=new Newron();
             nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
             nn.perceptron1st[cnt].initialize();
         }
         for(cnt=0;cnt<12;cnt++){
+            nn.perceptron2nd[cnt]=new Newron();
             nn.perceptron2nd[cnt].set_params(13);
             nn.perceptron2nd[cnt].initialize();
         }
         for(cnt=0;cnt<11;cnt++){
-            nn.perceptron3rd[cnt].set_params(11);
+            nn.perceptron3rd[cnt]=new Newron();
+            nn.perceptron3rd[cnt].set_params(12);
             nn.perceptron3rd[cnt].initialize();
         }
         nn.finalbias=random.nextFloat();
