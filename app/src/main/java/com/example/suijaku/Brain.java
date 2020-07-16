@@ -1,5 +1,14 @@
 package com.example.suijaku;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -281,6 +290,9 @@ class NNBrain extends Brain{
                 weight[inner_cnt] = random.nextFloat() * 2 - 1;
             }
         }
+        public void read_params(){
+
+        }
     }
 
     class NN{
@@ -313,28 +325,38 @@ class NNBrain extends Brain{
         }
     }
     NN nn;
-    public NNBrain(){
+    public NNBrain() throws IOException, ClassNotFoundException {
         int cnt;
-        nn=new NN();
-        nn.perceptron1st=new Newron[13];
-        nn.perceptron2nd=new Newron[12];
-        nn.perceptron3rd=new Newron[11];
-        for(cnt=0;cnt<13;cnt++){
-            nn.perceptron1st[cnt]=new Newron();
-            nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
-            nn.perceptron1st[cnt].initialize();
+        File file=new File("newron_param.bin");
+        if(file.exists()){
+            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("newron_param.bin"));
+            nn= (NN) file_param.readObject();
+            file_param.close();
+        }else{
+            nn=new NN();
+            nn.perceptron1st=new Newron[13];
+            nn.perceptron2nd=new Newron[12];
+            nn.perceptron3rd=new Newron[11];
+            for(cnt=0;cnt<13;cnt++){
+                nn.perceptron1st[cnt]=new Newron();
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
+                nn.perceptron1st[cnt].initialize();
+            }
+            for(cnt=0;cnt<12;cnt++){
+                nn.perceptron2nd[cnt]=new Newron();
+                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].initialize();
+            }
+            for(cnt=0;cnt<11;cnt++){
+                nn.perceptron3rd[cnt]=new Newron();
+                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].initialize();
+            }
+            nn.finalbias=random.nextFloat();
+            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("newron_param.bin"));
+            file_param.writeObject(nn);
+            file_param.close();
         }
-        for(cnt=0;cnt<12;cnt++){
-            nn.perceptron2nd[cnt]=new Newron();
-            nn.perceptron2nd[cnt].set_params(13);
-            nn.perceptron2nd[cnt].initialize();
-        }
-        for(cnt=0;cnt<11;cnt++){
-            nn.perceptron3rd[cnt]=new Newron();
-            nn.perceptron3rd[cnt].set_params(12);
-            nn.perceptron3rd[cnt].initialize();
-        }
-        nn.finalbias=random.nextFloat();
     }
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
@@ -350,7 +372,6 @@ class NNBrain extends Brain{
         for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
             in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
         }
-        //checker_check
         return nn.calc(in_put,mycard);
     }
 }

@@ -67,20 +67,20 @@ class Player{
     public void set_brain(Brain brain_in){
         algorhythm_to_choose_card=brain_in;
     }
-    public int insert_card(Card card_in){
+    public void insert_card(Card card_in){
         int pos;
         if(card_lis.size()==0){
             card_lis.add(card_in);
-            return 0;
+            return;
         }else{
             for(pos=0;pos<card_lis.size();pos++){
                 if(card_in.rtn_strength()<card_lis.get(pos).rtn_strength()){
                     card_lis.add(pos,card_in);
-                    return 0;
+                    return;
                 }
             }
             card_lis.add(card_in);
-            return 0;
+            return;
         }
     }
 }
