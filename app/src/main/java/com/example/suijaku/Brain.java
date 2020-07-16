@@ -1,23 +1,19 @@
 package com.example.suijaku;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static java.lang.Math.exp;
+import static com.example.suijaku.Cst.NUM_OF_CARDS;
+import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
-import static com.example.suijaku.Cst.NUM_OF_CARDS;
-import static java.lang.Math.random;
 
 public class Brain {
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
@@ -248,12 +244,12 @@ class StrongerBrain extends Brain{
     }
 }
 
-class NNBrain extends Brain{
+class NNBrain extends Brain implements Serializable{
     Random random = new Random();
     public float sigmoid(float param){
         return max(0,param);
     }
-    class Newron {
+    class Newron implements Serializable{
         float bias;
         float weight[];
         float out_put;
@@ -295,7 +291,7 @@ class NNBrain extends Brain{
         }
     }
 
-    class NN{
+    class NN implements Serializable{
         Newron[] perceptron1st;
         Newron[] perceptron2nd;
         Newron[] perceptron3rd;
@@ -325,11 +321,11 @@ class NNBrain extends Brain{
         }
     }
     NN nn;
-    public NNBrain() throws IOException, ClassNotFoundException {
+    public NNBrain() throws IOException, ClassNotFoundException{
         int cnt;
-        File file=new File("newron_param.bin");
+        File file=new File("/data/data/com.example.suijaku/files/newron_param.bin");
         if(file.exists()){
-            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("newron_param.bin"));
+            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
             nn= (NN) file_param.readObject();
             file_param.close();
         }else{
@@ -353,7 +349,7 @@ class NNBrain extends Brain{
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias=random.nextFloat();
-            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("newron_param.bin"));
+            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
             file_param.writeObject(nn);
             file_param.close();
         }

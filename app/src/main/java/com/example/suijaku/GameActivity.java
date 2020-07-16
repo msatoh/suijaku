@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -367,7 +368,13 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         pus[0].set_name("Masato");
-        pus[3].set_brain(new NNBrain());
+        try {
+            pus[3].set_brain(new NNBrain());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         pus[3].set_name("ニューラルネットワーク");
         pus[4].set_brain(new BasicBrain());
         pus[4].set_name("ふつう");
