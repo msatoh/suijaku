@@ -402,4 +402,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/COM3_turn"
         app:layout_constraintEnd_toEndOf="@+id/man1_status" />
 
+    <Button
+        android:id="@+id/button_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="40dp"
+        android:text="Save"
+        android:onClick="save_neuron"
+        app:layout_constraintBottom_toTopOf="@+id/PLAYER_turn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

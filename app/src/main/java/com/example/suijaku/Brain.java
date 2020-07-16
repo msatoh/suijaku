@@ -2,6 +2,7 @@ package com.example.suijaku;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,6 +17,8 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Brain {
+    class NN implements Serializable{}
+    public NN rtn_nn(){return new NN();}
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         ArrayList<Card> empty_card = new ArrayList<>();
         return empty_card;
@@ -249,7 +252,7 @@ class NNBrain extends Brain implements Serializable{
     public float sigmoid(float param){
         return max(0,param);
     }
-    class Newron implements Serializable{
+    class Neuron implements Serializable{
         float bias;
         float weight[];
         float out_put;
@@ -286,15 +289,11 @@ class NNBrain extends Brain implements Serializable{
                 weight[inner_cnt] = random.nextFloat() * 2 - 1;
             }
         }
-        public void read_params(){
-
-        }
     }
-
-    class NN implements Serializable{
-        Newron[] perceptron1st;
-        Newron[] perceptron2nd;
-        Newron[] perceptron3rd;
+    class NN extends Brain.NN implements Serializable{
+        Neuron[] perceptron1st;
+        Neuron[] perceptron2nd;
+        Neuron[] perceptron3rd;
         float result_1st_layer[];
         float result_2nd_layer[];
         float finalbias;
@@ -321,35 +320,39 @@ class NNBrain extends Brain implements Serializable{
         }
     }
     NN nn;
+
+    public NN rtn_nn(){
+        return nn;
+    }
     public NNBrain() throws IOException, ClassNotFoundException{
         int cnt;
-        File file=new File("/data/data/com.example.suijaku/files/newron_param.bin");
+        File file=new File("/data/data/com.example.suijaku/files/Neuron_param.bin");
         if(file.exists()){
-            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
+            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
             nn= (NN) file_param.readObject();
             file_param.close();
         }else{
             nn=new NN();
-            nn.perceptron1st=new Newron[13];
-            nn.perceptron2nd=new Newron[12];
-            nn.perceptron3rd=new Newron[11];
+            nn.perceptron1st=new Neuron[13];
+            nn.perceptron2nd=new Neuron[12];
+            nn.perceptron3rd=new Neuron[11];
             for(cnt=0;cnt<13;cnt++){
-                nn.perceptron1st[cnt]=new Newron();
+                nn.perceptron1st[cnt]=new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
                 nn.perceptron1st[cnt].initialize();
             }
             for(cnt=0;cnt<12;cnt++){
-                nn.perceptron2nd[cnt]=new Newron();
+                nn.perceptron2nd[cnt]=new Neuron();
                 nn.perceptron2nd[cnt].set_params(13);
                 nn.perceptron2nd[cnt].initialize();
             }
             for(cnt=0;cnt<11;cnt++){
-                nn.perceptron3rd[cnt]=new Newron();
+                nn.perceptron3rd[cnt]=new Neuron();
                 nn.perceptron3rd[cnt].set_params(12);
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias=random.nextFloat();
-            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
+            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
             file_param.writeObject(nn);
             file_param.close();
         }

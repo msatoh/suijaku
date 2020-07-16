@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -68,6 +71,7 @@ class Player{
     public void set_brain(Brain brain_in){
         algorhythm_to_choose_card=brain_in;
     }
+    public Brain rtn_brain(){return algorhythm_to_choose_card;}
     public void insert_card(Card card_in){
         int pos;
         if(card_lis.size()==0){
@@ -456,5 +460,10 @@ public class GameActivity extends AppCompatActivity {
         pus[0].reg_pass();
         MyThread passing_card = new MyThread();
         passing_card.start();
+    }
+    public void save_neuron(View view) throws IOException {
+        ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
+        file_param.writeObject(pus[3].rtn_brain().rtn_nn());
+        file_param.close();
     }
 }
