@@ -67,6 +67,22 @@ class Player{
     public void set_brain(Brain brain_in){
         algorhythm_to_choose_card=brain_in;
     }
+    public int insert_card(Card card_in){
+        int pos;
+        if(card_lis.size()==0){
+            card_lis.add(card_in);
+            return 0;
+        }else{
+            for(pos=0;pos<card_lis.size();pos++){
+                if(card_in.rtn_strength()<card_lis.get(pos).rtn_strength()){
+                    card_lis.add(pos,card_in);
+                    return 0;
+                }
+            }
+            card_lis.add(card_in);
+            return 0;
+        }
+    }
 }
 
 class Card{
@@ -363,7 +379,7 @@ public class GameActivity extends AppCompatActivity {
             pus_name[cnt].setText(pus[cnt].rtn_name());
         }
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
-            pus[cnt % 5].show_and_lis().add(gen_random_card());
+            pus[cnt % 5].insert_card(gen_random_card());
         }
         final boolean[] clicked = new boolean[pus[0].show_and_lis().size()];
         for (cnt = 0; cnt < pus[0].show_and_lis().size(); cnt++) {
@@ -381,13 +397,13 @@ public class GameActivity extends AppCompatActivity {
                         player_card.get(finalcnt).setTextColor(Color.BLUE);
                         player_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt] = true;
-                        pus[0].rtn_players_select_card_lis().rtn_select_card().add((Card) pus[0].show_and_lis().get(finalcnt));
+                        pus[0].rtn_players_select_card_lis().rtn_select_card().add(pus[0].show_and_lis().get(finalcnt));
                         pus[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().add(pus[0].show_and_lis().indexOf(pus[0].show_and_lis().get(finalcnt)));
                     } else {
                         player_card.get(finalcnt).setTextColor(Color.BLACK);
                         player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt] = false;
-                        pus[0].rtn_players_select_card_lis().rtn_select_card().remove((Card) pus[0].show_and_lis().get(finalcnt));
+                        pus[0].rtn_players_select_card_lis().rtn_select_card().remove(pus[0].show_and_lis().get(finalcnt));
                         pus[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().remove(pus[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().indexOf(finalcnt));
                     }
                 }
