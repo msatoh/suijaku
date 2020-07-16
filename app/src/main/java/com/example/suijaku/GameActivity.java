@@ -425,6 +425,7 @@ public class GameActivity extends AppCompatActivity {
                     Check checker = new Check();
                     int localcnt, inner_localcnt;
                     if (checker.chk_if_decideable(pus[0].rtn_players_select_card_lis().rtn_select_card(), field_entity.rtn_value())) {
+                        Toast.makeText(getApplicationContext(), pus[0].rtn_players_select_card_lis().rtn_select_card().equals(pus[3].choose_card(pus[1].show_and_lis().size(),pus[2].show_and_lis().size(),pus[3].show_and_lis().size(),pus[4].show_and_lis().size(),pus[0].show_and_lis(),field_entity.rtn_value()))?"○":"×"+show_cards(pus[3].choose_card(pus[1].show_and_lis().size(),pus[2].show_and_lis().size(),pus[3].show_and_lis().size(),pus[4].show_and_lis().size(),pus[0].show_and_lis(),field_entity.rtn_value())), Toast.LENGTH_SHORT).show();
                         field_entity.rtn_txtview().setText(show_cards(pus[0].rtn_players_select_card_lis().rtn_select_card()));
                         field_entity.give_val((pus[0].rtn_players_select_card_lis().rtn_select_card()));
                         for (localcnt = 0; localcnt < pus[0].rtn_players_select_card_lis().rtn_card_id_for_txtview().size(); localcnt++) {

@@ -20,8 +20,7 @@ public class Brain {
     class NN implements Serializable{}
     public NN rtn_nn(){return new NN();}
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        ArrayList<Card> empty_card = new ArrayList<>();
-        return empty_card;
+        return new ArrayList<>();
     }
 }
 
@@ -372,5 +371,8 @@ class NNBrain extends Brain implements Serializable{
             in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
         }
         return nn.calc(in_put,mycard);
+    }
+    public void back_propagation(ArrayList<Card> calculated_cards,ArrayList<Card> answer_cards){
+        ;
     }
 }
