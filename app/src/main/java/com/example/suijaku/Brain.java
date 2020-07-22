@@ -127,12 +127,12 @@ class StrongerBrain extends Brain{
                     candidate_card.clear();
                     candidate_card.add(mycard.get(first));
                     if (checker.chk_if_decideable(candidate_card, card_field)) {
-                        if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                        if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
                             if (buf_card.size() == 0) {
                                 buf_card = candidate_card;
-                            } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                            } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
                                 buf_card = candidate_card;
-                            } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                            } else if (!stronger && buf_card.get(0).strength > candidate_card.get(0).strength && candidate_card.get(0).strength < 12) {
                                 buf_card = candidate_card;
                             }
                         }
@@ -146,12 +146,12 @@ class StrongerBrain extends Brain{
                     for (second = first + 1; second < mycard.size(); second++) {
                         candidate_card.add(mycard.get(second));
                         if (checker.chk_if_decideable(candidate_card, card_field)) {
-                            if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                            if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
                                 if (buf_card.size() == 0) {
                                     buf_card = candidate_card;
-                                } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
                                     buf_card = candidate_card;
-                                } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                } else if (!stronger && buf_card.get(0).strength > candidate_card.get(0).strength && candidate_card.get(0).strength < 12) {
                                     buf_card = candidate_card;
                                 }
                             }
@@ -170,12 +170,12 @@ class StrongerBrain extends Brain{
                         for (third = second + 1; third < mycard.size(); third++) {
                             candidate_card.add(mycard.get(third));
                             if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                                if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
                                     if (buf_card.size() == 0) {
                                         buf_card = candidate_card;
-                                    } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                    } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
                                         buf_card = candidate_card;
-                                    } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                    } else if (!stronger && buf_card.get(0).strength > candidate_card.get(0).strength && candidate_card.get(0).strength < 12) {
                                         buf_card = candidate_card;
                                     }
                                 }
@@ -198,12 +198,12 @@ class StrongerBrain extends Brain{
                             for(fourth=third+1;fourth<mycard.size();fourth++) {
                                 candidate_card.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                    if(stronger||(!stronger&&candidate_card.get(0).rtn_strength()<12)) {
+                                    if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
                                         if (buf_card.size() == 0) {
                                             buf_card = candidate_card;
-                                        } else if (stronger && buf_card.get(0).rtn_strength() < candidate_card.get(0).rtn_strength()) {
+                                        } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
                                             buf_card = candidate_card;
-                                        } else if (!stronger && buf_card.get(0).rtn_strength() > candidate_card.get(0).rtn_strength() && candidate_card.get(0).rtn_strength() < 12) {
+                                        } else if (!stronger && buf_card.get(0).strength > candidate_card.get(0).strength && candidate_card.get(0).strength < 12) {
                                             buf_card = candidate_card;
                                         }
                                     }
@@ -379,16 +379,16 @@ class NNBrain extends Brain implements Serializable{
         in_put[2]=card_player3;
         in_put[3]=card_player4;
         for(cnt=4;cnt<4+mycard.size();cnt++){
-            in_put[cnt]=mycard.get(cnt-4).rtn_strength();
+            in_put[cnt]=mycard.get(cnt-4).strength;
         }
         for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
-            in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).rtn_strength();
+            in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).strength;
         }
         return nn.calc(in_put,mycard);
     }
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field,ArrayList<Card> answer_cards){
         float answer_list[]=new float[11];
-        float err=0,dEdW[]=new float[13],sum[] = new float[13];
+        float err,dEdW[]=new float[13],sum[] = new float[13];
         int cnt,i;
         for(cnt=0;cnt<11;cnt++){
             if(mycard.contains(answer_cards.get(cnt))){
@@ -396,19 +396,20 @@ class NNBrain extends Brain implements Serializable{
             }
         }
         for(cnt=0;cnt<11;cnt++){
+            err=0
             if(nn.rtn_3rd_layer(cnt)>nn.finalbias&&answer_list[cnt]==0.0){
-                err+=pow(nn.rtn_3rd_layer(cnt),2);
+                err=nn.rtn_3rd_layer(cnt);
             }
-            if(nn.rtn_3rd_layer(cnt)<nn.finalbias&&answer_list[cnt]==1.0){
-                err+=pow(nn.finalbias,2);
+            else if(nn.rtn_3rd_layer(cnt)<nn.finalbias&&answer_list[cnt]==1.0){
+                err=-nn.finalbias,2;
             }
-        }
-        for(cnt=0;cnt<11;cnt++) {
-            sum[cnt]=0;
-            for (i = 0; i < 12; cnt++) {
-                sum[cnt] += nn.result_2nd_layer[i];
+            if(err!=0) {
+                sum = 0;
+                for (i = 0; i < 12; cnt++) {
+                    sum += nn.result_2nd_layer[i];
+                }
+                nn.perceptron3rd[cnt].weight[i] -= 0.01 * sum[cnt] * err;
             }
-            nn.perceptron3rd[cnt].weight[i]=1;
         }
     }
 }

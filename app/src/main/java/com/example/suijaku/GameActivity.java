@@ -36,12 +36,6 @@ class Player{
     Brain algorhythm_to_choose_card;
     boolean if_end=false;
     boolean is_pass=false;
-    public ArrayList<Card> choose_card(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field){
-        return algorhythm_to_choose_card.calculate_card_to_put(card_player1, card_player2, card_player3, card_player4, mycard,  card_field);
-    }
-    public void set_brain(Brain brain_in){
-        algorhythm_to_choose_card=brain_in;
-    }
     public void insert_card(Card card_in){
         int pos;
         if(card_lis.size()==0){
@@ -49,7 +43,7 @@ class Player{
             return;
         }else{
             for(pos=0;pos<card_lis.size();pos++){
-                if(card_in.rtn_strength()<card_lis.get(pos).rtn_strength()){
+                if(card_in.strength<card_lis.get(pos).strength){
                     card_lis.add(pos,card_in);
                     return;
                 }
@@ -61,21 +55,9 @@ class Player{
 }
 
 class Card{
-    private mark mark_use;
-    private String num;
-    private int strength;
-    public int rtn_strength(){
-        return strength;
-    }
-    public mark rtn_mark(){
-        return mark_use;
-    }
-    public String rtn_num(){
-        return num;
-    }
-    public void give_mark(mark mark_in) {
-        mark_use = mark_in;
-    }
+    mark mark_use;
+    String num;
+    int strength;
     public void give_strength(int strength_in) {
         int num_before_conv;
         strength = strength_in;
@@ -113,18 +95,6 @@ class Rank{
 class Field{
     TextView txt;
     ArrayList<Card> field_card=new ArrayList<Card>();
-    public ArrayList<Card> rtn_value(){
-        return field_card;
-    }
-    public void give_val(ArrayList<Card> cards_in){
-        field_card= (ArrayList<Card>) cards_in.clone();
-    }
-    public TextView rtn_txtview(){
-        return txt;
-    }
-    public void give_txtview(TextView txtview_in){
-        txt=txtview_in;
-    }
 }
 
 public class GameActivity extends AppCompatActivity {
@@ -175,14 +145,14 @@ public class GameActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("Unexpected value: " + mark_num);
         }
-        a_card.give_mark(mark_in);
+        a_card.mark_use=mark_in;
         a_card.give_strength(strength_num);
         return a_card;
     }
 
     private String show_card(Card card_in) {
         String mark_disp;
-        switch (card_in.rtn_mark()) {
+        switch (card_in.mark_use) {
             case heart:
                 mark_disp = "♥";
                 break;
@@ -196,11 +166,11 @@ public class GameActivity extends AppCompatActivity {
                 mark_disp = "♣";
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + card_in.rtn_mark());
+                throw new IllegalStateException("Unexpected value: " + card_in.mark_use);
         }
-        mark_disp.concat(card_in.rtn_num());
+        mark_disp.concat(card_in.num);
 
-        return "[" + mark_disp + card_in.rtn_num() + "]";
+        return "[" + mark_disp + card_in.num + "]";
     }
 
     private String show_cards(ArrayList<Card> cards_in) {
@@ -255,8 +225,8 @@ public class GameActivity extends AppCompatActivity {
                                 }
                                 com_turn[finalperson_num].setVisibility(View.VISIBLE);
                                 if ((pus[(finalperson_num + 1) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 1) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end)) {
-                                    field_entity.rtn_txtview().setText("");
-                                    field_entity.rtn_value().clear();
+                                    field_entity.txt.setText("");
+                                    field_entity.field_card.clear();
                                     reset_all_pass();
                                 }
                             }
@@ -270,13 +240,13 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if (!pus[finalperson_num].is_pass && !pus[finalperson_num].if_end) {
-                                    chosen_card[0] = pus[finalperson_num].choose_card(pus[(finalperson_num + 1) % 5].card_lis.size(), pus[(finalperson_num + 2) % 5].card_lis.size(), pus[(finalperson_num + 3) % 5].card_lis.size(), pus[(finalperson_num + 4) % 5].card_lis.size(), pus[finalperson_num].card_lis, field_entity.rtn_value());
-                                    if (checker.chk_if_decideable(chosen_card[0],field_entity.rtn_value())) {
+                                    chosen_card[0] = pus[finalperson_num].algorhythm_to_choose_card.calculate_card_to_put(pus[(finalperson_num + 1) % 5].card_lis.size(), pus[(finalperson_num + 2) % 5].card_lis.size(), pus[(finalperson_num + 3) % 5].card_lis.size(), pus[(finalperson_num + 4) % 5].card_lis.size(), pus[finalperson_num].card_lis, field_entity.field_card);
+                                    if (checker.chk_if_decideable(chosen_card[0],field_entity.field_card)) {
                                         for (inner_person_num[0] = 0; inner_person_num[0] < chosen_card[0].size(); inner_person_num[0]++) {
                                             pus[finalperson_num].card_lis.remove(pus[finalperson_num].card_lis.indexOf(chosen_card[0].get(inner_person_num[0])));
                                         }
-                                        field_entity.rtn_txtview().setText(show_cards(chosen_card[0]));
-                                        field_entity.give_val(chosen_card[0]);
+                                        field_entity.txt.setText(show_cards(chosen_card[0]));
+                                        field_entity.field_card=chosen_card[0];
                                         if (pus[finalperson_num].card_lis.size() == 0 && !pus[finalperson_num].if_end) {
                                             pus[finalperson_num].if_end=true;
                                             com_card[finalperson_num].setText(rank_use.set_rank());
@@ -293,8 +263,8 @@ public class GameActivity extends AppCompatActivity {
                                     player_turn.setVisibility(View.VISIBLE);
                                     btn_pass.setVisibility(View.VISIBLE);
                                     if ((pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num) % NUM_OF_PLAYERS].if_end)) {
-                                        field_entity.rtn_txtview().setText("");
-                                        field_entity.rtn_value().clear();
+                                        field_entity.txt.setText("");
+                                        field_entity.field_card.clear();
                                         reset_all_pass();
                                     }
                                 }
@@ -320,7 +290,7 @@ public class GameActivity extends AppCompatActivity {
         int cnt;
         pass_card = new Handler();
         trash_card = new Handler();
-        field_entity.give_txtview((TextView) findViewById(R.id.field));
+        field_entity.txt=(TextView) findViewById(R.id.field);
         this.player_turn = findViewById(R.id.PLAYER_turn);
         for (cnt = 0; cnt < NUM_OF_CARDS / NUM_OF_PLAYERS + 1; cnt++) {
             player_card.add((TextView) findViewById(getResources().getIdentifier("player_card_in_hand_" + cnt, "id", getPackageName())));
@@ -343,19 +313,19 @@ public class GameActivity extends AppCompatActivity {
         }
         pus[0].name="Masato";
         try {
-            pus[3].set_brain(new NNBrain());
+            pus[3].algorhythm_to_choose_card=new NNBrain();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         pus[3].name="ニューラルネットワーク";
-        pus[4].set_brain(new BasicBrain());
+        pus[4].algorhythm_to_choose_card=new BasicBrain();
         pus[4].name="ふつう";
         pus[1].name="ザコ";
         pus[2].name="強い";
-        pus[1].set_brain(new BasicBrain());
-        pus[2].set_brain(new StrongerBrain());
+        pus[1].algorhythm_to_choose_card=new BasicBrain();
+        pus[2].algorhythm_to_choose_card=new StrongerBrain();
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             pus_name[cnt].setText(pus[cnt].name);
         }
@@ -394,11 +364,11 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
                     int localcnt, inner_localcnt;
-                    if (checker.chk_if_decideable(pus[0].players_select_card_lis.select_card, field_entity.rtn_value())) {
-                        Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].choose_card(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.rtn_value()))?"○":"×"+show_cards(pus[3].choose_card(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.rtn_value())), Toast.LENGTH_SHORT).show();
-                        //back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.rtn_value(),pus[0].players_select_card_lis.select_card);
-                        field_entity.rtn_txtview().setText(show_cards(pus[0].players_select_card_lis.select_card));
-                        field_entity.give_val((pus[0].players_select_card_lis.select_card));
+                    if (checker.chk_if_decideable(pus[0].players_select_card_lis.select_card, field_entity.field_card)) {
+                        Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card))?"○":"×"+show_cards(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card)), Toast.LENGTH_SHORT).show();
+                        //back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
+                        field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
+                        field_entity.field_card=(pus[0].players_select_card_lis.select_card);
                         for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
                             player_card.remove((Integer) pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
                         }
