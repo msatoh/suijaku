@@ -388,7 +388,7 @@ class NNBrain extends Brain implements Serializable{
     }
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field,ArrayList<Card> answer_cards){
         float answer_list[]=new float[11];
-        float err,dEdW[]=new float[13],sum[] = new float[13];
+        float err,sum;
         int cnt,i;
         for(cnt=0;cnt<11;cnt++){
             if(mycard.contains(answer_cards.get(cnt))){
@@ -396,19 +396,19 @@ class NNBrain extends Brain implements Serializable{
             }
         }
         for(cnt=0;cnt<11;cnt++){
-            err=0
+            err=0;
             if(nn.rtn_3rd_layer(cnt)>nn.finalbias&&answer_list[cnt]==0.0){
                 err=nn.rtn_3rd_layer(cnt);
             }
             else if(nn.rtn_3rd_layer(cnt)<nn.finalbias&&answer_list[cnt]==1.0){
-                err=-nn.finalbias,2;
+                err=-nn.finalbias;
             }
             if(err!=0) {
                 sum = 0;
                 for (i = 0; i < 12; cnt++) {
                     sum += nn.result_2nd_layer[i];
                 }
-                nn.perceptron3rd[cnt].weight[i] -= 0.01 * sum[cnt] * err;
+                nn.perceptron3rd[cnt].weight[i] -= 0.01 * sum * err;
             }
         }
     }
