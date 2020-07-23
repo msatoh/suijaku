@@ -248,12 +248,15 @@ class StrongerBrain extends Brain{
     }
 }
 
-class NNBrain extends Brain implements Serializable{
+class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    public float sigmoid(float param){
-        return max(0,param);
+    final float eta=0.01f;
+    float in_put[] = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
+    public float sigmoid(float param) {
+        return max(0, param);
     }
-    class Neuron implements Serializable{
+
+    class Neuron implements Serializable {
         float bias;
         float weight[];
         float out_put;
@@ -270,17 +273,14 @@ class NNBrain extends Brain implements Serializable{
             bias = param;
         }
 
-        public void calc(float[] in_put) {
+        public void calc(float[] input_param) {
             int cnt;
             float sum = 0.0f;
             sum += bias;
-            for (cnt = 0; cnt < in_put.length; cnt++) {
-                sum += weight[cnt] * in_put[cnt];
+            for (cnt = 0; cnt < input_param.length; cnt++) {
+                sum += weight[cnt] * input_param[cnt];
             }
             out_put = sigmoid(sum);
-        }
-        public float rtn_output(){
-            return out_put;
         }
 
         public void initialize() {
@@ -290,125 +290,152 @@ class NNBrain extends Brain implements Serializable{
                 weight[inner_cnt] = random.nextFloat() * 2 - 1;
             }
         }
-        public float rtn_weight(int param){
-            return weight[param];
-        }
     }
-    class NN extends Brain.NN implements Serializable{
+
+    class NN extends Brain.NN implements Serializable {
         Neuron[] perceptron1st;
         Neuron[] perceptron2nd;
         Neuron[] perceptron3rd;
-        float result_1st_layer[]=new float[13];
-        float result_2nd_layer[]=new float[12];
-        float result_3rd_layer[]=new float[11];
+        float result_1st_layer[] = new float[13];
+        float result_2nd_layer[] = new float[12];
+        float result_3rd_layer[] = new float[11];
         float finalbias;
-        public ArrayList<Card> calc(float[] in_put,ArrayList<Card> mycard){
+
+        public ArrayList<Card> calc(float[] input, ArrayList<Card> mycard) {
             int cnt;
-            ArrayList<Card>out_put=new ArrayList<>();
-            for(cnt=0;cnt<13;cnt++){
-                perceptron1st[cnt].calc(in_put);
-                result_1st_layer[cnt]=perceptron1st[cnt].rtn_output();
+            ArrayList<Card> out_put = new ArrayList<>();
+            for (cnt = 0; cnt < 13; cnt++) {
+                perceptron1st[cnt].calc(input);
+                result_1st_layer[cnt] = perceptron1st[cnt].out_put;
             }
-            for(cnt=0;cnt<12;cnt++){
+            for (cnt = 0; cnt < 12; cnt++) {
                 perceptron2nd[cnt].calc(result_1st_layer);
-                result_2nd_layer[cnt]=perceptron2nd[cnt].rtn_output();
+                result_2nd_layer[cnt] = perceptron2nd[cnt].out_put;
             }
-            for(cnt=0;cnt<11;cnt++){
+            for (cnt = 0; cnt < 11; cnt++) {
                 perceptron3rd[cnt].calc(result_2nd_layer);
-                result_3rd_layer[cnt]=perceptron3rd[cnt].rtn_output();
-                if(result_3rd_layer[cnt]>finalbias&&cnt<mycard.size()){
+                result_3rd_layer[cnt] = perceptron3rd[cnt].out_put;
+                if (result_3rd_layer[cnt] > finalbias && cnt < mycard.size()) {
                     out_put.add(mycard.get(cnt));
                 }
             }
             return out_put;
         }
-        public float rtn_1st_layer(int arg){
+
+        public float rtn_1st_layer(int arg) {
             return result_1st_layer[arg];
         }
-        public float rtn_2nd_layer(int arg){
+
+        public float rtn_2nd_layer(int arg) {
             return result_2nd_layer[arg];
         }
-        public float rtn_3rd_layer(int arg){
+
+        public float rtn_3rd_layer(int arg) {
             return result_3rd_layer[arg];
         }
     }
+
     NN nn;
 
-    public NN rtn_nn(){
+    public NN rtn_nn() {
         return nn;
     }
-    public NNBrain() throws IOException, ClassNotFoundException{
+
+    public NNBrain() throws IOException, ClassNotFoundException {
         int cnt;
-        File file=new File("/data/data/com.example.suijaku/files/Neuron_param.bin");
-        if(file.exists()){
-            ObjectInputStream file_param=new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
-            nn= (NN) file_param.readObject();
+        File file = new File("/data/data/com.example.suijaku/files/Neuron_param.bin");
+        if (file.exists()) {
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
+            nn = (NN) file_param.readObject();
             file_param.close();
-        }else{
-            nn=new NN();
-            nn.perceptron1st=new Neuron[13];
-            nn.perceptron2nd=new Neuron[12];
-            nn.perceptron3rd=new Neuron[11];
-            for(cnt=0;cnt<13;cnt++){
-                nn.perceptron1st[cnt]=new Neuron();
-                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2);
+        } else {
+            nn = new NN();
+            nn.perceptron1st = new Neuron[13];
+            nn.perceptron2nd = new Neuron[12];
+            nn.perceptron3rd = new Neuron[11];
+            for (cnt = 0; cnt < 13; cnt++) {
+                nn.perceptron1st[cnt] = new Neuron();
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
                 nn.perceptron1st[cnt].initialize();
             }
-            for(cnt=0;cnt<12;cnt++){
-                nn.perceptron2nd[cnt]=new Neuron();
+            for (cnt = 0; cnt < 12; cnt++) {
+                nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(13);
                 nn.perceptron2nd[cnt].initialize();
             }
-            for(cnt=0;cnt<11;cnt++){
-                nn.perceptron3rd[cnt]=new Neuron();
+            for (cnt = 0; cnt < 11; cnt++) {
+                nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(12);
                 nn.perceptron3rd[cnt].initialize();
             }
-            nn.finalbias=random.nextFloat();
-            ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
+            nn.finalbias = random.nextFloat();
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
             file_param.writeObject(nn);
             file_param.close();
         }
     }
+
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        float in_put[]=new float[NUM_OF_PLAYERS-1+(NUM_OF_CARDS/NUM_OF_PLAYERS)*2];
         int cnt;
-        in_put[0]=card_player1;
-        in_put[1]=card_player2;
-        in_put[2]=card_player3;
-        in_put[3]=card_player4;
-        for(cnt=4;cnt<4+mycard.size();cnt++){
-            in_put[cnt]=mycard.get(cnt-4).strength;
+        in_put[0] = card_player1;
+        in_put[1] = card_player2;
+        in_put[2] = card_player3;
+        in_put[3] = card_player4;
+        for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
+            in_put[cnt] = mycard.get(cnt - 4).strength;
         }
-        for(cnt=4+NUM_OF_CARDS/NUM_OF_PLAYERS;cnt<4+NUM_OF_CARDS/NUM_OF_PLAYERS+card_field.size();cnt++){
-            in_put[cnt]=card_field.get(cnt-(4+NUM_OF_CARDS/NUM_OF_PLAYERS)).strength;
+        for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + card_field.size(); cnt++) {
+            in_put[cnt] = card_field.get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
         }
-        return nn.calc(in_put,mycard);
+        return nn.calc(in_put, mycard);
     }
-    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field,ArrayList<Card> answer_cards){
-        float answer_list[]=new float[11];
-        float err,sum;
-        int cnt,i;
-        for(cnt=0;cnt<11;cnt++){
-            if(mycard.contains(answer_cards.get(cnt))){
-                answer_list[mycard.indexOf(answer_cards.get(cnt))]=1.0f;
+
+    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
+        float answer_list[] = new float[11];
+        float err[] = new float[11];
+        int cnt, i, j,k;
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (mycard.contains(answer_cards.get(cnt))) {
+                answer_list[mycard.indexOf(answer_cards.get(cnt))] = 1.0f;
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            err[cnt] = 0;
+            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && answer_list[cnt] == 0.0) {
+                err[cnt] = nn.rtn_3rd_layer(cnt);
+            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && answer_list[cnt] == 1.0) {
+                err[cnt] = -nn.finalbias;
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < 12; i++) {
+                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt];
+                }
+                nn.perceptron3rd[cnt].bias -= eta * err[cnt];
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < 12; i++) {
+                    for (j = 0; j < 13; j++) {
+                        nn.perceptron2nd[i].weight[j] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron1st[j].out_put;
+                    }
+                    nn.perceptron2nd[i].bias-=eta*nn.perceptron3rd[cnt].weight[i];
+                }
             }
         }
         for(cnt=0;cnt<11;cnt++){
-            err=0;
-            if(nn.rtn_3rd_layer(cnt)>nn.finalbias&&answer_list[cnt]==0.0){
-                err=nn.rtn_3rd_layer(cnt);
-            }
-            else if(nn.rtn_3rd_layer(cnt)<nn.finalbias&&answer_list[cnt]==1.0){
-                err=-nn.finalbias;
-            }
-            if(err!=0) {
-                sum = 0;
-                for (i = 0; i < 12; cnt++) {
-                    sum += nn.result_2nd_layer[i];
+            if(err[cnt]!=0){
+                for(i=0;i<12;i++){
+                    for(j=0;j<13;j++){
+                        for(k=0;k<NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2;k++){
+                            nn.perceptron1st[j].weight[k]-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[j]*nn.perceptron2nd[i].weight[j]*in_put[k];
+                        }
+                        nn.perceptron1st[j].bias-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[j]*nn.perceptron2nd[i].weight[j];
+                    }
                 }
-                nn.perceptron3rd[cnt].weight[i] -= 0.01 * sum * err;
             }
         }
     }
