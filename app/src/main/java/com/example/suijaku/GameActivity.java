@@ -363,10 +363,11 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
+                    ArrayList<Card> scard;
                     int localcnt, inner_localcnt;
                     if (checker.chk_if_decideable(pus[0].players_select_card_lis.select_card, field_entity.field_card)) {
                         Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card))?"○":"×"+show_cards(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card)), Toast.LENGTH_SHORT).show();
-                        //back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
+                        pus[3].algorhythm_to_choose_card.back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
                         field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
                         field_entity.field_card=(pus[0].players_select_card_lis.select_card);
                         for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
@@ -404,7 +405,7 @@ public class GameActivity extends AppCompatActivity {
         passing_card.start();
     }
     public void save_neuron(View view) throws IOException {
-        ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/newron_param.bin"));
+        ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/newron_param.bin"));
         file_param.writeObject(pus[3].algorhythm_to_choose_card.rtn_nn());
         file_param.close();
     }

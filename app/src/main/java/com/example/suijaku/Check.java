@@ -12,12 +12,12 @@ public class Check {
             if (select_card_in.size() != field_card_in.size()) {
                 return false;
             }
-            if(select_card_in.get(0).rtn_strength()<=field_card_in.get(0).rtn_strength()){
+            if(select_card_in.get(0).strength<=field_card_in.get(0).strength){
                 return false;
             }
         }
         for (localcnt = 1; localcnt < select_card_in.size(); localcnt++) {
-            if (select_card_in.get(localcnt - 1).rtn_strength() != select_card_in.get(localcnt).rtn_strength()) {
+            if (select_card_in.get(localcnt - 1).strength != select_card_in.get(localcnt).strength) {
                 return false;
             }
         }

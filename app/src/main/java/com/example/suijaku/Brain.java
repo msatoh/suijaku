@@ -24,6 +24,9 @@ public class Brain {
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         return new ArrayList<>();
     }
+    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
+        return;
+    }
 }
 
 class BasicBrain extends Brain{
@@ -345,7 +348,7 @@ class NNBrain extends Brain implements Serializable {
         int cnt;
         File file = new File("/data/data/com.example.suijaku/files/Neuron_param.bin");
         if (file.exists()) {
-            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream("/data/data/com.example.suijaku/Neuron_param.bin"));
             nn = (NN) file_param.readObject();
             file_param.close();
         } else {
@@ -369,7 +372,7 @@ class NNBrain extends Brain implements Serializable {
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();
-            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/files/Neuron_param.bin"));
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/Neuron_param.bin"));
             file_param.writeObject(nn);
             file_param.close();
         }
@@ -390,22 +393,23 @@ class NNBrain extends Brain implements Serializable {
         }
         return nn.calc(in_put, mycard);
     }
-
+    @Override
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
         float answer_list[] = new float[11];
         float err[] = new float[11];
         int cnt, i, j,k;
-        for (cnt = 0; cnt < 11; cnt++) {
+        for (cnt = 0; cnt < answer_cards.size(); cnt++) {
             if (mycard.contains(answer_cards.get(cnt))) {
                 answer_list[mycard.indexOf(answer_cards.get(cnt))] = 1.0f;
             }
         }
         for (cnt = 0; cnt < 11; cnt++) {
-            err[cnt] = 0;
             if (nn.rtn_3rd_layer(cnt) > nn.finalbias && answer_list[cnt] == 0.0) {
                 err[cnt] = nn.rtn_3rd_layer(cnt);
             } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && answer_list[cnt] == 1.0) {
                 err[cnt] = -nn.finalbias;
+            }else{
+                err[cnt] = 0;
             }
         }
         for (cnt = 0; cnt < 11; cnt++) {
@@ -431,9 +435,9 @@ class NNBrain extends Brain implements Serializable {
                 for(i=0;i<12;i++){
                     for(j=0;j<13;j++){
                         for(k=0;k<NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2;k++){
-                            nn.perceptron1st[j].weight[k]-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[j]*nn.perceptron2nd[i].weight[j]*in_put[k];
+                            nn.perceptron1st[j].weight[k]-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[i]*nn.perceptron2nd[i].weight[j]*in_put[k];
                         }
-                        nn.perceptron1st[j].bias-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[j]*nn.perceptron2nd[i].weight[j];
+                        nn.perceptron1st[j].bias-=eta*err[cnt]*nn.perceptron3rd[cnt].weight[i]*nn.perceptron2nd[i].weight[j];
                     }
                 }
             }
