@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -22,7 +21,7 @@ import java.util.Random;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 
-enum mark{heart,spade,dia,club};
+enum mark {heart, spade, dia, club}
 
 class SelectedCardList{
     ArrayList<Integer> card_id_for_txtview= new ArrayList<>();
@@ -84,8 +83,8 @@ class Card{
 }
 
 class Rank{
-    int iterator=0;
-    String rank[]={"","大富豪","富豪","平民","貧民","大貧民"};
+    int iterator = 0;
+    String[] rank = {"", "大富豪", "富豪", "平民", "貧民", "大貧民"};
     public String set_rank(){
         iterator++;
         return rank[iterator];
@@ -101,7 +100,7 @@ public class GameActivity extends AppCompatActivity {
     final int TRASH_TIME = 170;
     final int THINKING_TIME = 370;
     final Field field_entity = new Field();
-    final Player pus[] = new Player[NUM_OF_PLAYERS];
+    final Player[] pus = new Player[NUM_OF_PLAYERS];
     final ArrayList<TextView> player_card = new ArrayList<>();
     final TextView[] com_card = new TextView[NUM_OF_PLAYERS];
     final TextView[] pus_name = new TextView[NUM_OF_PLAYERS];
@@ -128,7 +127,7 @@ public class GameActivity extends AppCompatActivity {
         int random_param = used_lis.get(random_seed);
         int mark_num = random_param / 13;
         int strength_num = random_param % 13 + 1;
-        used_lis.remove(used_lis.indexOf(random_param));
+        used_lis.remove((Integer) random_param);
         switch (mark_num) {
             case 0:
                 mark_in = mark.heart;
@@ -189,98 +188,6 @@ public class GameActivity extends AppCompatActivity {
             pus_status[cnt].setText("");
         }
     }
-
-    class MyThread extends Thread {
-        Button btn_pass = findViewById(R.id.pass);
-        TextView rank_view = findViewById(R.id.player_card_in_hand_0);
-        Check checker=new Check();
-        @Override
-        public void run() {
-            final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
-            int person_num;
-            final int[] inner_person_num = new int[1];
-            do {
-                try {
-                    Thread.sleep(TRASH_TIME);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                for (person_num = 1; person_num < NUM_OF_PLAYERS; person_num++) {
-                    final int finalperson_num = person_num;
-                    if (!pus[person_num].if_end) {
-                        pass_card.post(new Runnable() {
-                            public void run() {
-                                btn_pass.setVisibility(View.INVISIBLE);
-                                if (finalperson_num == 1) {
-                                    player_turn.setVisibility(View.INVISIBLE);
-                                    if (pus[0].is_pass) {
-                                        pus_status[0].setText("pass");
-                                    }
-                                    if (pus[0].card_lis.size() == 0 && !pus[0].if_end) {
-                                        pus[0].if_end=true;
-                                        rank_view.setText(rank_use.set_rank());
-                                    }
-                                } else {
-                                    com_turn[finalperson_num - 1].setVisibility(View.INVISIBLE);
-                                }
-                                com_turn[finalperson_num].setVisibility(View.VISIBLE);
-                                if ((pus[(finalperson_num + 1) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 1) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end)) {
-                                    field_entity.txt.setText("");
-                                    field_entity.field_card.clear();
-                                    reset_all_pass();
-                                }
-                            }
-                        });
-                        try {
-                            Thread.sleep(THINKING_TIME);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        trash_card.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!pus[finalperson_num].is_pass && !pus[finalperson_num].if_end) {
-                                    chosen_card[0] = pus[finalperson_num].algorhythm_to_choose_card.calculate_card_to_put(pus[(finalperson_num + 1) % 5].card_lis.size(), pus[(finalperson_num + 2) % 5].card_lis.size(), pus[(finalperson_num + 3) % 5].card_lis.size(), pus[(finalperson_num + 4) % 5].card_lis.size(), pus[finalperson_num].card_lis, field_entity.field_card);
-                                    if (checker.chk_if_decideable(chosen_card[0],field_entity.field_card)) {
-                                        for (inner_person_num[0] = 0; inner_person_num[0] < chosen_card[0].size(); inner_person_num[0]++) {
-                                            pus[finalperson_num].card_lis.remove(pus[finalperson_num].card_lis.indexOf(chosen_card[0].get(inner_person_num[0])));
-                                        }
-                                        field_entity.txt.setText(show_cards(chosen_card[0]));
-                                        field_entity.field_card=chosen_card[0];
-                                        if (pus[finalperson_num].card_lis.size() == 0 && !pus[finalperson_num].if_end) {
-                                            pus[finalperson_num].if_end=true;
-                                            com_card[finalperson_num].setText(rank_use.set_rank());
-                                        } else {
-                                            com_card[finalperson_num].setText("" + pus[finalperson_num].card_lis.size() + "枚");
-                                        }
-                                    } else {
-                                        pus[finalperson_num].is_pass=true;
-                                        pus_status[finalperson_num].setText("pass");
-                                    }
-                                }
-                                if (finalperson_num == 4) {
-                                    com_turn[finalperson_num].setVisibility(View.INVISIBLE);
-                                    player_turn.setVisibility(View.VISIBLE);
-                                    btn_pass.setVisibility(View.VISIBLE);
-                                    if ((pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num) % NUM_OF_PLAYERS].if_end)) {
-                                        field_entity.txt.setText("");
-                                        field_entity.field_card.clear();
-                                        reset_all_pass();
-                                    }
-                                }
-                            }
-                        });
-                        try {
-                            Thread.sleep(TRASH_TIME);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            } while (pus[0].is_pass || pus[0].if_end || (pus[1].if_end && pus[2].if_end && pus[3].if_end && pus[4].if_end));
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,7 +262,7 @@ public class GameActivity extends AppCompatActivity {
                         player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt] = false;
                         pus[0].players_select_card_lis.select_card.remove(pus[0].card_lis.get(finalcnt));
-                        pus[0].players_select_card_lis.card_id_for_txtview.remove(pus[0].players_select_card_lis.card_id_for_txtview.indexOf(finalcnt));
+                        pus[0].players_select_card_lis.card_id_for_txtview.remove((Integer) finalcnt);
                     }
                 }
             });
@@ -369,7 +276,7 @@ public class GameActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card))?"○":"×"+show_cards(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card)), Toast.LENGTH_SHORT).show();
                         pus[3].algorhythm_to_choose_card.back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
                         field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
-                        field_entity.field_card=(pus[0].players_select_card_lis.select_card);
+                        field_entity.field_card = (ArrayList<Card>) pus[0].players_select_card_lis.select_card.clone();
                         for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
                             player_card.remove((Integer) pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
                         }
@@ -399,13 +306,106 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    class MyThread extends Thread {
+        Button btn_pass = findViewById(R.id.pass);
+        TextView rank_view = findViewById(R.id.player_card_in_hand_0);
+        Check checker = new Check();
+
+        @Override
+        public void run() {
+            final ArrayList<Card>[] chosen_card = new ArrayList[]{new ArrayList<>()};
+            int person_num;
+            final int[] inner_person_num = new int[1];
+            do {
+                try {
+                    Thread.sleep(TRASH_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (person_num = 1; person_num < NUM_OF_PLAYERS; person_num++) {
+                    final int finalperson_num = person_num;
+                    if (!pus[person_num].if_end) {
+                        pass_card.post(new Runnable() {
+                            public void run() {
+                                btn_pass.setVisibility(View.INVISIBLE);
+                                if (finalperson_num == 1) {
+                                    player_turn.setVisibility(View.INVISIBLE);
+                                    if (pus[0].is_pass) {
+                                        pus_status[0].setText("pass");
+                                    }
+                                    if (pus[0].card_lis.size() == 0 && !pus[0].if_end) {
+                                        pus[0].if_end = true;
+                                        rank_view.setText(rank_use.set_rank());
+                                    }
+                                } else {
+                                    com_turn[finalperson_num - 1].setVisibility(View.INVISIBLE);
+                                }
+                                com_turn[finalperson_num].setVisibility(View.VISIBLE);
+                                if ((pus[(finalperson_num + 1) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 1) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end)) {
+                                    field_entity.txt.setText("");
+                                    field_entity.field_card.clear();
+                                    reset_all_pass();
+                                }
+                            }
+                        });
+                        try {
+                            Thread.sleep(THINKING_TIME);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        trash_card.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!pus[finalperson_num].is_pass && !pus[finalperson_num].if_end) {
+                                    chosen_card[0] = pus[finalperson_num].algorhythm_to_choose_card.calculate_card_to_put(pus[(finalperson_num + 1) % 5].card_lis.size(), pus[(finalperson_num + 2) % 5].card_lis.size(), pus[(finalperson_num + 3) % 5].card_lis.size(), pus[(finalperson_num + 4) % 5].card_lis.size(), pus[finalperson_num].card_lis, field_entity.field_card);
+                                    if (checker.chk_if_decideable(chosen_card[0], field_entity.field_card)) {
+                                        for (inner_person_num[0] = 0; inner_person_num[0] < chosen_card[0].size(); inner_person_num[0]++) {
+                                            pus[finalperson_num].card_lis.remove(chosen_card[0].get(inner_person_num[0]));
+                                        }
+                                        field_entity.txt.setText(show_cards(chosen_card[0]));
+                                        field_entity.field_card = chosen_card[0];
+                                        if (pus[finalperson_num].card_lis.size() == 0 && !pus[finalperson_num].if_end) {
+                                            pus[finalperson_num].if_end = true;
+                                            com_card[finalperson_num].setText(rank_use.set_rank());
+                                        } else {
+                                            com_card[finalperson_num].setText("" + pus[finalperson_num].card_lis.size() + "枚");
+                                        }
+                                    } else {
+                                        pus[finalperson_num].is_pass = true;
+                                        pus_status[finalperson_num].setText("pass");
+                                    }
+                                }
+                                if (finalperson_num == 4) {
+                                    com_turn[finalperson_num].setVisibility(View.INVISIBLE);
+                                    player_turn.setVisibility(View.VISIBLE);
+                                    btn_pass.setVisibility(View.VISIBLE);
+                                    if ((pus[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end) && (pus[(finalperson_num) % NUM_OF_PLAYERS].is_pass || pus[(finalperson_num) % NUM_OF_PLAYERS].if_end)) {
+                                        field_entity.txt.setText("");
+                                        field_entity.field_card.clear();
+                                        reset_all_pass();
+                                    }
+                                }
+                            }
+                        });
+                        try {
+                            Thread.sleep(TRASH_TIME);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } while (pus[0].is_pass || pus[0].if_end || (pus[1].if_end && pus[2].if_end && pus[3].if_end && pus[4].if_end));
+        }
+    }
+
     public void turn_pass(View view) {
-        pus[0].is_pass=true;
+        pus[0].is_pass = true;
         MyThread passing_card = new MyThread();
         passing_card.start();
     }
+
     public void save_neuron(View view) throws IOException {
-        ObjectOutputStream file_param=new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/newron_param.bin"));
+        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/newron_param.bin"));
         file_param.writeObject(pus[3].algorhythm_to_choose_card.rtn_nn());
         file_param.close();
     }
