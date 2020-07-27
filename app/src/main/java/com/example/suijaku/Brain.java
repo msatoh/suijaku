@@ -285,7 +285,7 @@ class NNBrain extends Brain implements Serializable {
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();
-            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/Neuron_param.bin"));
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
             file_param.writeObject(nn);
             file_param.close();
         }
