@@ -251,7 +251,7 @@ class StrongerBrain extends Brain{
 
 class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    final float eta = 0.01f;
+    final float eta = 0.0001f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     public float sigmoid(float param) {
         return max(0, param);
