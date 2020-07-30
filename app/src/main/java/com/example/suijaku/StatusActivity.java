@@ -88,7 +88,7 @@ class StatusDraw extends View {
                 if (joint1stlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint1stlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) ((joint1stlayer[i][j] * 255) / max_param),(int) ((joint1stlayer[i][j] * 255) / max_param)));
+                    mpaint.setColor(rgb(255,(int) (abs(joint1stlayer[i][j] * 255) / max_param),(int) (abs(joint1stlayer[i][j] * 255) / max_param)));
                 }
                 canvas.drawLine(100, 150 + 60 * i, 400, 150 + 115 * j, mpaint);
             }
@@ -98,7 +98,7 @@ class StatusDraw extends View {
                 if (joint2ndlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint2ndlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) ((joint2ndlayer[i][j] * 255) / max_param),(int) ((joint2ndlayer[i][j] * 255) / max_param) ));
+                    mpaint.setColor(rgb(255,(int) (abs(joint2ndlayer[i][j] * 255) / max_param),(int) (abs(joint2ndlayer[i][j] * 255) / max_param) ));
                 }
                 canvas.drawLine(400, 150 + 115 * i, 700, 175 + 120 * j, mpaint);
             }
@@ -108,7 +108,7 @@ class StatusDraw extends View {
                 if (joint3rdlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint3rdlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) ((joint3rdlayer[i][j] * 255) / max_param),(int) ((joint3rdlayer[i][j] * 255) / max_param)));
+                    mpaint.setColor(rgb(255,(int) (abs(joint3rdlayer[i][j] * 255) / max_param),(int) (abs(joint3rdlayer[i][j] * 255) / max_param)));
                 }
                 canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
             }
