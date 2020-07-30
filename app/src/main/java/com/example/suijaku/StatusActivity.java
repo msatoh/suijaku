@@ -65,7 +65,8 @@ class StatusDraw extends View {
                     }
                 }
             }
-            canvas.drawText("border=" + networks.rtn_nn().finalbias, 50, 1050, mpaint);
+            mpaint.setTextSize(36);
+            canvas.drawText("border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -113,5 +114,6 @@ class StatusDraw extends View {
                 canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
             }
         }
+        canvas.drawText("max_param=" + max_param, 350, 1600, mpaint);
     }
 }
