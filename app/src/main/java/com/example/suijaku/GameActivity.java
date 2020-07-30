@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 
@@ -405,7 +406,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void save_neuron(View view) throws IOException {
-        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream("/data/data/com.example.suijaku/newron_param.bin"));
+        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
         file_param.writeObject(pus[3].algorhythm_to_choose_card.rtn_nn());
         file_param.close();
     }
