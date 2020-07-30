@@ -34,7 +34,7 @@ class StatusDraw extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int mounts, i, j;
+        int mnt, i, j;
         float[][] joint1stlayer = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2][13];
         float[][] joint2ndlayer = new float[13][12];
         float[][] joint3rdlayer = new float[12][11];
@@ -72,24 +72,24 @@ class StatusDraw extends View {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        for (mounts = 0; mounts < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mounts++) {
-            canvas.drawCircle(100, 150 + 60 * mounts, 20, mpaint);
+        for (mnt = 0; mnt < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mnt++) {
+            canvas.drawCircle(100, 150 + 60 * mnt, 20, mpaint);
         }
-        for (mounts = 0; mounts < 13; mounts++) {
-            canvas.drawCircle(400, 150 + 115 * mounts, 20, mpaint);
+        for (mnt = 0; mnt < 13; mnt++) {
+            canvas.drawCircle(400, 150 + 115 * mnt, 20, mpaint);
         }
-        for (mounts = 0; mounts < 12; mounts++) {
-            canvas.drawCircle(700, 175 + 120 * mounts, 20, mpaint);
+        for (mnt = 0; mnt < 12; mnt++) {
+            canvas.drawCircle(700, 175 + 120 * mnt, 20, mpaint);
         }
-        for (mounts = 0; mounts < 11; mounts++) {
-            canvas.drawCircle(1000, 225 + 125 * mounts, 20, mpaint);
+        for (mnt = 0; mnt < 11; mnt++) {
+            canvas.drawCircle(1000, 225 + 125 * mnt, 20, mpaint);
         }
         for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
             for (j = 0; j < 13; j++) {
                 if (joint1stlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint1stlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) (abs(joint1stlayer[i][j] * 255) / max_param),(int) (abs(joint1stlayer[i][j] * 255) / max_param)));
+                    mpaint.setColor(rgb(255, (int) (abs(joint1stlayer[i][j] * 255) / max_param), (int) (abs(joint1stlayer[i][j] * 255) / max_param)));
                 }
                 canvas.drawLine(100, 150 + 60 * i, 400, 150 + 115 * j, mpaint);
             }
