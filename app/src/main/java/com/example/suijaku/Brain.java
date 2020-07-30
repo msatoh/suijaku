@@ -17,16 +17,105 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Brain {
-    class NN implements Serializable{}
-    public NN rtn_nn(){return new NN();}
+    class NN implements Serializable {
+    }
+
+    public NN rtn_nn() {
+        return new NN();
+    }
+
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         return new ArrayList<>();
     }
+
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
         return;
     }
-    public ArrayList<Card> return_candidate_cards(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        return new ArrayList<>();
+
+    public ArrayList<ArrayList<Card>> add_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
+        Check checker = new Check();
+        ArrayList<Card> candidate_cards = new ArrayList<>();
+        ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
+        int first = 1, second = 2, third = 3, fourth = 4;
+        switch (size) {
+            case 1:
+                for (first = 0; first < mycard.size(); first++) {
+                    candidate_cards.clear();
+                    candidate_cards.add(mycard.get(first));
+                    if (checker.chk_if_decideable(candidate_cards, card_field)) {
+                        candidate_list.add(candidate_cards);
+                    }
+                }
+                break;
+            case 2:
+                candidate_cards.clear();
+                for (first = 0; first < second; first++) {
+                    candidate_cards.add(mycard.get(first));
+                    for (second = first + 1; second < mycard.size(); second++) {
+                        candidate_cards.add(mycard.get(second));
+                        if (checker.chk_if_decideable(candidate_cards, card_field)) {
+                            candidate_list.add(candidate_cards);
+                        }
+                        candidate_cards.remove(mycard.get(second));
+                    }
+                    candidate_cards.remove(mycard.get(first));
+                }
+                break;
+            case 3:
+                candidate_cards.clear();
+                for (first = 0; first < second; first++) {
+                    candidate_cards.add(mycard.get(first));
+                    for (second = first + 1; second < third; second++) {
+                        candidate_cards.add(mycard.get(second));
+                        for (third = second + 1; third < mycard.size(); third++) {
+                            candidate_cards.add(mycard.get(third));
+                            if (checker.chk_if_decideable(candidate_cards, card_field)) {
+                                candidate_list.add(candidate_cards);
+                            }
+                            candidate_cards.remove(mycard.get(third));
+                        }
+                        candidate_cards.remove(mycard.get(second));
+                    }
+                    candidate_cards.remove(mycard.get(first));
+                }
+                break;
+            case 4:
+                candidate_cards.clear();
+                for (first = 0; first < second; first++) {
+                    candidate_cards.add(mycard.get(first));
+                    for (second = first + 1; second < third; second++) {
+                        candidate_cards.add(mycard.get(second));
+                        for (third = second + 1; third < fourth; third++) {
+                            candidate_cards.add(mycard.get(third));
+                            for (fourth = third + 1; fourth < mycard.size(); fourth++) {
+                                candidate_cards.add(mycard.get(fourth));
+                                if (checker.chk_if_decideable(candidate_cards, card_field)) {
+                                    candidate_list.add(candidate_cards);
+                                }
+                                candidate_cards.remove(mycard.get(fourth));
+                            }
+                            candidate_cards.remove(mycard.get(third));
+                        }
+                        candidate_cards.remove(mycard.get(second));
+                    }
+                    candidate_cards.remove(mycard.get(first));
+                }
+                break;
+        }
+        return candidate_list;
+    }
+
+    public ArrayList<ArrayList<Card>> return_candidate_lists(ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
+        int cnt;
+        if (card_field.size() == 0) {
+            for (cnt = 0; cnt < min(4, mycard.size()); cnt++) {
+                candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
+            }
+        } else {
+            return add_card_by_sheets(mycard, card_field, card_field.size());
+        }
+        return candidate_list;
     }
 }
 
