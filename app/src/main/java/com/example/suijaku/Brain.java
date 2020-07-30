@@ -25,6 +25,9 @@ public class Brain {
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
         return;
     }
+    public ArrayList<Card> return_candidate_cards(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        return new ArrayList<>();
+    }
 }
 
 class BasicBrain extends Brain{
