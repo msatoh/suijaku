@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
-    <com.example.suijaku.StatusActivity
-        android:id="@+id/view"
+    <com.example.suijaku.StatusDraw
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
