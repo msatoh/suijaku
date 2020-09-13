@@ -21,10 +21,11 @@
         android:id="@+id/titletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="35dp"
         android:text="キャラクターセレクト"
         android:textSize="36sp"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/zako_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,91 +33,145 @@
 
     <ImageView
         android:id="@+id/zako_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="79dp"
-        android:layout_marginLeft="79dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginRight="38dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="24dp"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/robot_full_sigmoid_img"
-        app:layout_constraintEnd_toStartOf="@+id/strong_img"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titletext"
         app:srcCompat="@drawable/zako" />
 
     <ImageView
         android:id="@+id/strong_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="94dp"
-        android:layout_marginRight="94dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginRight="75dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/zako_img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/zako_img"
         app:layout_constraintTop_toTopOf="@+id/zako_img"
         app:srcCompat="@drawable/strong" />
 
     <ImageView
         android:id="@+id/robot_full_sigmoid_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginRight="49dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/robot_genetic_img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/robot_full_relu_img"
-        app:layout_constraintTop_toBottomOf="@+id/zako_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_relu_img"
         app:srcCompat="@drawable/robot_full_sigmoid" />
 
     <ImageView
         android:id="@+id/robot_genetic_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="79dp"
-        android:layout_marginLeft="79dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginRight="38dp"
-        android:layout_marginBottom="269dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="12dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/robot_select_img"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/robot_full_sigmoid_img"
         app:srcCompat="@drawable/robot_genetic" />
 
     <ImageView
         android:id="@+id/robot_select_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="94dp"
-        android:layout_marginRight="94dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginRight="75dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/robot_genetic_img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/robot_genetic_img"
         app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
         app:srcCompat="@drawable/robot_select" />
 
     <ImageView
         android:id="@+id/robot_full_relu_img"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginLeft="38dp"
-        android:layout_marginTop="112dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="12dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/robot_genetic_img"
-        app:layout_constraintEnd_toStartOf="@+id/robot_full_sigmoid_img"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/zako_img"
+        app:layout_constraintTop_toBottomOf="@+id/zako_img"
         app:srcCompat="@drawable/robot_full_relu" />
+
+    <ImageView
+        android:id="@+id/frame_zako"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/zako_img"
+        app:layout_constraintEnd_toEndOf="@+id/zako_img"
+        app:layout_constraintStart_toStartOf="@+id/zako_img"
+        app:layout_constraintTop_toTopOf="@+id/zako_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_strong"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/strong_img"
+        app:layout_constraintEnd_toEndOf="@+id/strong_img"
+        app:layout_constraintStart_toStartOf="@+id/strong_img"
+        app:layout_constraintTop_toTopOf="@+id/strong_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/selectable_underline"
+        tools:layout_editor_absoluteX="70dp"
+        tools:layout_editor_absoluteY="179dp" />
+
+    <ImageView
+        android:id="@+id/frame_robot_full_relu_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_full_relu_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_full_relu_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_full_relu_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_relu_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_full_sigmoid_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_sigmoid_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_genetic_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_genetic_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_genetic_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_genetic_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_select_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_select_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_select_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_select_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_select_img"
+        app:srcCompat="@drawable/selectable_underline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
