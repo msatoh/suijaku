@@ -13,8 +13,7 @@ import java.util.Random;
 import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 
 public class Brain {
     class NN implements Serializable {
@@ -343,10 +342,11 @@ class StrongerBrain extends Brain{
 
 class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    final float eta = 0.0001f;
+    final float eta = 0.01f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     public float sigmoid(float param) {
-        return max(0, param);
+
+        return (float) tanh(param);
     }
 
     public NNBrain() throws IOException, ClassNotFoundException {

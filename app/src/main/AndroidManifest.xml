@@ -30,6 +30,10 @@
             android:id="@+id/activity"
             android:name=".StatusActivity"
             android:label="@string/app_name"></activity>
+        <activity
+            android:id="@+id/activity"
+            android:name=".SelectActivity"
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>
