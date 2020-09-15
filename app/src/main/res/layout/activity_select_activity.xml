@@ -123,15 +123,7 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/selectable_underline"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="179dp" />
-
-    <ImageView
-        android:id="@+id/frame_robot_full_relu_img"
+        android:id="@+id/frame_robot_full_relu"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
@@ -142,7 +134,7 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/frame_robot_full_sigmoid_img"
+        android:id="@+id/frame_robot_full_sigmoid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
@@ -153,7 +145,7 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/frame_robot_genetic_img"
+        android:id="@+id/frame_robot_genetic"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
@@ -164,7 +156,7 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/frame_robot_select_img"
+        android:id="@+id/frame_robot_select"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
