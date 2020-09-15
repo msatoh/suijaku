@@ -1,10 +1,13 @@
 package com.example.suijaku;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +28,9 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_activity);
         int cnt;
+        final int[] num_of_clicked = { 0 };
         final selection select[]={new selection("zako"), new selection("strong"),new selection("robot_full_sigmoid"),new selection("robot_genetic"),new selection("robot_select"),new selection("robot_full_relu")};
+        final TextView txt_name=findViewById(R.id.char_name);
         for(cnt=0;cnt<6;cnt++) {
             final int finalCnt = cnt;
             select[cnt].img_name.setOnClickListener(new View.OnClickListener() {
@@ -35,8 +40,19 @@ public class SelectActivity extends AppCompatActivity {
                                                          select[finalCnt].frame_name.setVisibility(View.INVISIBLE);
                                                          select[finalCnt].clicked = false;
                                                      } else {
-                                                         select[finalCnt].frame_name.setVisibility(View.VISIBLE);
-                                                         select[finalCnt].clicked = true;
+                                                         if(num_of_clicked[0]>=4){
+                                                             AlertDialog.Builder builder = new AlertDialog.Builder();
+                                                             builder.setMessage("4人までしか選べません。").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                         public void onClick(DialogInterface dialog, int id) {
+// ボタンをクリックしたときの動作
+                                                                         }
+                                                                     });
+                                                         }else {
+                                                             select[finalCnt].frame_name.setVisibility(View.VISIBLE);
+                                                             select[finalCnt].clicked = true;
+                                                             num_of_clicked[0]++;
+                                                             txt_name.setText(select[finalCnt].label_name);
+                                                         }
                                                      }
                                                  }
                                              }
