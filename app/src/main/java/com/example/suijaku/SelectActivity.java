@@ -39,14 +39,10 @@ public class SelectActivity extends AppCompatActivity {
                                                      if (select[finalCnt].clicked) {
                                                          select[finalCnt].frame_name.setVisibility(View.INVISIBLE);
                                                          select[finalCnt].clicked = false;
+                                                         num_of_clicked[0]--;
                                                      } else {
                                                          if(num_of_clicked[0]>=4){
-                                                             AlertDialog.Builder builder = new AlertDialog.Builder();
-                                                             builder.setMessage("4人までしか選べません。").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                                         public void onClick(DialogInterface dialog, int id) {
-// ボタンをクリックしたときの動作
-                                                                         }
-                                                                     });
+                                                             new AlertDialog.Builder(getApplicationContext()).setMessage("4人までしか選べません。").setPositiveButton("OK", null).show();
                                                          }else {
                                                              select[finalCnt].frame_name.setVisibility(View.VISIBLE);
                                                              select[finalCnt].clicked = true;
