@@ -41,7 +41,7 @@ public class SelectActivity extends AppCompatActivity {
                                                          select[finalCnt].clicked = false;
                                                      } else {
                                                          if(num_of_clicked[0]>=4){
-                                                             new AlertDialog.Builder(SelectActivity.this).setMessage("4人までしか選べません。").setPositiveButton("OK", null);
+                                                             new AlertDialog.Builder(SelectActivity.this).setMessage("4人までしか選べません。").setPositiveButton("OK", null).show();
                                                          }else {
                                                              select[finalCnt].frame_name.setVisibility(View.VISIBLE);
                                                              select[finalCnt].clicked = true;
