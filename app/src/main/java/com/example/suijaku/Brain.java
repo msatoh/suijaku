@@ -108,11 +108,13 @@ public class Brain {
         ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
         int cnt;
         if (card_field.size() == 0) {
-            for (cnt = 0; cnt < min(4, mycard.size()); cnt++) {
+            for (cnt = 1; cnt <= min(4, mycard.size()); cnt++) {
                 candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
             }
         } else {
-            return add_card_by_sheets(mycard, card_field, card_field.size());
+            for(cnt=1;cnt<=card_field.size();cnt++) {
+                candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
+            }
         }
         return candidate_list;
     }
@@ -626,6 +628,42 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
             }
         }
     }
+}
+
+class NNBrain_Select extends NNBrain implements Serializable {
+    public NNBrain_Select() throws IOException, ClassNotFoundException {
+        int cnt;
+        File file = new File(FILE_PATH);
+        if (file.exists()) {
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
+            nn = (NN) file_param.readObject();
+            file_param.close();
+        } else {
+            nn = new NN();
+            nn.perceptron1st = new Neuron[13];
+            nn.perceptron2nd = new Neuron[12];
+            nn.perceptron3rd = new Neuron[11];
+            for (cnt = 0; cnt < 13; cnt++) {
+                nn.perceptron1st[cnt] = new Neuron();
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
+                nn.perceptron1st[cnt].initialize();
+            }
+            for (cnt = 0; cnt < 12; cnt++) {
+                nn.perceptron2nd[cnt] = new Neuron();
+                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].initialize();
+            }
+            for (cnt = 0; cnt < 11; cnt++) {
+                nn.perceptron3rd[cnt] = new Neuron();
+                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].initialize();
+            }
+            nn.finalbias = random.nextFloat();
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+            file_param.writeObject(nn);
+            file_param.close();
+        }
+    }
 
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
@@ -637,8 +675,8 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
         for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
             in_put[cnt] = mycard.get(cnt - 4).strength;
         }
-        for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + card_field.size(); cnt++) {
-            in_put[cnt] = card_field.get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
+        for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + return_candidate_lists(mycard, card_field).size(); cnt++) {
+            in_put[cnt] = return_candidate_lists(mycard, card_field).get(card_field.size()).get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
         }
         return nn.calc(in_put, mycard);
     }
