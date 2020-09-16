@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,25 +35,32 @@ public class SelectActivity extends AppCompatActivity {
         for(cnt=0;cnt<6;cnt++) {
             final int finalCnt = cnt;
             select[cnt].img_name.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     if (select[finalCnt].clicked) {
-                                                         select[finalCnt].frame_name.setVisibility(View.INVISIBLE);
-                                                         select[finalCnt].clicked = false;
-                                                         num_of_clicked[0]--;
-                                                     } else {
-                                                         if(num_of_clicked[0]>=4){
-                                                             new AlertDialog.Builder(getApplicationContext()).setMessage("4人までしか選べません。").setPositiveButton("OK", null).show();
-                                                         }else {
-                                                             select[finalCnt].frame_name.setVisibility(View.VISIBLE);
-                                                             select[finalCnt].clicked = true;
-                                                             num_of_clicked[0]++;
-                                                             txt_name.setText(select[finalCnt].label_name);
-                                                         }
-                                                     }
-                                                 }
-                                             }
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            if (select[finalCnt].clicked) {
+                                                                select[finalCnt].frame_name.setVisibility(View.INVISIBLE);
+                                                                select[finalCnt].clicked = false;
+                                                                num_of_clicked[0]--;
+                                                            } else {
+                                                                if (num_of_clicked[0] >= 4) {
+                                                                    AlertThread thread_alert = new AlertThread();
+                                                                    thread_alert.start();
+                                                                } else {
+                                                                    select[finalCnt].frame_name.setVisibility(View.VISIBLE);
+                                                                    select[finalCnt].clicked = true;
+                                                                    num_of_clicked[0]++;
+                                                                    txt_name.setText(select[finalCnt].label_name);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
             );
+        }
+    }
+
+    class AlertThread extends Thread{
+        public void run(){
+            new AlertDialog.Builder(getApplicationContext()).setMessage("4人までしか選べません。").setPositiveButton("OK", null).show();
         }
     }
 
