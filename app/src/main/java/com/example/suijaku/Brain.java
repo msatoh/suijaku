@@ -342,7 +342,7 @@ class StrongerBrain extends Brain{
 
 class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    final float eta = 0.01f;
+    final float eta = 0.001f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     public float sigmoid(float param) {
 
@@ -533,5 +533,113 @@ class NNBrain extends Brain implements Serializable {
         public float rtn_3rd_layer(int arg) {
             return result_3rd_layer[arg];
         }
+    }
+}
+
+class NNBrain_ReLu extends NNBrain implements Serializable {
+    final float eta = 0.0001f;
+    @Override
+    public float sigmoid(float param) {
+        return max(param,0);
+    }
+    public NNBrain_ReLu() throws IOException, ClassNotFoundException {
+        int cnt;
+        File file = new File(FILE_PATH);
+        if (file.exists()) {
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
+            nn = (NN) file_param.readObject();
+            file_param.close();
+        } else {
+            nn = new NN();
+            nn.perceptron1st = new Neuron[13];
+            nn.perceptron2nd = new Neuron[12];
+            nn.perceptron3rd = new Neuron[11];
+            for (cnt = 0; cnt < 13; cnt++) {
+                nn.perceptron1st[cnt] = new Neuron();
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
+                nn.perceptron1st[cnt].initialize();
+            }
+            for (cnt = 0; cnt < 12; cnt++) {
+                nn.perceptron2nd[cnt] = new Neuron();
+                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].initialize();
+            }
+            for (cnt = 0; cnt < 11; cnt++) {
+                nn.perceptron3rd[cnt] = new Neuron();
+                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].initialize();
+            }
+            nn.finalbias = random.nextFloat();
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+            file_param.writeObject(nn);
+            file_param.close();
+        }
+    }
+
+    @Override
+    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
+        float[] answer_list = new float[11];
+        float[] err = new float[11];
+        int cnt, i, j, k;
+        for (cnt = 0; cnt < answer_cards.size(); cnt++) {
+            if (mycard.contains(answer_cards.get(cnt))) {
+                answer_list[mycard.indexOf(answer_cards.get(cnt))] = 1.0f;
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && answer_list[cnt] == 0.0) {
+                err[cnt] = nn.rtn_3rd_layer(cnt);
+            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && answer_list[cnt] == 1.0) {
+                err[cnt] = -nn.finalbias;
+            }else{
+                err[cnt] = 0;
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < 12; i++) {
+                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt];
+                }
+                nn.perceptron3rd[cnt].bias -= eta * err[cnt];
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < 12; i++) {
+                    for (j = 0; j < 13; j++) {
+                        nn.perceptron2nd[i].weight[j] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron1st[j].out_put;
+                    }
+                    nn.perceptron2nd[i].bias-=eta*nn.perceptron3rd[cnt].weight[i];
+                }
+            }
+        }
+        for(cnt=0;cnt<11;cnt++){
+            if(err[cnt]!=0){
+                for(i=0;i<12;i++){
+                    for (j = 0; j < 13; j++) {
+                        for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
+                            nn.perceptron1st[j].weight[k] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j] * in_put[k];
+                        }
+                        nn.perceptron1st[j].bias -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j];
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        int cnt;
+        in_put[0] = card_player1;
+        in_put[1] = card_player2;
+        in_put[2] = card_player3;
+        in_put[3] = card_player4;
+        for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
+            in_put[cnt] = mycard.get(cnt - 4).strength;
+        }
+        for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + card_field.size(); cnt++) {
+            in_put[cnt] = card_field.get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
+        }
+        return nn.calc(in_put, mycard);
     }
 }
