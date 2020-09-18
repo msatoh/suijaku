@@ -670,14 +670,15 @@ class NNBrain_Select extends NNBrain implements Serializable {
 
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        int cnt;
+        int cnt, pos = 4;
         in_put[0] = card_player1;
         in_put[1] = card_player2;
         in_put[2] = card_player3;
         in_put[3] = card_player4;
         for (cnt = 4; cnt < 4 + return_candidate_lists(mycard, card_field).size(); cnt++) {
-            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(cnt - 4).get(1).strength))) {
-                in_put[cnt] = 12 * (return_candidate_lists(mycard, card_field).get(cnt).size() - 1) + return_candidate_lists(mycard, card_field).get(cnt - 4).get(1).strength;
+            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(cnt - 4).get(0).strength))) {
+                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(cnt - 4).size() - 1) + return_candidate_lists(mycard, card_field).get(cnt - 4).get(0).strength;
+                pos++;
             }
         }
         return nn.calc(in_put, mycard);
