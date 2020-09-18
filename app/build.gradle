@@ -20,9 +20,9 @@ android {
     }
 
     buildTypes {
-        debug{
-            debuggable true
-        }
+//        debug{
+//            debuggable false
+//        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

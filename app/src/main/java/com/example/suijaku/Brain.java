@@ -8,12 +8,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.tanh;
 
 public class Brain {
     class NN implements Serializable {
@@ -42,7 +45,7 @@ public class Brain {
                     candidate_cards.clear();
                     candidate_cards.add(mycard.get(first));
                     if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                        candidate_list.add(candidate_cards);
+                        candidate_list.add((ArrayList<Card>) candidate_cards.clone());
                     }
                 }
                 break;
@@ -53,7 +56,7 @@ public class Brain {
                     for (second = first + 1; second < mycard.size(); second++) {
                         candidate_cards.add(mycard.get(second));
                         if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                            candidate_list.add(candidate_cards);
+                            candidate_list.add((ArrayList<Card>) candidate_cards.clone());
                         }
                         candidate_cards.remove(mycard.get(second));
                     }
@@ -69,7 +72,7 @@ public class Brain {
                         for (third = second + 1; third < mycard.size(); third++) {
                             candidate_cards.add(mycard.get(third));
                             if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                                candidate_list.add(candidate_cards);
+                                candidate_list.add((ArrayList<Card>) candidate_cards.clone());
                             }
                             candidate_cards.remove(mycard.get(third));
                         }
@@ -89,7 +92,7 @@ public class Brain {
                             for (fourth = third + 1; fourth < mycard.size(); fourth++) {
                                 candidate_cards.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                                    candidate_list.add(candidate_cards);
+                                    candidate_list.add((ArrayList<Card>) candidate_cards.clone());
                                 }
                                 candidate_cards.remove(mycard.get(fourth));
                             }
@@ -672,11 +675,10 @@ class NNBrain_Select extends NNBrain implements Serializable {
         in_put[1] = card_player2;
         in_put[2] = card_player3;
         in_put[3] = card_player4;
-        for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
-            in_put[cnt] = mycard.get(cnt - 4).strength;
-        }
-        for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + return_candidate_lists(mycard, card_field).size(); cnt++) {
-            in_put[cnt] = return_candidate_lists(mycard, card_field).get(card_field.size()).get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
+        for (cnt = 4; cnt < 4 + return_candidate_lists(mycard, card_field).size(); cnt++) {
+            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(cnt - 4).get(1).strength))) {
+                in_put[cnt] = 12 * (return_candidate_lists(mycard, card_field).get(cnt).size() - 1) + return_candidate_lists(mycard, card_field).get(cnt - 4).get(1).strength;
+            }
         }
         return nn.calc(in_put, mycard);
     }
