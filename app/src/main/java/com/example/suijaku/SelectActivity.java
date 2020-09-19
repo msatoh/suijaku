@@ -56,9 +56,13 @@ public class SelectActivity extends AppCompatActivity {
     }
 
     public void game_start(View view) {
-        Intent intent = new Intent(SelectActivity.this, GameActivity.class);
-        intent.putExtra("selected_char_list", selected_char);
-        startActivity(intent);
+        if (selected_char.size() == 4) {
+            Intent intent = new Intent(SelectActivity.this, GameActivity.class);
+            intent.putExtra("selected_char_list", selected_char);
+            startActivity(intent);
+        } else {
+            new AlertDialog.Builder(SelectActivity.this).setMessage("4人選んでください。").setPositiveButton("OK", null).show();
+        }
     }
 
 
