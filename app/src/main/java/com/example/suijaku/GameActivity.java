@@ -1,5 +1,6 @@
 package com.example.suijaku;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -192,13 +193,15 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent get_intent = getIntent();
+        ArrayList<String> char_list = get_intent.getStringArrayListExtra("selected_char_list");
         android.os.Debug.waitForDebugger();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
         int cnt;
         pass_card = new Handler();
         trash_card = new Handler();
-        field_entity.txt=(TextView) findViewById(R.id.field);
+        field_entity.txt = findViewById(R.id.field);
         this.player_turn = findViewById(R.id.PLAYER_turn);
         for (cnt = 0; cnt < NUM_OF_CARDS / NUM_OF_PLAYERS + 1; cnt++) {
             player_card.add((TextView) findViewById(getResources().getIdentifier("player_card_in_hand_" + cnt, "id", getPackageName())));
@@ -243,7 +246,7 @@ public class GameActivity extends AppCompatActivity {
         final boolean[] clicked = new boolean[pus[0].card_lis.size()];
         for (cnt = 0; cnt < pus[0].card_lis.size(); cnt++) {
             clicked[cnt] = false;
-            player_card.get(cnt).setText(show_card(((Card) pus[0].card_lis.get(cnt))));
+            player_card.get(cnt).setText(show_card(pus[0].card_lis.get(cnt)));
         }
         for (cnt = 1; cnt < NUM_OF_PLAYERS; cnt++) {
             com_card[cnt].setText("" + pus[cnt].card_lis.size() + "枚");
@@ -256,7 +259,7 @@ public class GameActivity extends AppCompatActivity {
                         player_card.get(finalcnt).setTextColor(Color.BLUE);
                         player_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt] = true;
-                        pus[0].players_select_card_lis.select_card.add((Card) pus[0].card_lis.get(finalcnt));
+                        pus[0].players_select_card_lis.select_card.add(pus[0].card_lis.get(finalcnt));
                         pus[0].players_select_card_lis.card_id_for_txtview.add(pus[0].card_lis.indexOf(pus[0].card_lis.get(finalcnt)));
                     } else {
                         player_card.get(finalcnt).setTextColor(Color.BLACK);
@@ -279,14 +282,14 @@ public class GameActivity extends AppCompatActivity {
                         field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
                         field_entity.field_card = (ArrayList<Card>) pus[0].players_select_card_lis.select_card.clone();
                         for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
-                            player_card.remove((Integer) pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
+                            player_card.remove(pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
                         }
                         pus[0].players_select_card_lis.card_id_for_txtview.clear();
                         for (inner_localcnt = 0; inner_localcnt < pus[0].players_select_card_lis.select_card.size(); inner_localcnt++) {
                             pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(inner_localcnt));
                         }
                         for (inner_localcnt = 0; inner_localcnt < pus[0].card_lis.size(); inner_localcnt++) {
-                            player_card.get(inner_localcnt).setText(show_card(((Card) pus[0].card_lis.get(inner_localcnt))));
+                            player_card.get(inner_localcnt).setText(show_card(pus[0].card_lis.get(inner_localcnt)));
                             clicked[inner_localcnt] = false;
                             player_card.get(inner_localcnt).setTextColor(Color.BLACK);
                             player_card.get(inner_localcnt).setTypeface(Typeface.DEFAULT);

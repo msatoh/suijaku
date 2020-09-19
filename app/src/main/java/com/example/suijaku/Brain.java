@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.max;
@@ -636,9 +637,9 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
 class NNBrain_Select extends NNBrain implements Serializable {
     public NNBrain_Select() throws IOException, ClassNotFoundException {
         int cnt;
-        File file = new File(FILE_PATH);
+        File file = new File(FILE_PATH_NNBSelect);
         if (file.exists()) {
-            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH_NNBSelect));
             nn = (NN) file_param.readObject();
             file_param.close();
         } else {
@@ -662,7 +663,7 @@ class NNBrain_Select extends NNBrain implements Serializable {
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();
-            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH_NNBSelect));
             file_param.writeObject(nn);
             file_param.close();
         }
