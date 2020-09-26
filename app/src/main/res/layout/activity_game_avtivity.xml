@@ -41,7 +41,7 @@
 
     <ImageView
         android:id="@+id/COM1_turn"
-        android:layout_width="0dp"
+        android:layout_width="205dp"
         android:layout_height="0dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/divider4"
@@ -52,23 +52,23 @@
 
     <ImageView
         android:id="@+id/COM3_turn"
-        android:layout_width="0dp"
+        android:layout_width="205dp"
         android:layout_height="0dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/divider5"
-        app:layout_constraintEnd_toStartOf="@+id/COM4_turn"
+        app:layout_constraintEnd_toStartOf="@+id/divider2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4"
         app:srcCompat="@drawable/frame_style" />
 
     <ImageView
         android:id="@+id/COM4_turn"
-        android:layout_width="0dp"
+        android:layout_width="205dp"
         android:layout_height="130dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/divider5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/COM3_turn"
+        app:layout_constraintStart_toEndOf="@+id/divider2"
         app:layout_constraintTop_toBottomOf="@+id/divider4"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/frame_style" />
