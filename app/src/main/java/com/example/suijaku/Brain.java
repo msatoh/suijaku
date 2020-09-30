@@ -490,7 +490,7 @@ class NNBrain extends Brain implements Serializable {
         in_put[2] = card_player3;
         in_put[3] = card_player4;
         for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
-            in_put[cnt] = mycard.get(cnt - 4).strength;
+            in_put[cnt] = mycard.get(mycard.size()-(cnt - 4)).strength;
         }
         for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + card_field.size(); cnt++) {
             in_put[cnt] = card_field.get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
@@ -677,8 +677,8 @@ class NNBrain_Select extends NNBrain implements Serializable {
         in_put[2] = card_player3;
         in_put[3] = card_player4;
         for (cnt = 4; cnt < 4 + return_candidate_lists(mycard, card_field).size(); cnt++) {
-            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(cnt - 4).get(0).strength))) {
-                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(cnt - 4).size() - 1) + return_candidate_lists(mycard, card_field).get(cnt - 4).get(0).strength;
+            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)).get(0).strength))) {
+                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)).size() - 1) + return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)).get(0).strength;
                 pos++;
             }
         }
