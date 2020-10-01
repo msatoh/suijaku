@@ -5,9 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
 
 import java.io.IOException;
 
@@ -17,20 +21,74 @@ import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
 
 public class StatusActivity extends AppCompatActivity {
+    enum Type {
+        UP,
+        DOWN,
+        RIGHT,
+        LEFT,
+    }
+
+    private GestureDetectorCompat gestureDetector;
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);//    GestureDetectorにイベントを渡すために必要です
+        return super.onTouchEvent(event);
+    }
+
+    class mOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Type type;
+            float startX = e1.getX();
+            float startY = e1.getY();
+            float nowX = e2.getX();
+            float nowY = e2.getY();
+            float absX = Math.abs(nowX - startX);
+            float absY = Math.abs(nowY - startY);
+//    フリック開始時のx,y座標、終了時のx,y座標を保持
+//    指の移動距離の絶対値
+
+            if (absX + absY < 50) {
+                return false;
+            }//    誤作動を防ぐため、移動距離が短い時は何もしない。調節してください
+            if (absX > absY) {
+                //    横方向の操作の場合
+                if (nowX - startX < 0) {
+                    type = Type.LEFT;
+                } else {
+                    type = Type.RIGHT;
+                }
+            } else {
+                //    縦方向の操作の場合
+                if (nowY - startY < 0) {
+                    type = Type.UP;
+                } else {
+                    type = Type.DOWN;
+                }
+            }
+            Log.d("hogehoge", type.toString());
+            //    ログに方向を表示
+            return true;
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_avtivity);
+        gestureDetector=new GestureDetectorCompat(this, new mOnGestureListener());
     }
 }
 
+//import from: https://kojiko-android.hatenablog.com/entry/2016/07/10/004153
 class StatusDraw extends View {
     Paint mpaint = new Paint();
-
     public StatusDraw(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -99,7 +157,7 @@ class StatusDraw extends View {
                 if (joint2ndlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint2ndlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) (abs(joint2ndlayer[i][j] * 255) / max_param),(int) (abs(joint2ndlayer[i][j] * 255) / max_param) ));
+                    mpaint.setColor(rgb(255, (int) (abs(joint2ndlayer[i][j] * 255) / max_param), (int) (abs(joint2ndlayer[i][j] * 255) / max_param)));
                 }
                 canvas.drawLine(400, 150 + 115 * i, 700, 175 + 120 * j, mpaint);
             }
@@ -109,7 +167,7 @@ class StatusDraw extends View {
                 if (joint3rdlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint3rdlayer[i][j] * 255) / max_param)));
                 } else {
-                    mpaint.setColor(rgb(255,(int) (abs(joint3rdlayer[i][j] * 255) / max_param),(int) (abs(joint3rdlayer[i][j] * 255) / max_param)));
+                    mpaint.setColor(rgb(255, (int) (abs(joint3rdlayer[i][j] * 255) / max_param), (int) (abs(joint3rdlayer[i][j] * 255) / max_param)));
                 }
                 canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
             }
