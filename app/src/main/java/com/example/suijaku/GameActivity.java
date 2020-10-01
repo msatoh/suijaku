@@ -224,7 +224,7 @@ public class GameActivity extends AppCompatActivity {
         }
         pus[0].name="Masato";
         try {
-            pus[3].algorhythm_to_choose_card = new NNBrain_Select();
+            pus[3].algorhythm_to_choose_card = new NNBrain();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

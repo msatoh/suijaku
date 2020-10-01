@@ -40,7 +40,7 @@ class StatusDraw extends View {
         float[][] joint3rdlayer = new float[12][11];
         float max_param = 0.0f;
         try {
-            NNBrain_Select networks = new NNBrain_Select();
+            NNBrain networks = new NNBrain();
             for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
                 for (j = 0; j < 13; j++) {
                     joint1stlayer[i][j] = networks.rtn_nn().perceptron1st[j].weight[i];
