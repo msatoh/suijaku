@@ -13,6 +13,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 
+import com.example.suijaku.NNBrain;
+import com.example.suijaku.R;
+
 import java.io.IOException;
 
 import static android.graphics.Color.rgb;
@@ -20,7 +23,7 @@ import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
 
-public class StatusActivity extends AppCompatActivity {
+public class StatusActivity2 extends AppCompatActivity {
     enum Direction {
         UP,
         DOWN,
@@ -82,9 +85,9 @@ public class StatusActivity extends AppCompatActivity {
     }
 }
 
-class StatusDraw extends View {
+class StatusDraw2 extends View {
     Paint mpaint = new Paint();
-    public StatusDraw(Context context, AttributeSet attributeSet) {
+    public StatusDraw2(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
     @Override
@@ -96,7 +99,7 @@ class StatusDraw extends View {
         float[][] joint3rdlayer = new float[12][11];
         float max_param = 0.0f;
         try {
-            NNBrain networks = new NNBrain();
+            NNBrain_Select networks = new NNBrain_Select();
             for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
                 for (j = 0; j < 13; j++) {
                     joint1stlayer[i][j] = networks.rtn_nn().perceptron1st[j].weight[i];
