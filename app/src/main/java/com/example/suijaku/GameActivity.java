@@ -27,7 +27,7 @@ enum mark {heart, spade, dia, club}
 
 class SelectedCardList{
     ArrayList<Integer> card_id_for_txtview= new ArrayList<>();
-    ArrayList<Card> select_card=new ArrayList<Card>();
+    ArrayList<Card> select_card=new ArrayList<>();
 }
 
 class Player{
@@ -95,7 +95,7 @@ class Rank{
 
 class Field{
     TextView txt;
-    ArrayList<Card> field_card=new ArrayList<Card>();
+    ArrayList<Card> field_card=new ArrayList<>();
 }
 
 public class GameActivity extends AppCompatActivity {
@@ -112,7 +112,7 @@ public class GameActivity extends AppCompatActivity {
     Handler pass_card;
     Handler trash_card;
     final Rank rank_use = new Rank();
-    private ArrayList<Integer> used_lis = new ArrayList<Integer>();
+    private ArrayList<Integer> used_lis = new ArrayList<>();
 
     private void init_array(ArrayList<Integer> used_lis_in) {
         int cnt;
@@ -224,7 +224,13 @@ public class GameActivity extends AppCompatActivity {
         }
         pus[0].name="Masato";
         try {
-            pus[3].algorhythm_to_choose_card = new NNBrain();
+            if(char_list.contains("robot_select")) {
+                pus[3].algorhythm_to_choose_card = new NNBrain_Select();
+            }else if(char_list.contains("robot_full_relu")){
+                pus[3].algorhythm_to_choose_card = new NNBrain_ReLu();
+            }else{
+                pus[3].algorhythm_to_choose_card = new NNBrain();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

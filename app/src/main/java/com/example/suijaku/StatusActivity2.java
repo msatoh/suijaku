@@ -1,6 +1,7 @@
 package com.example.suijaku;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -24,12 +25,6 @@ import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
 
 public class StatusActivity2 extends AppCompatActivity {
-    enum Direction {
-        UP,
-        DOWN,
-        RIGHT,
-        LEFT,
-    }
 
     private GestureDetectorCompat gestureDetector;
     public boolean onTouchEvent(MotionEvent event) {
@@ -44,7 +39,6 @@ public class StatusActivity2 extends AppCompatActivity {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Direction type;
             float startX = e1.getX();
             float startY = e1.getY();
             float nowX = e2.getX();
@@ -59,28 +53,16 @@ public class StatusActivity2 extends AppCompatActivity {
             }//    誤作動を防ぐため、移動距離が短い時は何もしない。調節してください
             if (absX > absY) {
                 //    横方向の操作の場合
-                if (nowX - startX < 0) {
-                    type = Direction.LEFT;
-                } else {
-                    type = Direction.RIGHT;
-                }
-            } else {
-                //    縦方向の操作の場合
-                if (nowY - startY < 0) {
-                    type = Direction.UP;
-                } else {
-                    type = Direction.DOWN;
-                }
+                startActivity(new Intent(StatusActivity2.this, StatusActivity.class));
+                finish();
             }
-            Log.d("hogehoge", type.toString());
-            //    ログに方向を表示
             return true;
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_status_avtivity);
+        setContentView(R.layout.activity_status_avtivity2);
         gestureDetector=new GestureDetectorCompat(this, new mOnGestureListener());
     }
 }
