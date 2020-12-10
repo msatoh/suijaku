@@ -13,7 +13,7 @@
 <BR><BR>
   
 <h2>＜今後やること（上から順）＞</h2>
-<li>残ったカードリストから選択Brain作成
+<li>残ったカードリストから選択Brain作成<BR>
 Train Activity作成…
 <ul>キャラクター選択画面実装（フル学習・選択肢から学習・遺伝アルゴリズム）SelectActivity2かな
 フル学習・選択肢から学習BrainのTrain実装…<BR>
