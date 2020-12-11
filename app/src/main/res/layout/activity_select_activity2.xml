@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:onClick="game_start"
+        android:text="決定"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/titletext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:text="誰を育てる？"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/robot_full_sigmoid_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_relu_img"
+        app:srcCompat="@drawable/robot_full_sigmoid" />
+
+    <ImageView
+        android:id="@+id/robot_genetic_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/robot_full_sigmoid_img"
+        app:srcCompat="@drawable/robot_genetic" />
+
+    <ImageView
+        android:id="@+id/robot_select_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginRight="75dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
+        app:srcCompat="@drawable/robot_select" />
+
+    <ImageView
+        android:id="@+id/robot_full_relu_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="100dp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/robot_full_relu" />
+
+    <ImageView
+        android:id="@+id/frame_robot_full_relu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_full_relu_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_full_relu_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_full_relu_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_relu_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_full_sigmoid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_full_sigmoid_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_full_sigmoid_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_genetic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_genetic_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_genetic_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_genetic_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <ImageView
+        android:id="@+id/frame_robot_select"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_select_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_select_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_select_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_select_img"
+        app:srcCompat="@drawable/selectable_underline" />
+
+    <TextView
+        android:id="@+id/char_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_button" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="カード捨てたとき学習するか選ぶ"
+        app:layout_constraintBottom_toTopOf="@+id/editTextNumber"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:width="50dp"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="4"
+        app:layout_constraintBottom_toTopOf="@+id/start_button"
+        app:layout_constraintStart_toEndOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="（遺伝的アルゴリズムのみ）世代数："
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNumber"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

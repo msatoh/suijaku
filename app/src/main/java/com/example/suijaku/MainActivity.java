@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void train_npc(View view){
-        Intent intent = new Intent(MainActivity.this, TrainActivity.class);
+        Intent intent = new Intent(MainActivity.this, SelectActivity2.class);
         startActivity(intent);
     }
     public void growth_of_npc(View view){

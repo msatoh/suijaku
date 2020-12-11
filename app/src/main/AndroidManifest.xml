@@ -40,11 +40,16 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
         android:screenOrientation="portrait">
-    <activity
-        android:id="@+id/activity"
-        android:name=".StatusActivity2"
-        android:label="@string/app_name"
-        android:screenOrientation="portrait"></activity>
+        <activity
+            android:id="@+id/activity"
+            android:name=".StatusActivity2"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:id="@+id/activity"
+            android:name=".SelectActivity2"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
