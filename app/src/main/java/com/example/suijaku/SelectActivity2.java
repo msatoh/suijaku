@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class SelectActivity2 extends AppCompatActivity {
-    String selected_char;
+    String selected_char="";
     boolean if_stop=false;
 
     class selection {
@@ -76,9 +76,11 @@ public class SelectActivity2 extends AppCompatActivity {
     public void game_start(View view) {
         EditText num_gen = findViewById(R.id.editTextNumber);
         try {
-            if (selected_char == "robot_genetic" && Integer.valueOf(num_gen.getText().toString()) <= 0) {
+            if (selected_char == "robot_genetic" && Integer.valueOf(num_gen.getText().toString()) == 0) {
                 new AlertDialog.Builder(SelectActivity2.this).setMessage("世代数を入力してください(>0)").setPositiveButton("OK", null).show();
-            } else {
+            }else if(selected_char==""){
+                new AlertDialog.Builder(SelectActivity2.this).setMessage("キャラを選択してください").setPositiveButton("OK", null).show();
+            }else {
                 Intent intent = new Intent(SelectActivity2.this, TrainActivity.class);
                 intent.putExtra("selected_char_list", selected_char);
                 intent.putExtra("number_of_generation", num_gen.toString());
