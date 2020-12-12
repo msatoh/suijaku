@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class SelectActivity2 extends AppCompatActivity {
     String selected_char="";
-    boolean if_stop=false;
 
     class selection {
         ImageView img_name;
@@ -58,19 +57,6 @@ public class SelectActivity2 extends AppCompatActivity {
                 }
             });
         }
-        CompoundButton toggle = (CompoundButton) findViewById(R.id.switch1);
-        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if_stop = true;
-                } else {
-                    if_stop = false;
-                }
-            }
-        });
-
-
     }
 
     public void game_start(View view) {
@@ -78,19 +64,16 @@ public class SelectActivity2 extends AppCompatActivity {
         try {
             if (selected_char == "robot_genetic" && Integer.valueOf(num_gen.getText().toString()) == 0) {
                 new AlertDialog.Builder(SelectActivity2.this).setMessage("世代数を入力してください(>0)").setPositiveButton("OK", null).show();
-            }else if(selected_char==""){
+            } else if (selected_char == "") {
                 new AlertDialog.Builder(SelectActivity2.this).setMessage("キャラを選択してください").setPositiveButton("OK", null).show();
-            }else {
+            } else {
                 Intent intent = new Intent(SelectActivity2.this, TrainActivity.class);
                 intent.putExtra("selected_char_list", selected_char);
                 intent.putExtra("number_of_generation", num_gen.toString());
-                intent.putExtra("selected_char_list", if_stop);
                 startActivity(intent);
             }
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             new AlertDialog.Builder(SelectActivity2.this).setMessage("世代数を入力してください").setPositiveButton("OK", null).show();
         }
     }
-
-
 }

@@ -296,16 +296,15 @@ public class TrainActivity extends AppCompatActivity {
                         pass_card.post(new Runnable() {
                             public void run() {
                                 btn_pass.setVisibility(View.INVISIBLE);
-                                if (finalperson_num == 1) {
-                                    player_turn.setVisibility(View.INVISIBLE);
-                                    if (pus[0].is_pass) {
-                                        pus_status[0].setText("pass");
-                                    }
-                                    if (pus[0].card_lis.size() == 0 && !pus[0].if_end) {
-                                        pus[0].if_end = true;
-                                        rank_view.setText(rank_use.set_rank());
-                                    }
-                                } else {
+                                player_turn.setVisibility(View.INVISIBLE);
+                                if (pus[0].is_pass) {
+                                    pus_status[0].setText("pass");
+                                }
+                                if (pus[0].card_lis.size() == 0&&!pus[0].if_end) {
+                                    pus[0].if_end = true;
+                                    rank_view.setText(rank_use.set_rank());
+                                }
+                                if (finalperson_num != 1) {
                                     com_turn[finalperson_num - 1].setVisibility(View.INVISIBLE);
                                 }
                                 com_turn[finalperson_num].setVisibility(View.VISIBLE);
