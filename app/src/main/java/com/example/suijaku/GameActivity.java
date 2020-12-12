@@ -291,7 +291,6 @@ public class GameActivity extends AppCompatActivity {
                             pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(localcnt));
                         }
                         pus[0].players_select_card_lis.card_id_for_txtview.clear();
-
                         for (localcnt = 0; localcnt < pus[0].card_lis.size(); localcnt++) {
                             player_card.get(localcnt).setText(show_card(pus[0].card_lis.get(localcnt)));
                             clicked[localcnt] = false;
