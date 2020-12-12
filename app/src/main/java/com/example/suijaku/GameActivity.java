@@ -280,8 +280,7 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
-                    ArrayList<Card> scard;
-                    int localcnt, inner_localcnt;
+                    int localcnt;
                     if (checker.chk_if_decideable(pus[0].players_select_card_lis.select_card, field_entity.field_card)) {
                         Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card))?"○":"×"+show_cards(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card)), Toast.LENGTH_SHORT).show();
                         pus[3].algorhythm_to_choose_card.back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
@@ -289,19 +288,18 @@ public class GameActivity extends AppCompatActivity {
                         field_entity.field_card = (ArrayList<Card>) pus[0].players_select_card_lis.select_card.clone();
                         for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
                             player_card.remove(pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
+                            pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(localcnt));
                         }
                         pus[0].players_select_card_lis.card_id_for_txtview.clear();
-                        for (inner_localcnt = 0; inner_localcnt < pus[0].players_select_card_lis.select_card.size(); inner_localcnt++) {
-                            pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(inner_localcnt));
+
+                        for (localcnt = 0; localcnt < pus[0].card_lis.size(); localcnt++) {
+                            player_card.get(localcnt).setText(show_card(pus[0].card_lis.get(localcnt)));
+                            clicked[localcnt] = false;
+                            player_card.get(localcnt).setTextColor(Color.BLACK);
+                            player_card.get(localcnt).setTypeface(Typeface.DEFAULT);
                         }
-                        for (inner_localcnt = 0; inner_localcnt < pus[0].card_lis.size(); inner_localcnt++) {
-                            player_card.get(inner_localcnt).setText(show_card(pus[0].card_lis.get(inner_localcnt)));
-                            clicked[inner_localcnt] = false;
-                            player_card.get(inner_localcnt).setTextColor(Color.BLACK);
-                            player_card.get(inner_localcnt).setTypeface(Typeface.DEFAULT);
-                        }
-                        for (inner_localcnt = pus[0].card_lis.size(); inner_localcnt < pus[0].card_lis.size() + pus[0].players_select_card_lis.select_card.size(); inner_localcnt++) {
-                            player_card.get(inner_localcnt).setText("");
+                        for (localcnt = pus[0].card_lis.size(); localcnt < pus[0].card_lis.size() + pus[0].players_select_card_lis.select_card.size(); localcnt++) {
+                            player_card.get(localcnt).setText("");
                         }
                         pus[0].players_select_card_lis.select_card.clear();
 
