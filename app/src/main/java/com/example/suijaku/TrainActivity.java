@@ -1,5 +1,7 @@
 package com.example.suijaku;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -71,7 +73,7 @@ public class TrainActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("Unexpected value: " + mark_num);
         }
-        a_card.mark_use=mark_in;
+        a_card.mark_use = mark_in;
         a_card.give_strength(strength_num);
         return a_card;
     }
@@ -111,7 +113,7 @@ public class TrainActivity extends AppCompatActivity {
     private void reset_all_pass() {
         int cnt;
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
-            pus[cnt].is_pass=false;
+            pus[cnt].is_pass = false;
             pus_status[cnt].setText("");
         }
     }
@@ -124,6 +126,7 @@ public class TrainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
         int cnt;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         pass_card = new Handler();
         trash_card = new Handler();
         field_entity.txt = findViewById(R.id.field);
@@ -142,32 +145,27 @@ public class TrainActivity extends AppCompatActivity {
             pus_status[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_status", "id", getPackageName()));
             pus_status[cnt].setText("");
             if (cnt == 0) {
-                pus[cnt].name="user";
+                pus[cnt].name = "user";
             } else {
-                pus[cnt].name="COM" + cnt;
+                pus[cnt].name = "COM" + cnt;
             }
         }
-        pus[0].name="Masato";
+        pus[0].name = "Masato";
         try {
-            if(char_list=="robot_select") {
-                pus[3].algorhythm_to_choose_card = new NNBrain_Select();
-            }else if(char_list=="robot_full_relu"){
-                pus[3].algorhythm_to_choose_card = new NNBrain_ReLu();
-            }else{
-                pus[3].algorhythm_to_choose_card = new NNBrain();
-            }
+            pus[0].algorhythm_to_choose_card=new NNBrain();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        pus[3].name="ニューラルネットワーク";
-        pus[4].algorhythm_to_choose_card=new BasicBrain();
-        pus[4].name="ふつう";
-        pus[1].name="ザコ";
-        pus[2].name="強い";
-        pus[1].algorhythm_to_choose_card=new BasicBrain();
-        pus[2].algorhythm_to_choose_card=new StrongerBrain();
+        pus[1].name = "ザコ";
+        pus[1].algorhythm_to_choose_card = new BasicBrain();
+        pus[2].name = "強い";
+        pus[2].algorhythm_to_choose_card = new StrongerBrain();
+        pus[3].algorhythm_to_choose_card = new StrongerBrain();
+        pus[3].name = "ニューラルネットワーク";
+        pus[4].algorhythm_to_choose_card = new BasicBrain();
+        pus[4].name = "ふつう";
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             pus_name[cnt].setText(pus[cnt].name);
         }
@@ -205,33 +203,68 @@ public class TrainActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
-                    ArrayList<Card> scard;
-                    int localcnt, inner_localcnt;
+                    final int[] localcnt = new int[1];
                     if (checker.chk_if_decideable(pus[0].players_select_card_lis.select_card, field_entity.field_card)) {
-                        Toast.makeText(getApplicationContext(), pus[0].players_select_card_lis.select_card.equals(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card))?"○":"×"+show_cards(pus[3].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card)), Toast.LENGTH_SHORT).show();
-                        pus[3].algorhythm_to_choose_card.back_propagation(pus[1].card_lis.size(),pus[2].card_lis.size(),pus[3].card_lis.size(),pus[4].card_lis.size(),pus[0].card_lis,field_entity.field_card,pus[0].players_select_card_lis.select_card);
-                        field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
-                        field_entity.field_card = (ArrayList<Card>) pus[0].players_select_card_lis.select_card.clone();
-                        for (localcnt = 0; localcnt < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt++) {
-                            player_card.remove(pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt));
-                        }
-                        pus[0].players_select_card_lis.card_id_for_txtview.clear();
-                        for (inner_localcnt = 0; inner_localcnt < pus[0].players_select_card_lis.select_card.size(); inner_localcnt++) {
-                            pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(inner_localcnt));
-                        }
-                        for (inner_localcnt = 0; inner_localcnt < pus[0].card_lis.size(); inner_localcnt++) {
-                            player_card.get(inner_localcnt).setText(show_card(pus[0].card_lis.get(inner_localcnt)));
-                            clicked[inner_localcnt] = false;
-                            player_card.get(inner_localcnt).setTextColor(Color.BLACK);
-                            player_card.get(inner_localcnt).setTypeface(Typeface.DEFAULT);
-                        }
-                        for (inner_localcnt = pus[0].card_lis.size(); inner_localcnt < pus[0].card_lis.size() + pus[0].players_select_card_lis.select_card.size(); inner_localcnt++) {
-                            player_card.get(inner_localcnt).setText("");
-                        }
-                        pus[0].players_select_card_lis.select_card.clear();
+                        builder.setTitle("COMの捨てたカード")
+                                .setMessage(show_cards(pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card)))
+                                .setPositiveButton("ラーン", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        pus[0].algorhythm_to_choose_card.back_propagation(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card, pus[0].players_select_card_lis.select_card);
+                                    }
+                                })
+                                .setNeutralButton("送る(自分の選択したカード)", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        field_entity.txt.setText(show_cards(pus[0].players_select_card_lis.select_card));
+                                        field_entity.field_card = (ArrayList<Card>) pus[0].players_select_card_lis.select_card.clone();
+                                        for (localcnt[0] = 0; localcnt[0] < pus[0].players_select_card_lis.card_id_for_txtview.size(); localcnt[0]++) {
+                                            player_card.remove(pus[0].players_select_card_lis.card_id_for_txtview.get(localcnt[0]));
+                                        }
+                                        pus[0].players_select_card_lis.card_id_for_txtview.clear();
+                                        for (localcnt[0] = 0; localcnt[0] < pus[0].players_select_card_lis.select_card.size(); localcnt[0]++) {
+                                            pus[0].card_lis.remove(pus[0].players_select_card_lis.select_card.get(localcnt[0]));
+                                        }
+                                        for (localcnt[0] = 0; localcnt[0] < pus[0].card_lis.size(); localcnt[0]++) {
+                                            player_card.get(localcnt[0]).setText(show_card(pus[0].card_lis.get(localcnt[0])));
+                                            clicked[localcnt[0]] = false;
+                                            player_card.get(localcnt[0]).setTextColor(Color.BLACK);
+                                            player_card.get(localcnt[0]).setTypeface(Typeface.DEFAULT);
+                                        }
+                                        for (localcnt[0] = pus[0].card_lis.size(); localcnt[0] < pus[0].card_lis.size() + pus[0].players_select_card_lis.select_card.size(); localcnt[0]++) {
+                                            player_card.get(localcnt[0]).setText("");
+                                        }
+                                        pus[0].players_select_card_lis.select_card.clear();
+                                        MyThread passing_card = new MyThread();
+                                        passing_card.start();
+                                    }
+                                })
+                                .setNegativeButton("送る(COMの選択したカード)", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        pus[0].players_select_card_lis.card_id_for_txtview.clear();
+                                        field_entity.txt.setText(show_cards(pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card)));
+                                        field_entity.field_card = (ArrayList<Card>) pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card).clone();
+                                        for (localcnt[0] = 0; localcnt[0] < pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card).size(); localcnt[0]++) {
+                                            player_card.remove(pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card).get(localcnt[0]));
+                                            pus[0].card_lis.remove(pus[0].algorhythm_to_choose_card.calculate_card_to_put(pus[1].card_lis.size(), pus[2].card_lis.size(), pus[3].card_lis.size(), pus[4].card_lis.size(), pus[0].card_lis, field_entity.field_card).get(localcnt[0]));
+                                        }
+                                        for (localcnt[0] = 0; localcnt[0] < pus[0].card_lis.size(); localcnt[0]++) {
+                                            player_card.get(localcnt[0]).setText(show_card(pus[0].card_lis.get(localcnt[0])));
+                                            clicked[localcnt[0]] = false;
+                                            player_card.get(localcnt[0]).setTextColor(Color.BLACK);
+                                            player_card.get(localcnt[0]).setTypeface(Typeface.DEFAULT);
+                                        }
+                                        for (localcnt[0] = pus[0].card_lis.size(); localcnt[0] < pus[0].card_lis.size() + pus[0].players_select_card_lis.select_card.size(); localcnt[0]++) {
+                                            player_card.get(localcnt[0]).setText("");
+                                        }
+                                        pus[0].players_select_card_lis.select_card.clear();
+                                        MyThread passing_card = new MyThread();
+                                        passing_card.start();
+                                    }
+                                });
+                        builder.show();
 
-                        MyThread passing_card = new MyThread();
-                        passing_card.start();
                     } else {
                         Toast.makeText(getApplicationContext(), "出せません！", Toast.LENGTH_SHORT).show();
                     }
