@@ -12,6 +12,7 @@
 <BR><BR>
   
 <h2>＜今後やること（上から順）＞</h2>
+  <li>もしかしたら最後softmaxが実装されてないかも</li>
 <li>残ったカードリストから選択Brain作成<BR></li>
   <li>遺伝アルゴリズムのBrain作成…candidate_cards_listsの中から選択させるようにし、出せる場合は必ず出せるようにする。（フル学習でない）</li>
 <li>遺伝アルゴリズムBrainのTrain実装<BR>
