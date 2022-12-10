@@ -85,7 +85,7 @@
         app:srcCompat="@drawable/frame_style" />
 
     <TextView
-        android:id="@+id/man0_status"
+        android:id="@+id/man0_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -96,21 +96,21 @@
         app:layout_constraintEnd_toStartOf="@+id/pass" />
 
     <TextView
-        android:id="@+id/man4_status"
+        android:id="@+id/man4_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="状態"
-        app:layout_constraintBottom_toBottomOf="@+id/man3_status"
-        app:layout_constraintEnd_toEndOf="@+id/man2_status" />
+        app:layout_constraintBottom_toBottomOf="@+id/man3_stat"
+        app:layout_constraintEnd_toEndOf="@+id/man2_stat" />
 
     <TextView
-        android:id="@+id/man2_status"
+        android:id="@+id/man2_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="状態"
-        app:layout_constraintBottom_toBottomOf="@+id/man1_status"
+        app:layout_constraintBottom_toBottomOf="@+id/man1_stat"
         app:layout_constraintEnd_toEndOf="@+id/COM2_turn" />
 
     <TextView
@@ -122,7 +122,7 @@
         app:layout_constraintStart_toStartOf="@+id/man2_name" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_0"
+        android:id="@+id/p_card_in_hand_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -136,51 +136,51 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_1"
+        android:id="@+id/p_card_in_hand_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="2枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_0"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_0" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_0"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_0" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_2"
+        android:id="@+id/p_card_in_hand_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="3枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_1"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_1" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_1"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_1" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_3"
+        android:id="@+id/p_card_in_hand_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="4枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_2"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_2" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_2"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_2" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_5"
+        android:id="@+id/p_card_in_hand_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="6枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_4"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_4" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_4"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_4" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_4"
+        android:id="@+id/p_card_in_hand_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -188,33 +188,33 @@
         android:longClickable="true"
         android:text="5枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="@+id/player_card_in_hand_0"
-        app:layout_constraintTop_toBottomOf="@+id/player_card_in_hand_0" />
+        app:layout_constraintStart_toStartOf="@+id/p_card_in_hand_0"
+        app:layout_constraintTop_toBottomOf="@+id/p_card_in_hand_0" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_6"
+        android:id="@+id/p_card_in_hand_6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="7枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_5"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_5" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_5"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_5" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_7"
+        android:id="@+id/p_card_in_hand_7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="8枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_6"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_6" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_6"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_6" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_8"
+        android:id="@+id/p_card_in_hand_8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -222,30 +222,30 @@
         android:longClickable="true"
         android:text="9枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="@+id/player_card_in_hand_4"
-        app:layout_constraintTop_toBottomOf="@+id/player_card_in_hand_4" />
+        app:layout_constraintStart_toStartOf="@+id/p_card_in_hand_4"
+        app:layout_constraintTop_toBottomOf="@+id/p_card_in_hand_4" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_9"
+        android:id="@+id/p_card_in_hand_9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="10枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_8"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_8" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_8"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_8" />
 
     <TextView
-        android:id="@+id/player_card_in_hand_10"
+        android:id="@+id/p_card_in_hand_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
         android:text="11枚目"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/player_card_in_hand_9"
-        app:layout_constraintTop_toTopOf="@+id/player_card_in_hand_9" />
+        app:layout_constraintStart_toEndOf="@+id/p_card_in_hand_9"
+        app:layout_constraintTop_toTopOf="@+id/p_card_in_hand_9" />
 
     <TextView
         android:id="@+id/COM1_card"
@@ -343,7 +343,7 @@
         app:layout_constraintStart_toStartOf="@+id/man1_name" />
 
     <TextView
-        android:id="@+id/man1_status"
+        android:id="@+id/man1_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -354,13 +354,13 @@
         app:layout_constraintEnd_toStartOf="@+id/COM2_turn" />
 
     <TextView
-        android:id="@+id/man3_status"
+        android:id="@+id/man3_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="状態"
         app:layout_constraintBottom_toBottomOf="@+id/COM3_turn"
-        app:layout_constraintEnd_toEndOf="@+id/man1_status" />
+        app:layout_constraintEnd_toEndOf="@+id/man1_stat" />
 
     <View
         android:id="@+id/divider"

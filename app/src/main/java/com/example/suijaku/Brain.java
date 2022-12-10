@@ -17,9 +17,13 @@ import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.Math.pow;
 import static java.lang.Math.tanh;
 
 public class Brain {
+    public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_list, ArrayList<Card> field_card, ArrayList<Card> select_card) {
+    }
+
     class NN implements Serializable {
     }
 
@@ -29,10 +33,6 @@ public class Brain {
 
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         return new ArrayList<>();
-    }
-
-    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
-        return;
     }
 
     public ArrayList<ArrayList<Card>> add_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
@@ -116,7 +116,7 @@ public class Brain {
                 candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
             }
         } else {
-            for(cnt=1;cnt<=card_field.size();cnt++) {
+            for (cnt = 1; cnt <= card_field.size(); cnt++) {
                 candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
             }
         }
@@ -124,8 +124,8 @@ public class Brain {
     }
 }
 
-class BasicBrain extends Brain{
-    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field,int size){
+class BasicBrain extends Brain {
+    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
         Check checker = new Check();
         ArrayList<Card> empty_card = new ArrayList<>();
         int first = 1, second = 2, third = 3, fourth = 4;
@@ -179,7 +179,7 @@ class BasicBrain extends Brain{
                         candidate_card.add(mycard.get(second));
                         for (third = second + 1; third < fourth; third++) {
                             candidate_card.add(mycard.get(third));
-                            for(fourth=third+1;fourth<mycard.size();fourth++) {
+                            for (fourth = third + 1; fourth < mycard.size(); fourth++) {
                                 candidate_card.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_card, card_field)) {
                                     return candidate_card;
@@ -195,37 +195,38 @@ class BasicBrain extends Brain{
         }
         return empty_card;
     }
+
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
-        if(card_field.size()==0){
-            for(cnt=min(4,mycard.size());cnt>0;cnt--){
-                if(select_card_by_sheets(mycard,card_field,cnt).size()!=0){
-                    return select_card_by_sheets(mycard,card_field,cnt);
+        if (card_field.size() == 0) {
+            for (cnt = min(4, mycard.size()); cnt > 0; cnt--) {
+                if (select_card_by_sheets(mycard, card_field, cnt).size() != 0) {
+                    return select_card_by_sheets(mycard, card_field, cnt);
                 }
             }
-        }else if(mycard.size()>=card_field.size()){
-            return select_card_by_sheets(mycard,card_field,card_field.size());
+        } else if (mycard.size() >= card_field.size()) {
+            return select_card_by_sheets(mycard, card_field, card_field.size());
         }
         return empty_card;
     }
 }
 
-class StrongerBrain extends Brain{
+class StrongerBrain extends Brain {
 
-    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field,int size,boolean stronger){
+    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size, boolean stronger) {
         Check checker = new Check();
         int first, second = 2, third = 3, fourth = 4;
         ArrayList<Card> candidate_card = new ArrayList<>();
-        ArrayList<Card> buf_card=new ArrayList<>();
+        ArrayList<Card> buf_card = new ArrayList<>();
         switch (size) {
             case 1:
                 for (first = 0; first < mycard.size(); first++) {
                     candidate_card.clear();
                     candidate_card.add(mycard.get(first));
                     if (checker.chk_if_decideable(candidate_card, card_field)) {
-                        if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
+                        if (stronger || (!stronger && candidate_card.get(0).strength < 12)) {
                             if (buf_card.size() == 0) {
                                 buf_card = candidate_card;
                             } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
@@ -244,7 +245,7 @@ class StrongerBrain extends Brain{
                     for (second = first + 1; second < mycard.size(); second++) {
                         candidate_card.add(mycard.get(second));
                         if (checker.chk_if_decideable(candidate_card, card_field)) {
-                            if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
+                            if (stronger || (!stronger && candidate_card.get(0).strength < 12)) {
                                 if (buf_card.size() == 0) {
                                     buf_card = candidate_card;
                                 } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
@@ -268,7 +269,7 @@ class StrongerBrain extends Brain{
                         for (third = second + 1; third < mycard.size(); third++) {
                             candidate_card.add(mycard.get(third));
                             if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
+                                if (stronger || (!stronger && candidate_card.get(0).strength < 12)) {
                                     if (buf_card.size() == 0) {
                                         buf_card = candidate_card;
                                     } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
@@ -293,10 +294,10 @@ class StrongerBrain extends Brain{
                         candidate_card.add(mycard.get(second));
                         for (third = second + 1; third < fourth; third++) {
                             candidate_card.add(mycard.get(third));
-                            for(fourth=third+1;fourth<mycard.size();fourth++) {
+                            for (fourth = third + 1; fourth < mycard.size(); fourth++) {
                                 candidate_card.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_card, card_field)) {
-                                    if(stronger||(!stronger&&candidate_card.get(0).strength<12)) {
+                                    if (stronger || (!stronger && candidate_card.get(0).strength < 12)) {
                                         if (buf_card.size() == 0) {
                                             buf_card = candidate_card;
                                         } else if (stronger && buf_card.get(0).strength < candidate_card.get(0).strength) {
@@ -318,24 +319,25 @@ class StrongerBrain extends Brain{
         }
         return buf_card;
     }
+
     @Override
     public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        Random random=new Random();
+        Random random = new Random();
         int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
-        if(card_field.size()==0){
-            for(cnt=min(4,mycard.size());cnt>0;cnt--){
-                if(select_card_by_sheets(mycard,card_field,cnt,false).size()!=0){
-                    if (min(min(min(min(card_player1,card_player2),card_player3),card_player4),mycard.size())<=2) {
+        if (card_field.size() == 0) {
+            for (cnt = min(4, mycard.size()); cnt > 0; cnt--) {
+                if (select_card_by_sheets(mycard, card_field, cnt, false).size() != 0) {
+                    if (min(min(min(min(card_player1, card_player2), card_player3), card_player4), mycard.size()) <= 2) {
                         return select_card_by_sheets(mycard, card_field, cnt, true);
-                    }else {
+                    } else {
                         return select_card_by_sheets(mycard, card_field, cnt, false);
                     }
                 }
             }
-        }else{
-            if(mycard.size()>=card_field.size()) {
-                if (min(min(min(min(card_player1,card_player2),card_player3),card_player4),mycard.size())<=2) {
+        } else {
+            if (mycard.size() >= card_field.size()) {
+                if (min(min(min(min(card_player1, card_player2), card_player3), card_player4), mycard.size()) <= 2) {
                     return select_card_by_sheets(mycard, card_field, card_field.size(), true);
                 } else {
                     return select_card_by_sheets(mycard, card_field, card_field.size(), false);
@@ -348,10 +350,10 @@ class StrongerBrain extends Brain{
 
 class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    final float eta = 0.001f;
+    final float eta = 0.05f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
-    public float sigmoid(float param) {
 
+    public float sigmoid(float param) {
         return (float) tanh(param);
     }
 
@@ -389,51 +391,63 @@ class NNBrain extends Brain implements Serializable {
         }
     }
 
+    public float derivate_sigmoid(float x){
+        return (float) (1-pow(sigmoid(x),2));
+    }
+
     @Override
-    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
-        float[] answer_list = new float[11];
+    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> ans_cards) {
+        float[] ans_list = new float[11];
         float[] err = new float[11];
+        float[] delta3 = new float[12];
+        float[] delta2 = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
         int cnt, i, j, k;
-        for (cnt = 0; cnt < answer_cards.size(); cnt++) {
-            if (mycard.contains(answer_cards.get(cnt))) {
-                answer_list[mycard.indexOf(answer_cards.get(cnt))] = 1.0f;
+        for (cnt = 0; cnt < ans_cards.size(); cnt++) {
+            if (mycard.contains(ans_cards.get(cnt))) {
+                ans_list[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
             }
         }
         for (cnt = 0; cnt < 11; cnt++) {
-            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && answer_list[cnt] == 0.0) {
+            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && ans_list[cnt] == 0.0) {
                 err[cnt] = nn.rtn_3rd_layer(cnt);
-            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && answer_list[cnt] == 1.0) {
+            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && ans_list[cnt] == 1.0) {
                 err[cnt] = -nn.finalbias;
-            }else{
+            } else {
                 err[cnt] = 0;
             }
         }
         for (cnt = 0; cnt < 11; cnt++) {
             if (err[cnt] != 0) {
                 for (i = 0; i < 12; i++) {
-                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt];
+                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
                 }
-                nn.perceptron3rd[cnt].bias -= eta * err[cnt];
+                nn.perceptron3rd[cnt].bias -= eta * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
+            }
+        }
+        for (cnt = 0; cnt < 11; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < 12; i++) {
+                    for (j = 0; j < 11; j++) {
+                        delta3[i] += nn.perceptron3rd[j].weight[i] * err[j] * derivate_sigmoid(nn.perceptron3rd[j].out_put);
+                    }
+                    for (j = 0; j < 13; j++) {
+                        nn.perceptron2nd[i].weight[j] -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * nn.perceptron1st[j].out_put * delta3[i];
+                    }
+                    nn.perceptron2nd[i].bias -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * delta3[i];
+                }
             }
         }
         for (cnt = 0; cnt < 11; cnt++) {
             if (err[cnt] != 0) {
                 for (i = 0; i < 12; i++) {
                     for (j = 0; j < 13; j++) {
-                        nn.perceptron2nd[i].weight[j] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron1st[j].out_put;
-                    }
-                    nn.perceptron2nd[i].bias-=eta*nn.perceptron3rd[cnt].weight[i];
-                }
-            }
-        }
-        for(cnt=0;cnt<11;cnt++){
-            if(err[cnt]!=0){
-                for(i=0;i<12;i++){
-                    for (j = 0; j < 13; j++) {
-                        for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
-                            nn.perceptron1st[j].weight[k] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j] * in_put[k];
+                        for (k = 0; k < 12; k++) {
+                            delta2[j] += nn.perceptron2nd[k].weight[j] * derivate_sigmoid(nn.perceptron2nd[k].out_put) * delta3[k];
                         }
-                        nn.perceptron1st[j].bias -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j];
+                        for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
+                            nn.perceptron1st[j].weight[k] -= eta * in_put[k] * derivate_sigmoid(nn.perceptron1st[j].out_put) * delta2[j];
+                        }
+                        nn.perceptron1st[j].bias -= eta * derivate_sigmoid(nn.perceptron1st[j].out_put) * delta2[j];
                     }
                 }
             }
@@ -490,7 +504,7 @@ class NNBrain extends Brain implements Serializable {
         in_put[2] = card_player3;
         in_put[3] = card_player4;
         for (cnt = 4; cnt < 4 + mycard.size(); cnt++) {
-            in_put[cnt] = mycard.get(mycard.size()-(cnt - 4)-1).strength;
+            in_put[cnt] = mycard.get(mycard.size() - (cnt - 4) - 1).strength;
         }
         for (cnt = 4 + NUM_OF_CARDS / NUM_OF_PLAYERS; cnt < 4 + NUM_OF_CARDS / NUM_OF_PLAYERS + card_field.size(); cnt++) {
             in_put[cnt] = card_field.get(cnt - (4 + NUM_OF_CARDS / NUM_OF_PLAYERS)).strength;
@@ -543,11 +557,18 @@ class NNBrain extends Brain implements Serializable {
 }
 
 class NNBrain_ReLu extends NNBrain implements Serializable {
-    final float eta = 0.0001f;
+    //final float eta = 0.0001f;
+
     @Override
     public float sigmoid(float param) {
-        return max(param,0);
+        return max(param, 0);
     }
+
+    @Override
+    public float derivate_sigmoid(float x){
+        return 1;
+    }
+
     public NNBrain_ReLu() throws IOException, ClassNotFoundException {
         int cnt;
         File file = new File(FILE_PATH);
@@ -579,57 +600,6 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
             ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
             file_param.writeObject(nn);
             file_param.close();
-        }
-    }
-
-    @Override
-    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> answer_cards) {
-        float[] answer_list = new float[11];
-        float[] err = new float[11];
-        int cnt, i, j, k;
-        for (cnt = 0; cnt < answer_cards.size(); cnt++) {
-            if (mycard.contains(answer_cards.get(cnt))) {
-                answer_list[mycard.indexOf(answer_cards.get(cnt))] = 1.0f;
-            }
-        }
-        for (cnt = 0; cnt < 11; cnt++) {
-            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && answer_list[cnt] == 0.0) {
-                err[cnt] = nn.rtn_3rd_layer(cnt);
-            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && answer_list[cnt] == 1.0) {
-                err[cnt] = -nn.finalbias;
-            }else{
-                err[cnt] = 0;
-            }
-        }
-        for (cnt = 0; cnt < 11; cnt++) {
-            if (err[cnt] != 0) {
-                for (i = 0; i < 12; i++) {
-                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt];
-                }
-                nn.perceptron3rd[cnt].bias -= eta * err[cnt];
-            }
-        }
-        for (cnt = 0; cnt < 11; cnt++) {
-            if (err[cnt] != 0) {
-                for (i = 0; i < 12; i++) {
-                    for (j = 0; j < 13; j++) {
-                        nn.perceptron2nd[i].weight[j] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron1st[j].out_put;
-                    }
-                    nn.perceptron2nd[i].bias-=eta*nn.perceptron3rd[cnt].weight[i];
-                }
-            }
-        }
-        for(cnt=0;cnt<11;cnt++){
-            if(err[cnt]!=0){
-                for(i=0;i<12;i++){
-                    for (j = 0; j < 13; j++) {
-                        for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
-                            nn.perceptron1st[j].weight[k] -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j] * in_put[k];
-                        }
-                        nn.perceptron1st[j].bias -= eta * err[cnt] * nn.perceptron3rd[cnt].weight[i] * nn.perceptron2nd[i].weight[j];
-                    }
-                }
-            }
         }
     }
 }
@@ -677,8 +647,8 @@ class NNBrain_Select extends NNBrain implements Serializable {
         in_put[2] = card_player3;
         in_put[3] = card_player4;
         for (cnt = 4; cnt < 4 + return_candidate_lists(mycard, card_field).size(); cnt++) {
-            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)-1).get(0).strength))) {
-                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)-1).size() - 1) + return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size()-(cnt - 4)-1).get(0).strength;
+            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength))) {
+                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).size() - 1) + return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength;
                 pos++;
             }
         }

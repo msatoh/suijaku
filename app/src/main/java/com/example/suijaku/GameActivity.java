@@ -103,12 +103,12 @@ public class GameActivity extends AppCompatActivity {
     final int THINKING_TIME = 370;
     final Field field_entity = new Field();
     final Player[] psn = new Player[NUM_OF_PLAYERS];
-    final ArrayList<TextView> player_card = new ArrayList<>();
+    final ArrayList<TextView> p_card = new ArrayList<>();
     final TextView[] com_card = new TextView[NUM_OF_PLAYERS];
     final TextView[] psn_name = new TextView[NUM_OF_PLAYERS];
     final ImageView[] com_turn = new ImageView[NUM_OF_PLAYERS];
-    final TextView[] psn_status = new TextView[NUM_OF_PLAYERS];
-    ImageView player_turn;
+    final TextView[] psn_stat = new TextView[NUM_OF_PLAYERS];
+    ImageView p_turn;
     Handler pass_card;
     Handler trash_card;
     final Rank rank_use = new Rank();
@@ -121,15 +121,15 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private Card gen_random_card() {
+    private Card gen_rand_card() {
         mark mark_in;
         Card a_card = new Card();
         Random mark_num_seed = new Random();
-        int random_seed = mark_num_seed.nextInt(used_list.size());
-        int random_param = used_list.get(random_seed);
-        int mark_num = random_param / 13;
-        int strength_num = random_param % 13 + 1;
-        used_list.remove((Integer) random_param);
+        int rand_seed = mark_num_seed.nextInt(used_list.size());
+        int rand_param = used_list.get(rand_seed);
+        int mark_num = rand_param / 13;
+        int strength_num = rand_param % 13 + 1;
+        used_list.remove((Integer) rand_param);
         switch (mark_num) {
             case 0:
                 mark_in = mark.heart;
@@ -187,7 +187,7 @@ public class GameActivity extends AppCompatActivity {
         int cnt;
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn[cnt].is_pass=false;
-            psn_status[cnt].setText("");
+            psn_stat[cnt].setText("");
         }
     }
 
@@ -202,9 +202,9 @@ public class GameActivity extends AppCompatActivity {
         pass_card = new Handler();
         trash_card = new Handler();
         field_entity.txt = findViewById(R.id.field);
-        this.player_turn = findViewById(R.id.PLAYER_turn);
+        this.p_turn = findViewById(R.id.PLAYER_turn);
         for (cnt = 0; cnt < NUM_OF_CARDS / NUM_OF_PLAYERS + 1; cnt++) {
-            player_card.add((TextView) findViewById(getResources().getIdentifier("player_card_in_hand_" + cnt, "id", getPackageName())));
+            p_card.add((TextView) findViewById(getResources().getIdentifier("p_card_in_hand_" + cnt, "id", getPackageName())));
         }
         for (cnt = 1; cnt < NUM_OF_PLAYERS; cnt++) {
             com_card[cnt] = findViewById(getResources().getIdentifier("COM" + cnt + "_card", "id", getPackageName()));
@@ -214,8 +214,8 @@ public class GameActivity extends AppCompatActivity {
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn[cnt] = new Player();
             psn_name[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_name", "id", getPackageName()));
-            psn_status[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_status", "id", getPackageName()));
-            psn_status[cnt].setText("");
+            psn_stat[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_stat", "id", getPackageName()));
+            psn_stat[cnt].setText("");
             if (cnt == 0) {
                 psn[cnt].name="user";
             } else {
@@ -247,36 +247,36 @@ public class GameActivity extends AppCompatActivity {
             psn_name[cnt].setText(psn[cnt].name);
         }
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
-            psn[cnt % 5].insert_card(gen_random_card());
+            psn[cnt % 5].insert_card(gen_rand_card());
         }
         final boolean[] clicked = new boolean[psn[0].card_list.size()];
         for (cnt = 0; cnt < psn[0].card_list.size(); cnt++) {
             clicked[cnt] = false;
-            player_card.get(cnt).setText(show_card(psn[0].card_list.get(cnt)));
+            p_card.get(cnt).setText(show_card(psn[0].card_list.get(cnt)));
         }
         for (cnt = 1; cnt < NUM_OF_PLAYERS; cnt++) {
             com_card[cnt].setText("" + psn[cnt].card_list.size() + "枚");
         }
         for (cnt = 0; cnt < NUM_OF_CARDS / NUM_OF_PLAYERS + 1; cnt++) {
             final int finalcnt = cnt;
-            player_card.get(cnt).setOnClickListener(new View.OnClickListener() {
+            p_card.get(cnt).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (!clicked[finalcnt]) {
-                        player_card.get(finalcnt).setTextColor(Color.BLUE);
-                        player_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
+                        p_card.get(finalcnt).setTextColor(Color.BLUE);
+                        p_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt] = true;
                         psn[0].players_select_card_list.select_card.add(psn[0].card_list.get(finalcnt));
                         psn[0].players_select_card_list.card_id_for_txtview.add(psn[0].card_list.indexOf(psn[0].card_list.get(finalcnt)));
                     } else {
-                        player_card.get(finalcnt).setTextColor(Color.BLACK);
-                        player_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
+                        p_card.get(finalcnt).setTextColor(Color.BLACK);
+                        p_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt] = false;
                         psn[0].players_select_card_list.select_card.remove(psn[0].card_list.get(finalcnt));
                         psn[0].players_select_card_list.card_id_for_txtview.remove((Integer) finalcnt);
                     }
                 }
             });
-            player_card.get(cnt).setOnLongClickListener(new View.OnLongClickListener() {
+            p_card.get(cnt).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
@@ -287,18 +287,18 @@ public class GameActivity extends AppCompatActivity {
                         field_entity.txt.setText(show_cards(psn[0].players_select_card_list.select_card));
                         field_entity.field_card = (ArrayList<Card>) psn[0].players_select_card_list.select_card.clone();
                         for (localcnt = 0; localcnt < psn[0].players_select_card_list.card_id_for_txtview.size(); localcnt++) {
-                            player_card.remove(psn[0].players_select_card_list.card_id_for_txtview.get(localcnt));
+                            p_card.remove(psn[0].players_select_card_list.card_id_for_txtview.get(localcnt));
                             psn[0].card_list.remove(psn[0].players_select_card_list.select_card.get(localcnt));
                         }
                         psn[0].players_select_card_list.card_id_for_txtview.clear();
                         for (localcnt = 0; localcnt < psn[0].card_list.size(); localcnt++) {
-                            player_card.get(localcnt).setText(show_card(psn[0].card_list.get(localcnt)));
+                            p_card.get(localcnt).setText(show_card(psn[0].card_list.get(localcnt)));
                             clicked[localcnt] = false;
-                            player_card.get(localcnt).setTextColor(Color.BLACK);
-                            player_card.get(localcnt).setTypeface(Typeface.DEFAULT);
+                            p_card.get(localcnt).setTextColor(Color.BLACK);
+                            p_card.get(localcnt).setTypeface(Typeface.DEFAULT);
                         }
                         for (localcnt = psn[0].card_list.size(); localcnt < psn[0].card_list.size() + psn[0].players_select_card_list.select_card.size(); localcnt++) {
-                            player_card.get(localcnt).setText("");
+                            p_card.get(localcnt).setText("");
                         }
                         psn[0].players_select_card_list.select_card.clear();
 
@@ -315,7 +315,7 @@ public class GameActivity extends AppCompatActivity {
 
     class MyThread extends Thread {
         Button btn_pass = findViewById(R.id.pass);
-        TextView rank_view = findViewById(R.id.player_card_in_hand_0);
+        TextView rank_view = findViewById(R.id.p_card_in_hand_0);
         Check checker = new Check();
 
         @Override
@@ -335,9 +335,9 @@ public class GameActivity extends AppCompatActivity {
                         pass_card.post(new Runnable() {
                             public void run() {
                                 btn_pass.setVisibility(View.INVISIBLE);
-                                player_turn.setVisibility(View.INVISIBLE);
+                                p_turn.setVisibility(View.INVISIBLE);
                                 if (psn[0].is_pass) {
-                                    psn_status[0].setText("pass");
+                                    psn_stat[0].setText("pass");
                                 }
                                 if (psn[0].card_list.size() == 0&&!psn[0].if_end) {
                                     psn[0].if_end = true;
@@ -378,12 +378,12 @@ public class GameActivity extends AppCompatActivity {
                                         }
                                     } else {
                                         psn[finalperson_num].is_pass = true;
-                                        psn_status[finalperson_num].setText("pass");
+                                        psn_stat[finalperson_num].setText("pass");
                                     }
                                 }
                                 if (finalperson_num == 4) {
                                     com_turn[finalperson_num].setVisibility(View.INVISIBLE);
-                                    player_turn.setVisibility(View.VISIBLE);
+                                    p_turn.setVisibility(View.VISIBLE);
                                     btn_pass.setVisibility(View.VISIBLE);
                                     if ((psn[(finalperson_num + 2) % NUM_OF_PLAYERS].is_pass || psn[(finalperson_num + 2) % NUM_OF_PLAYERS].if_end) && (psn[(finalperson_num + 3) % NUM_OF_PLAYERS].is_pass || psn[(finalperson_num + 3) % NUM_OF_PLAYERS].if_end) && (psn[(finalperson_num + 4) % NUM_OF_PLAYERS].is_pass || psn[(finalperson_num + 4) % NUM_OF_PLAYERS].if_end) && (psn[(finalperson_num) % NUM_OF_PLAYERS].is_pass || psn[(finalperson_num) % NUM_OF_PLAYERS].if_end)) {
                                         field_entity.txt.setText("");
