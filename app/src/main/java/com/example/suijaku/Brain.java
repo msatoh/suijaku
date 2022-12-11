@@ -1,24 +1,12 @@
 package com.example.suijaku;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import static com.example.suijaku.Cst.FILE_PATH;
-import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
-import static com.example.suijaku.Cst.NUM_OF_CARDS;
-import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.pow;
-import static java.lang.Math.tanh;
+import static com.example.suijaku.Cst.*;
+import static java.lang.Math.*;
 
 public class Brain {
     public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_list, ArrayList<Card> field_card, ArrayList<Card> select_card) {
@@ -108,7 +96,7 @@ public class Brain {
         return candidate_list;
     }
 
-    public ArrayList<ArrayList<Card>> return_candidate_lists(ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<ArrayList<Card>> rtn_candidate_lists(ArrayList<Card> mycard, ArrayList<Card> card_field) {
         ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
         int cnt;
         if (card_field.size() == 0) {
@@ -646,9 +634,9 @@ class NNBrain_Select extends NNBrain implements Serializable {
         in_put[1] = card_player2;
         in_put[2] = card_player3;
         in_put[3] = card_player4;
-        for (cnt = 4; cnt < 4 + return_candidate_lists(mycard, card_field).size(); cnt++) {
-            if (!(Arrays.asList(in_put).contains(return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength))) {
-                in_put[pos] = 12 * (return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).size() - 1) + return_candidate_lists(mycard, card_field).get(return_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength;
+        for (cnt = 4; cnt < 4 + rtn_candidate_lists(mycard, card_field).size(); cnt++) {
+            if (!(Arrays.asList(in_put).contains(rtn_candidate_lists(mycard, card_field).get(rtn_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength))) {
+                in_put[pos] = 12 * (rtn_candidate_lists(mycard, card_field).get(rtn_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).size() - 1) + rtn_candidate_lists(mycard, card_field).get(rtn_candidate_lists(mycard, card_field).size() - (cnt - 4) - 1).get(0).strength;
                 pos++;
             }
         }
