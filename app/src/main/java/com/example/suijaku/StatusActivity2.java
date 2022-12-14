@@ -81,7 +81,7 @@ class StatusDraw2 extends View {
         float[][] joint3rdlayer = new float[12][11];
         float max_param = 0.0f;
         try {
-            NNBrain_Select networks = new NNBrain_Select();
+            NNBrain_ReLu networks = new NNBrain_ReLu();
             for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
                 for (j = 0; j < 13; j++) {
                     joint1stlayer[i][j] = networks.rtn_nn().perceptron1st[j].weight[i];
@@ -107,7 +107,7 @@ class StatusDraw2 extends View {
                 }
             }
             mpaint.setTextSize(36);
-            canvas.drawText("border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
+            canvas.drawText("brain: relu border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -155,6 +155,6 @@ class StatusDraw2 extends View {
                 canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
             }
         }
-        canvas.drawText("max_param=" + max_param, 350, 1600, mpaint);
+        canvas.drawText("max_param=" + max_param, 700, 1600, mpaint);
     }
 }

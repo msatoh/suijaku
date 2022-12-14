@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_Relu;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 
@@ -39,8 +40,8 @@ public class TrainActivity extends AppCompatActivity {
     Handler pass_card;
     Handler trash_card;
     final Rank rank_use = new Rank();
+    String char_list;
     private ArrayList<Integer> used_list = new ArrayList<>();
-
     private void init_array(ArrayList<Integer> used_list_in) {
         int cnt;
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
@@ -120,11 +121,11 @@ public class TrainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent get_intent = getIntent();
-        String char_list = get_intent.getStringExtra("selected_char_list");
         android.os.Debug.waitForDebugger();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
+        Intent get_intent=getIntent();
+        char_list = get_intent.getStringExtra("selected_char_list");
         int cnt;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         pass_card = new Handler();
@@ -162,7 +163,13 @@ public class TrainActivity extends AppCompatActivity {
         psn[1].algorhythm_to_choose_card = new BasicBrain();
         psn[2].name = "強い";
         psn[2].algorhythm_to_choose_card = new StrongerBrain();
-        psn[3].algorhythm_to_choose_card = new StrongerBrain();
+        try {
+            psn[3].algorhythm_to_choose_card = new NNBrain();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         psn[3].name = "ニューラルネットワーク";
         psn[4].algorhythm_to_choose_card = new BasicBrain();
         psn[4].name = "ふつう";
@@ -372,7 +379,13 @@ public class TrainActivity extends AppCompatActivity {
     }
 
     public void save_neuron(View view) throws IOException {
-        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+        String filepath="";
+        if(char_list.contains("robot_full_sigmoid")) {
+            filepath=FILE_PATH;
+        }else if(char_list.contains("robot_full_relu")){
+            filepath=FILE_PATH_Relu;
+        }
+        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(filepath));
         file_param.writeObject(psn[0].algorhythm_to_choose_card.rtn_nn());
         file_param.close();
     }

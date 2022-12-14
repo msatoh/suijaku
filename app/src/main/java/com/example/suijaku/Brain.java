@@ -560,9 +560,9 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
 
     public NNBrain_ReLu() throws IOException, ClassNotFoundException {
         int cnt;
-        File file = new File(FILE_PATH);
+        File file = new File(FILE_PATH_Relu);
         if (file.exists()) {
-            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH_Relu));
             nn = (NN) file_param.readObject();
             file_param.close();
         } else {
