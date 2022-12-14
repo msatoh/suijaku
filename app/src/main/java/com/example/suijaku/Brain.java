@@ -340,6 +340,7 @@ class NNBrain extends Brain implements Serializable {
     Random random = new Random();
     final float eta = 0.05f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
+    int num_perceptron1st=13,num_perceptron2nd=12,num_perceptron3rd=11;
 
     public float sigmoid(float param) {
         return (float) tanh(param);
@@ -354,20 +355,20 @@ class NNBrain extends Brain implements Serializable {
             file_param.close();
         } else {
             nn = new NN();
-            nn.perceptron1st = new Neuron[13];
-            nn.perceptron2nd = new Neuron[12];
-            nn.perceptron3rd = new Neuron[11];
-            for (cnt = 0; cnt < 13; cnt++) {
+            nn.perceptron1st = new Neuron[num_perceptron1st];
+            nn.perceptron2nd = new Neuron[num_perceptron2nd];
+            nn.perceptron3rd = new Neuron[num_perceptron3rd];
+            for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
                 nn.perceptron1st[cnt].initialize();
             }
-            for (cnt = 0; cnt < 12; cnt++) {
+            for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(13);
                 nn.perceptron2nd[cnt].initialize();
             }
-            for (cnt = 0; cnt < 11; cnt++) {
+            for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(12);
                 nn.perceptron3rd[cnt].initialize();
@@ -385,9 +386,9 @@ class NNBrain extends Brain implements Serializable {
 
     @Override
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> ans_cards) {
-        float[] ans_list = new float[11];
-        float[] err = new float[11];
-        float[] delta3 = new float[12];
+        float[] ans_list = new float[num_perceptron3rd];
+        float[] err = new float[num_perceptron3rd];
+        float[] delta3 = new float[num_perceptron2nd];
         float[] delta2 = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
         int cnt, i, j, k;
         for (cnt = 0; cnt < ans_cards.size(); cnt++) {
@@ -395,7 +396,7 @@ class NNBrain extends Brain implements Serializable {
                 ans_list[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
             }
         }
-        for (cnt = 0; cnt < 11; cnt++) {
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             if (nn.rtn_3rd_layer(cnt) > nn.finalbias && ans_list[cnt] == 0.0) {
                 err[cnt] = nn.rtn_3rd_layer(cnt);
             } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && ans_list[cnt] == 1.0) {
@@ -404,32 +405,32 @@ class NNBrain extends Brain implements Serializable {
                 err[cnt] = 0;
             }
         }
-        for (cnt = 0; cnt < 11; cnt++) {
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             if (err[cnt] != 0) {
-                for (i = 0; i < 12; i++) {
+                for (i = 0; i < num_perceptron2nd; i++) {
                     nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
                 }
                 nn.perceptron3rd[cnt].bias -= eta * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
             }
         }
-        for (cnt = 0; cnt < 11; cnt++) {
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             if (err[cnt] != 0) {
-                for (i = 0; i < 12; i++) {
-                    for (j = 0; j < 11; j++) {
+                for (i = 0; i < num_perceptron2nd; i++) {
+                    for (j = 0; j < num_perceptron3rd; j++) {
                         delta3[i] += nn.perceptron3rd[j].weight[i] * err[j] * derivate_sigmoid(nn.perceptron3rd[j].out_put);
                     }
-                    for (j = 0; j < 13; j++) {
+                    for (j = 0; j < num_perceptron1st; j++) {
                         nn.perceptron2nd[i].weight[j] -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * nn.perceptron1st[j].out_put * delta3[i];
                     }
                     nn.perceptron2nd[i].bias -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * delta3[i];
                 }
             }
         }
-        for (cnt = 0; cnt < 11; cnt++) {
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             if (err[cnt] != 0) {
-                for (i = 0; i < 12; i++) {
-                    for (j = 0; j < 13; j++) {
-                        for (k = 0; k < 12; k++) {
+                for (i = 0; i < num_perceptron2nd; i++) {
+                    for (j = 0; j < num_perceptron1st; j++) {
+                        for (k = 0; k < num_perceptron2nd; k++) {
                             delta2[j] += nn.perceptron2nd[k].weight[j] * derivate_sigmoid(nn.perceptron2nd[k].out_put) * delta3[k];
                         }
                         for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
@@ -504,23 +505,23 @@ class NNBrain extends Brain implements Serializable {
         Neuron[] perceptron1st;
         Neuron[] perceptron2nd;
         Neuron[] perceptron3rd;
-        float[] result_1st_layer = new float[13];
-        float[] result_2nd_layer = new float[12];
-        float[] result_3rd_layer = new float[11];
+        float[] result_1st_layer = new float[num_perceptron1st];
+        float[] result_2nd_layer = new float[num_perceptron2nd];
+        float[] result_3rd_layer = new float[num_perceptron3rd];
         float finalbias;
 
         public ArrayList<Card> calc(float[] input, ArrayList<Card> mycard) {
             int cnt;
             ArrayList<Card> out_put = new ArrayList<>();
-            for (cnt = 0; cnt < 13; cnt++) {
+            for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 perceptron1st[cnt].calc(input);
                 result_1st_layer[cnt] = perceptron1st[cnt].out_put;
             }
-            for (cnt = 0; cnt < 12; cnt++) {
+            for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 perceptron2nd[cnt].calc(result_1st_layer);
                 result_2nd_layer[cnt] = perceptron2nd[cnt].out_put;
             }
-            for (cnt = 0; cnt < 11; cnt++) {
+            for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 perceptron3rd[cnt].calc(result_2nd_layer);
                 result_3rd_layer[cnt] = perceptron3rd[cnt].out_put;
                 if (result_3rd_layer[cnt] > finalbias && cnt < mycard.size()) {
@@ -566,22 +567,22 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
             file_param.close();
         } else {
             nn = new NN();
-            nn.perceptron1st = new Neuron[13];
-            nn.perceptron2nd = new Neuron[12];
-            nn.perceptron3rd = new Neuron[11];
-            for (cnt = 0; cnt < 13; cnt++) {
+            nn.perceptron1st = new Neuron[num_perceptron1st];
+            nn.perceptron2nd = new Neuron[num_perceptron2nd];
+            nn.perceptron3rd = new Neuron[num_perceptron3rd];
+            for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
                 nn.perceptron1st[cnt].initialize();
             }
-            for (cnt = 0; cnt < 12; cnt++) {
+            for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
-                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].set_params(num_perceptron1st);
                 nn.perceptron2nd[cnt].initialize();
             }
-            for (cnt = 0; cnt < 11; cnt++) {
+            for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
-                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();
@@ -602,22 +603,22 @@ class NNBrain_Select extends NNBrain implements Serializable {
             file_param.close();
         } else {
             nn = new NN();
-            nn.perceptron1st = new Neuron[13];
-            nn.perceptron2nd = new Neuron[12];
-            nn.perceptron3rd = new Neuron[11];
-            for (cnt = 0; cnt < 13; cnt++) {
+            nn.perceptron1st = new Neuron[num_perceptron1st];
+            nn.perceptron2nd = new Neuron[num_perceptron2nd];
+            nn.perceptron3rd = new Neuron[num_perceptron3rd];
+            for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
                 nn.perceptron1st[cnt].initialize();
             }
-            for (cnt = 0; cnt < 12; cnt++) {
+            for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
-                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].set_params(num_perceptron1st);
                 nn.perceptron2nd[cnt].initialize();
             }
-            for (cnt = 0; cnt < 11; cnt++) {
+            for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
-                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();

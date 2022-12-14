@@ -191,6 +191,30 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void assign_com(ArrayList<String> char_list) throws IOException, ClassNotFoundException {
+        int i;
+        for(i=0;i<char_list.size();i++){
+            switch(char_list.get(i)){
+                case "zako":
+                    psn[i].name="雑魚";
+                    psn[i].algorhythm_to_choose_card=new BasicBrain();
+                    break;
+                case "strong":
+                    psn[i].name="ちゅよい";
+                    psn[i].algorhythm_to_choose_card=new StrongerBrain();
+                    break;
+                case "robot_full_sigmoid":
+                    psn[i].name="ニューラルネットワーク";
+                    psn[i].algorhythm_to_choose_card=new NNBrain();
+                    break;
+                case "robot_full_relu":
+                    psn[i].name="レルー";
+                    psn[i].algorhythm_to_choose_card=new NNBrain_ReLu();
+                    break;
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent get_intent = getIntent();
@@ -216,13 +240,9 @@ public class GameActivity extends AppCompatActivity {
             psn_name[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_name", "id", getPackageName()));
             psn_stat[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_stat", "id", getPackageName()));
             psn_stat[cnt].setText("");
-            if (cnt == 0) {
-                psn[cnt].name="user";
-            } else {
-                psn[cnt].name="COM" + cnt;
-            }
         }
         psn[0].name="Masato";
+        //assign_com((ArrayList<String>) char_list.subList(1,char_list.size()));
         try {
             if(char_list.contains("robot_select")) {
                 psn[3].algorhythm_to_choose_card = new NNBrain_Select();
