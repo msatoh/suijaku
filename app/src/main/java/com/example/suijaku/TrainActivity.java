@@ -23,6 +23,7 @@ import java.util.Random;
 
 import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.FILE_PATH_Relu;
+import static com.example.suijaku.Cst.FILE_PATH_manynewron;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 
@@ -153,7 +154,13 @@ public class TrainActivity extends AppCompatActivity {
         }
         psn[0].name = "Masato";
         try {
-            psn[0].algorhythm_to_choose_card=new NNBrain();
+            if(char_list.contains("robot_full_sigmoid")) {
+                psn[0].algorhythm_to_choose_card=new NNBrain();
+            }else if(char_list.contains("robot_full_relu")){
+                psn[0].algorhythm_to_choose_card=new NNBrain_ReLu();
+            }else if(char_list.contains("robot_genetic")){
+                psn[0].algorhythm_to_choose_card=new NNBrain_manynewrons();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -384,6 +391,8 @@ public class TrainActivity extends AppCompatActivity {
             filepath=FILE_PATH;
         }else if(char_list.contains("robot_full_relu")){
             filepath=FILE_PATH_Relu;
+        }else if(char_list.contains("robot_genetic")){
+            filepath=FILE_PATH_manynewron;
         }
         ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(filepath));
         file_param.writeObject(psn[0].algorhythm_to_choose_card.rtn_nn());

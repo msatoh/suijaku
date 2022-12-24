@@ -592,6 +592,46 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
     }
 }
 
+class NNBrain_manynewrons extends NNBrain implements Serializable {
+    Random random = new Random();
+    final float eta = 0.05f;
+    float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
+    int num_perceptron1st=39,num_perceptron2nd=50,num_perceptron3rd=11;
+    public NNBrain_manynewrons() throws IOException, ClassNotFoundException {
+        int cnt;
+        File file = new File(FILE_PATH_manynewron);
+        if (file.exists()) {
+            ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
+            nn = (NN) file_param.readObject();
+            file_param.close();
+        } else {
+            nn = new NN();
+            nn.perceptron1st = new Neuron[num_perceptron1st];
+            nn.perceptron2nd = new Neuron[num_perceptron2nd];
+            nn.perceptron3rd = new Neuron[num_perceptron3rd];
+            for (cnt = 0; cnt < num_perceptron1st; cnt++) {
+                nn.perceptron1st[cnt] = new Neuron();
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
+                nn.perceptron1st[cnt].initialize();
+            }
+            for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
+                nn.perceptron2nd[cnt] = new Neuron();
+                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].initialize();
+            }
+            for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
+                nn.perceptron3rd[cnt] = new Neuron();
+                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].initialize();
+            }
+            nn.finalbias = random.nextFloat();
+            ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+            file_param.writeObject(nn);
+            file_param.close();
+        }
+    }
+}
+
 class NNBrain_Select extends NNBrain implements Serializable {
     public NNBrain_Select() throws IOException, ClassNotFoundException {
         int cnt;

@@ -211,6 +211,10 @@ public class GameActivity extends AppCompatActivity {
                     psn[i].name="レルー";
                     psn[i].algorhythm_to_choose_card=new NNBrain_ReLu();
                     break;
+                case "robot_genetic":
+                    psn[i].name="多細胞";
+                    psn[i].algorhythm_to_choose_card=new NNBrain_manynewrons();
+                    break;
             }
         }
     }
