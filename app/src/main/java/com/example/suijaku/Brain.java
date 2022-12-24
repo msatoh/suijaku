@@ -546,7 +546,6 @@ class NNBrain extends Brain implements Serializable {
 }
 
 class NNBrain_ReLu extends NNBrain implements Serializable {
-    //final float eta = 0.0001f;
 
     @Override
     public float sigmoid(float param) {

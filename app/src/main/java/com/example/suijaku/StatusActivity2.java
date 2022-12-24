@@ -76,30 +76,35 @@ class StatusDraw2 extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int mnt, i, j;
-        float[][] joint1stlayer = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2][13];
-        float[][] joint2ndlayer = new float[13][12];
-        float[][] joint3rdlayer = new float[12][11];
+        int num_1st=0,num_2nd=0,num_3rd=0;
+        float[][] joint1stlayer = new float[0][],joint2ndlayer = new float[0][],joint3rdlayer = new float[0][];
         float max_param = 0.0f;
         try {
             NNBrain_ReLu networks = new NNBrain_ReLu();
+            num_1st= networks.num_perceptron1st;
+            num_2nd=networks.num_perceptron2nd;
+            num_3rd=networks.num_perceptron3rd;
+            joint1stlayer = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2][num_1st];
+            joint2ndlayer = new float[num_1st][num_2nd];
+            joint3rdlayer = new float[num_2nd][num_3rd];
             for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
-                for (j = 0; j < 13; j++) {
+                for (j = 0; j < num_1st; j++) {
                     joint1stlayer[i][j] = networks.rtn_nn().perceptron1st[j].weight[i];
                     if (max_param < abs(joint1stlayer[i][j])) {
                         max_param = joint1stlayer[i][j];
                     }
                 }
             }
-            for (i = 0; i < 13; i++) {
-                for (j = 0; j < 12; j++) {
+            for (i = 0; i < num_1st; i++) {
+                for (j = 0; j < num_2nd; j++) {
                     joint2ndlayer[i][j] = networks.rtn_nn().perceptron2nd[j].weight[i];
                     if (max_param < abs(joint2ndlayer[i][j])) {
                         max_param = joint2ndlayer[i][j];
                     }
                 }
             }
-            for (i = 0; i < 12; i++) {
-                for (j = 0; j < 11; j++) {
+            for (i = 0; i <  num_2nd; i++) {
+                for (j = 0; j < num_3rd; j++) {
                     joint3rdlayer[i][j] = networks.rtn_nn().perceptron3rd[j].weight[i];
                     if (max_param < abs(joint3rdlayer[i][j])) {
                         max_param = joint3rdlayer[i][j];
@@ -116,17 +121,17 @@ class StatusDraw2 extends View {
         for (mnt = 0; mnt < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mnt++) {
             canvas.drawCircle(100, 150 + 60 * mnt, 20, mpaint);
         }
-        for (mnt = 0; mnt < 13; mnt++) {
+        for (mnt = 0; mnt < num_1st; mnt++) {
             canvas.drawCircle(400, 150 + 115 * mnt, 20, mpaint);
         }
-        for (mnt = 0; mnt < 12; mnt++) {
+        for (mnt = 0; mnt < num_2nd; mnt++) {
             canvas.drawCircle(700, 175 + 120 * mnt, 20, mpaint);
         }
-        for (mnt = 0; mnt < 11; mnt++) {
+        for (mnt = 0; mnt < num_3rd; mnt++) {
             canvas.drawCircle(1000, 225 + 125 * mnt, 20, mpaint);
         }
         for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
-            for (j = 0; j < 13; j++) {
+            for (j = 0; j < num_1st; j++) {
                 if (joint1stlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint1stlayer[i][j] * 255) / max_param)));
                 } else {
@@ -135,8 +140,8 @@ class StatusDraw2 extends View {
                 canvas.drawLine(100, 150 + 60 * i, 400, 150 + 115 * j, mpaint);
             }
         }
-        for (i = 0; i < 13; i++) {
-            for (j = 0; j < 12; j++) {
+        for (i = 0; i < num_1st; i++) {
+            for (j = 0; j < num_2nd; j++) {
                 if (joint2ndlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint2ndlayer[i][j] * 255) / max_param)));
                 } else {
@@ -145,8 +150,8 @@ class StatusDraw2 extends View {
                 canvas.drawLine(400, 150 + 115 * i, 700, 175 + 120 * j, mpaint);
             }
         }
-        for (i = 0; i < 12; i++) {
-            for (j = 0; j < 11; j++) {
+        for (i = 0; i < num_2nd; i++) {
+            for (j = 0; j < num_3rd; j++) {
                 if (joint3rdlayer[i][j] > 0) {
                     mpaint.setColor(rgb(0, 0, (int) ((joint3rdlayer[i][j] * 255) / max_param)));
                 } else {
