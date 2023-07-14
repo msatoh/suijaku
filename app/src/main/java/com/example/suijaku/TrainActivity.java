@@ -158,7 +158,7 @@ public class TrainActivity extends AppCompatActivity {
                 psn[0].algorhythm_to_choose_card=new NNBrain();
             }else if(char_list.contains("robot_full_relu")){
                 psn[0].algorhythm_to_choose_card=new NNBrain_ReLu();
-            }else if(char_list.contains("robot_genetic")){
+            }else if(char_list.contains("robot_select")){
                 psn[0].algorhythm_to_choose_card=new NNBrain_manynewrons();
             }
         } catch (IOException e) {
@@ -179,7 +179,7 @@ public class TrainActivity extends AppCompatActivity {
         }
         psn[3].name = "ニューラルネットワーク";
         psn[4].algorhythm_to_choose_card = new BasicBrain();
-        psn[4].name = "ふつう";
+        psn[4].name = "ザコ";
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn_name[cnt].setText(psn[cnt].name);
         }
