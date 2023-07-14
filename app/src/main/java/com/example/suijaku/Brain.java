@@ -340,7 +340,7 @@ class NNBrain extends Brain implements Serializable {
     Random random = new Random();
     final float eta = 0.05f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
-    int num_perceptron1st=13,num_perceptron2nd=12,num_perceptron3rd=11;
+    int num_perceptron1st = 13, num_perceptron2nd = 12, num_perceptron3rd = 11;
 
     public float sigmoid(float param) {
         return (float) tanh(param);
@@ -380,8 +380,8 @@ class NNBrain extends Brain implements Serializable {
         }
     }
 
-    public float derivate_sigmoid(float x){
-        return (float) (1-pow(sigmoid(x),2));
+    public float derivate_sigmoid(float x) {
+        return (float) (1 - pow(sigmoid(x), 2));
     }
 
     @Override
@@ -553,7 +553,7 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
     }
 
     @Override
-    public float derivate_sigmoid(float x){
+    public float derivate_sigmoid(float x) {
         return 1;
     }
 
@@ -596,7 +596,8 @@ class NNBrain_manynewrons extends NNBrain implements Serializable {
     Random random = new Random();
     final float eta = 0.05f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
-    int num_perceptron1st=39,num_perceptron2nd=50,num_perceptron3rd=11;
+    int num_perceptron1st = 39, num_perceptron2nd = 50, num_perceptron3rd = 11;
+
     public NNBrain_manynewrons() throws IOException, ClassNotFoundException {
         int cnt;
         File file = new File(FILE_PATH_manynewron);
@@ -680,6 +681,107 @@ class NNBrain_Select extends NNBrain implements Serializable {
                 pos++;
             }
         }
-        return nn.calc(in_put, mycard);
+        return calc_select(in_put, mycard, card_field);
+    }
+
+    float[] softmax(float[] in) {
+        float denom = 0;
+        float out[] = new float[in.length];
+        int cnt;
+        for (cnt = 0; cnt < in.length; cnt++) {
+            denom += exp(in[cnt]);
+        }
+        for (cnt = 0; cnt < in.length; cnt++) {
+            out[cnt] = (float) (exp(in[cnt]) / denom);
+        }
+        return out;
+    }
+
+    public ArrayList<Card> calc_select(float[] input, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+        int cnt;
+        float MAX = 0;
+        ArrayList<Card> out_put = new ArrayList<>();
+        for (cnt = 0; cnt < num_perceptron1st; cnt++) {
+            nn.perceptron1st[cnt].calc(input);
+            nn.result_1st_layer[cnt] = nn.perceptron1st[cnt].out_put;
+        }
+        for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
+            nn.perceptron2nd[cnt].calc(nn.result_1st_layer);
+            nn.result_2nd_layer[cnt] = nn.perceptron2nd[cnt].out_put;
+        }
+        for (cnt = 0; cnt < rtn_candidate_lists(mycard, card_field).size(); cnt++) {
+            nn.perceptron3rd[cnt].calc(nn.result_2nd_layer);
+            nn.result_3rd_layer[cnt] = nn.perceptron3rd[cnt].out_put;
+            if (nn.result_3rd_layer[cnt] > MAX && cnt < mycard.size()) {
+                MAX = nn.result_3rd_layer[cnt];
+                out_put = rtn_candidate_lists(mycard, card_field).get(cnt);
+            }
+        }
+        nn.result_3rd_layer = softmax(nn.result_3rd_layer);
+        for (cnt = 0; cnt < rtn_candidate_lists(mycard, card_field).size(); cnt++) {
+            if (nn.result_3rd_layer[cnt] > MAX && cnt < mycard.size()) {
+                MAX = nn.result_3rd_layer[cnt];
+                out_put = rtn_candidate_lists(mycard, card_field).get(cnt);
+            }
+        }
+        return out_put;
+    }
+    @Override
+    public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> ans_cards) {
+        float[] ans_list = new float[num_perceptron3rd];
+        float[] err = new float[num_perceptron3rd];
+        float[] delta3 = new float[num_perceptron2nd];
+        float[] delta2 = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
+        int cnt, i, j, k;
+        for (cnt = 0; cnt < ans_cards.size(); cnt++) {
+            if (mycard.contains(ans_cards.get(cnt))) {
+                ans_list[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
+            }
+        }
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
+            if (ans_list[cnt] == 0.0) {
+                err[cnt] = nn.rtn_3rd_layer(cnt);
+            } else if (ans_list[cnt] == 1.0) {
+                err[cnt] = 1-nn.rtn_3rd_layer(cnt);
+            } else {
+                err[cnt] = 0;
+            }
+        }
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < num_perceptron2nd; i++) {
+                    nn.perceptron3rd[cnt].weight[i] -= eta * nn.perceptron2nd[i].out_put * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
+                }
+                nn.perceptron3rd[cnt].bias -= eta * err[cnt] * derivate_sigmoid(nn.perceptron3rd[cnt].out_put);
+            }
+        }
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < num_perceptron2nd; i++) {
+                    for (j = 0; j < num_perceptron3rd; j++) {
+                        delta3[i] += nn.perceptron3rd[j].weight[i] * err[j] * derivate_sigmoid(nn.perceptron3rd[j].out_put);
+                    }
+                    for (j = 0; j < num_perceptron1st; j++) {
+                        nn.perceptron2nd[i].weight[j] -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * nn.perceptron1st[j].out_put * delta3[i];
+                    }
+                    nn.perceptron2nd[i].bias -= eta * derivate_sigmoid(nn.perceptron2nd[i].out_put) * delta3[i];
+                }
+            }
+        }
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
+            if (err[cnt] != 0) {
+                for (i = 0; i < num_perceptron2nd; i++) {
+                    for (j = 0; j < num_perceptron1st; j++) {
+                        for (k = 0; k < num_perceptron2nd; k++) {
+                            delta2[j] += nn.perceptron2nd[k].weight[j] * derivate_sigmoid(nn.perceptron2nd[k].out_put) * delta3[k];
+                        }
+                        for (k = 0; k < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; k++) {
+                            nn.perceptron1st[j].weight[k] -= eta * in_put[k] * derivate_sigmoid(nn.perceptron1st[j].out_put) * delta2[j];
+                        }
+                        nn.perceptron1st[j].bias -= eta * derivate_sigmoid(nn.perceptron1st[j].out_put) * delta2[j];
+                    }
+                }
+            }
+        }
     }
 }
