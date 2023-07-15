@@ -365,12 +365,12 @@ class NNBrain extends Brain implements Serializable {
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
-                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].set_params(num_perceptron1st);
                 nn.perceptron2nd[cnt].initialize();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
-                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
                 nn.perceptron3rd[cnt].initialize();
             }
             nn.finalbias = random.nextFloat();
@@ -634,6 +634,8 @@ class NNBrain_manynewrons extends NNBrain implements Serializable {
 }
 
 class NNBrain_Select extends NNBrain implements Serializable {
+
+    int num_perceptron3rd = (int) (pow(2,4)+pow(2,4)+pow(2,3));
     public NNBrain_Select() throws IOException, ClassNotFoundException {
         int cnt;
         File file = new File(FILE_PATH_NNBSelect);
@@ -709,13 +711,9 @@ class NNBrain_Select extends NNBrain implements Serializable {
             nn.perceptron2nd[cnt].calc(nn.result_1st_layer);
             nn.result_2nd_layer[cnt] = nn.perceptron2nd[cnt].out_put;
         }
-        for (cnt = 0; cnt < rtn_candidate_lists(mycard, card_field).size(); cnt++) {
+        for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             nn.perceptron3rd[cnt].calc(nn.result_2nd_layer);
             nn.result_3rd_layer[cnt] = nn.perceptron3rd[cnt].out_put;
-            if (nn.result_3rd_layer[cnt] > MAX && cnt < mycard.size()) {
-                MAX = nn.result_3rd_layer[cnt];
-                out_put = rtn_candidate_lists(mycard, card_field).get(cnt);
-            }
         }
         nn.result_3rd_layer = softmax(nn.result_3rd_layer);
         for (cnt = 0; cnt < rtn_candidate_lists(mycard, card_field).size(); cnt++) {

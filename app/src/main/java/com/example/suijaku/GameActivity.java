@@ -192,30 +192,30 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void assign_com(ArrayList<String> char_list) throws IOException, ClassNotFoundException {
-        int i;
-        for(i=0;i<char_list.size();i++){
-            switch(char_list.get(i)){
-                case "zako":
-                    psn[i].name="雑魚";
-                    psn[i].algorhythm_to_choose_card=new BasicBrain();
-                    break;
-                case "strong":
-                    psn[i].name="ちゅよい";
-                    psn[i].algorhythm_to_choose_card=new StrongerBrain();
-                    break;
-                case "robot_full_sigmoid":
-                    psn[i].name="ニューラルネットワーク";
-                    psn[i].algorhythm_to_choose_card=new NNBrain();
-                    break;
-                case "robot_full_relu":
-                    psn[i].name="レルー";
-                    psn[i].algorhythm_to_choose_card=new NNBrain_ReLu();
-                    break;
-                case "robot_genetic":
-                    psn[i].name="多細胞";
-                    psn[i].algorhythm_to_choose_card=new NNBrain_manynewrons();
-                    break;
-            }
+        int cnt=1;
+        if(char_list.contains("robot_select")) {
+            psn[cnt].algorhythm_to_choose_card = new NNBrain_Select();
+            psn[cnt].name="NNselect";
+            cnt++;
+        }
+        if(char_list.contains("robot_full_relu")){
+            psn[cnt].algorhythm_to_choose_card = new NNBrain_ReLu();
+            psn[cnt].name="ReLu子";
+            cnt++;
+        }
+        if(char_list.contains("robot_full_sigmoid")){
+            psn[cnt].algorhythm_to_choose_card = new NNBrain();
+            psn[cnt].name="ニューラルネットワーク";
+            cnt++;
+        }
+        if(char_list.contains("zako")){
+            psn[cnt].algorhythm_to_choose_card=new BasicBrain();
+            psn[cnt].name="ザコ";
+            cnt++;
+        }
+        if(char_list.contains("strong")){
+            psn[cnt].algorhythm_to_choose_card=new StrongerBrain();
+            psn[cnt].name="強い";
         }
     }
 
@@ -246,9 +246,14 @@ public class GameActivity extends AppCompatActivity {
             psn_stat[cnt].setText("");
         }
         psn[0].name="Masato";
-        //assign_com((ArrayList<String>) char_list.subList(1,char_list.size()));
-        cnt=1;
         try {
+            assign_com((ArrayList<String>) char_list);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        /*try {
             if(char_list.contains("robot_select")) {
                 psn[cnt].algorhythm_to_choose_card = new NNBrain_Select();
                 psn[cnt].name="NNselect";
@@ -277,7 +282,7 @@ public class GameActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn_name[cnt].setText(psn[cnt].name);
         }

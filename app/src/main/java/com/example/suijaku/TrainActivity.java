@@ -159,7 +159,7 @@ public class TrainActivity extends AppCompatActivity {
             }else if(char_list.contains("robot_full_relu")){
                 psn[0].algorhythm_to_choose_card=new NNBrain_ReLu();
             }else if(char_list.contains("robot_select")){
-                psn[0].algorhythm_to_choose_card=new NNBrain_manynewrons();
+                psn[0].algorhythm_to_choose_card=new NNBrain_Select();
             }
         } catch (IOException e) {
             e.printStackTrace();
