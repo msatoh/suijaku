@@ -458,14 +458,6 @@ class NNBrain extends Brain implements Serializable {
             weight = new float[num_of_input];
         }
 
-        public void set_weight(int num_of_input, float param) {
-            weight[num_of_input] = param;
-        }
-
-        public void set_bias(int cnt, float param) {
-            bias = param;
-        }
-
         public void calc(float[] input_param) {
             int cnt;
             float sum = 0.0f;
@@ -582,8 +574,6 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
 
 class NNBrain_manyneurons extends NNBrain implements Serializable {
     Random random = new Random();
-    final float eta = 0.05f;
-    float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     int num_perceptron1st = 39, num_perceptron2nd = 50, num_perceptron3rd = 11;
 
     public NNBrain_manyneurons() throws IOException, ClassNotFoundException {
@@ -622,7 +612,6 @@ class NNBrain_manyneurons extends NNBrain implements Serializable {
 }
 
 class NNBrain_Select extends NNBrain implements Serializable {
-    final float eta = 0.1f;
     int num_perceptron3rd = (int) (pow(2,4)+pow(2,4)+pow(2,3));
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (int) (pow(2,4)+pow(2,4)+pow(2,3))];
     float[] result_3rd_layer = new float[num_perceptron3rd];
