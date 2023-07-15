@@ -24,7 +24,7 @@ import java.util.Random;
 import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
 import static com.example.suijaku.Cst.FILE_PATH_Relu;
-import static com.example.suijaku.Cst.FILE_PATH_manynewron;
+import static com.example.suijaku.Cst.FILE_PATH_manyneurons;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 
@@ -44,6 +44,7 @@ public class TrainActivity extends AppCompatActivity {
     final Rank rank_use = new Rank();
     String char_list;
     private ArrayList<Integer> used_list = new ArrayList<>();
+
     private void init_array(ArrayList<Integer> used_list_in) {
         int cnt;
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
@@ -126,7 +127,7 @@ public class TrainActivity extends AppCompatActivity {
         android.os.Debug.waitForDebugger();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_avtivity);
-        Intent get_intent=getIntent();
+        Intent get_intent = getIntent();
         char_list = get_intent.getStringExtra("selected_char_list");
         int cnt;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -155,12 +156,14 @@ public class TrainActivity extends AppCompatActivity {
         }
         psn[0].name = "Masato";
         try {
-            if(char_list.contains("robot_full_sigmoid")) {
-                psn[0].algorhythm_to_choose_card=new NNBrain();
-            }else if(char_list.contains("robot_full_relu")){
-                psn[0].algorhythm_to_choose_card=new NNBrain_ReLu();
-            }else if(char_list.contains("robot_select")){
-                psn[0].algorhythm_to_choose_card=new NNBrain_Select();
+            if (char_list.contains("robot_full_sigmoid")) {
+                psn[0].algorhythm_to_choose_card = new NNBrain();
+            } else if (char_list.contains("robot_full_relu")) {
+                psn[0].algorhythm_to_choose_card = new NNBrain_ReLu();
+            } else if (char_list.contains("robot_select")) {
+                psn[0].algorhythm_to_choose_card = new NNBrain_Select();
+            }else if (char_list.contains("robot_manyneurons")) {
+                psn[0].algorhythm_to_choose_card = new NNBrain_manyneurons();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -315,7 +318,7 @@ public class TrainActivity extends AppCompatActivity {
                                 if (psn[0].is_pass) {
                                     psn_stat[0].setText("pass");
                                 }
-                                if (psn[0].card_list.size() == 0&&!psn[0].if_end) {
+                                if (psn[0].card_list.size() == 0 && !psn[0].if_end) {
                                     psn[0].if_end = true;
                                     rank_view.setText(rank_use.set_rank());
                                 }
@@ -387,13 +390,15 @@ public class TrainActivity extends AppCompatActivity {
     }
 
     public void save_neuron(View view) throws IOException {
-        String filepath="";
-        if(char_list.contains("robot_full_sigmoid")) {
-            filepath=FILE_PATH;
-        }else if(char_list.contains("robot_full_relu")){
-            filepath=FILE_PATH_Relu;
-        }else if(char_list.contains("robot_select")){
-            filepath=FILE_PATH_NNBSelect;
+        String filepath = "";
+        if (char_list.contains("robot_full_sigmoid")) {
+            filepath = FILE_PATH;
+        } else if (char_list.contains("robot_full_relu")) {
+            filepath = FILE_PATH_Relu;
+        } else if (char_list.contains("robot_select")) {
+            filepath = FILE_PATH_NNBSelect;
+        } else if (char_list.contains("robot_manyneurons")) {
+            filepath = FILE_PATH_manyneurons;
         }
         ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(filepath));
         file_param.writeObject(psn[0].algorhythm_to_choose_card.rtn_nn());

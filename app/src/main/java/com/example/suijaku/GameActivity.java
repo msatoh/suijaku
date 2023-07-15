@@ -217,6 +217,10 @@ public class GameActivity extends AppCompatActivity {
             psn[cnt].algorhythm_to_choose_card=new StrongerBrain();
             psn[cnt].name="強い";
         }
+        if(char_list.contains("robot_manyneurons")){
+            psn[cnt].algorhythm_to_choose_card=new NNBrain_manyneurons();
+            psn[cnt].name="神経増やしたシグモイド";
+        }
     }
 
     @Override

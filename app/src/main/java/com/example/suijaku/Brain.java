@@ -580,15 +580,15 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
     }
 }
 
-class NNBrain_manynewrons extends NNBrain implements Serializable {
+class NNBrain_manyneurons extends NNBrain implements Serializable {
     Random random = new Random();
     final float eta = 0.05f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     int num_perceptron1st = 39, num_perceptron2nd = 50, num_perceptron3rd = 11;
 
-    public NNBrain_manynewrons() throws IOException, ClassNotFoundException {
+    public NNBrain_manyneurons() throws IOException, ClassNotFoundException {
         int cnt;
-        File file = new File(FILE_PATH_manynewron);
+        File file = new File(FILE_PATH_manyneurons);
         if (file.exists()) {
             ObjectInputStream file_param = new ObjectInputStream(new FileInputStream(FILE_PATH));
             nn = (NN) file_param.readObject();
