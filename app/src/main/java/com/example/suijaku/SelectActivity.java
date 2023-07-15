@@ -29,7 +29,7 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_activity);
         int cnt;
-        final selection[] select = {new selection("zako"), new selection("strong"), new selection("robot_full_sigmoid"), new selection("robot_genetic"), new selection("robot_select"), new selection("robot_full_relu")};
+        final selection[] select = {new selection("zako"), new selection("strong"), new selection("robot_full_sigmoid"), new selection("robot_manyneurons"), new selection("robot_select"), new selection("robot_full_relu")};
         final TextView txt_name = findViewById(R.id.char_name);
         for (cnt = 0; cnt < 6; cnt++) {
             final int finalCnt = cnt;

@@ -66,7 +66,7 @@
         app:srcCompat="@drawable/robot_full_sigmoid" />
 
     <ImageView
-        android:id="@+id/robot_genetic_img"
+        android:id="@+id/robot_manyneurons_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="75dp"
@@ -75,7 +75,7 @@
         android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/robot_full_sigmoid_img"
-        app:srcCompat="@drawable/robot_genetic" />
+        app:srcCompat="@drawable/robot_manyneurons" />
 
     <ImageView
         android:id="@+id/robot_select_img"
@@ -85,7 +85,7 @@
         android:layout_marginRight="75dp"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_manyneurons_img"
         app:srcCompat="@drawable/robot_select" />
 
     <ImageView
@@ -145,14 +145,14 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/frame_robot_genetic"
+        android:id="@+id/frame_robot_manyneurons"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/robot_genetic_img"
-        app:layout_constraintEnd_toEndOf="@+id/robot_genetic_img"
-        app:layout_constraintStart_toStartOf="@+id/robot_genetic_img"
-        app:layout_constraintTop_toTopOf="@+id/robot_genetic_img"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_manyneurons_img"
+        app:layout_constraintEnd_toEndOf="@+id/robot_manyneurons_img"
+        app:layout_constraintStart_toStartOf="@+id/robot_manyneurons_img"
+        app:layout_constraintTop_toTopOf="@+id/robot_manyneurons_img"
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
@@ -162,8 +162,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/robot_select_img"
         app:layout_constraintEnd_toEndOf="@+id/robot_select_img"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/robot_select_img"
         app:layout_constraintTop_toTopOf="@+id/robot_select_img"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/selectable_underline" />
 
     <TextView
