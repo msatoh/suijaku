@@ -216,6 +216,7 @@ public class GameActivity extends AppCompatActivity {
         if(char_list.contains("strong")){
             psn[cnt].algorhythm_to_choose_card=new StrongerBrain();
             psn[cnt].name="強い";
+            cnt++;
         }
         if(char_list.contains("robot_manyneurons")){
             psn[cnt].algorhythm_to_choose_card=new NNBrain_manyneurons();
@@ -422,11 +423,5 @@ public class GameActivity extends AppCompatActivity {
         psn[0].is_pass = true;
         MyThread passing_card = new MyThread();
         passing_card.start();
-    }
-
-    public void save_neuron(View view) throws IOException {
-        ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
-        file_param.writeObject(psn[3].algorhythm_to_choose_card.rtn_nn());
-        file_param.close();
     }
 }
