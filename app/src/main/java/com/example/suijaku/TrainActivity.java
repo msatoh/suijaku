@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
 import static com.example.suijaku.Cst.FILE_PATH_Relu;
 import static com.example.suijaku.Cst.FILE_PATH_manynewron;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
@@ -391,8 +392,8 @@ public class TrainActivity extends AppCompatActivity {
             filepath=FILE_PATH;
         }else if(char_list.contains("robot_full_relu")){
             filepath=FILE_PATH_Relu;
-        }else if(char_list.contains("robot_genetic")){
-            filepath=FILE_PATH_manynewron;
+        }else if(char_list.contains("robot_select")){
+            filepath=FILE_PATH_NNBSelect;
         }
         ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(filepath));
         file_param.writeObject(psn[0].algorhythm_to_choose_card.rtn_nn());

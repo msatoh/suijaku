@@ -397,9 +397,9 @@ class NNBrain extends Brain implements Serializable {
             }
         }
         for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
-            if (nn.rtn_3rd_layer(cnt) > nn.finalbias && ans_list[cnt] == 0.0) {
-                err[cnt] = nn.rtn_3rd_layer(cnt);
-            } else if (nn.rtn_3rd_layer(cnt) < nn.finalbias && ans_list[cnt] == 1.0) {
+            if (nn.result_3rd_layer[cnt] > nn.finalbias && ans_list[cnt] == 0.0) {
+                err[cnt] = nn.result_3rd_layer[cnt];
+            } else if (nn.result_3rd_layer[cnt] < nn.finalbias && ans_list[cnt] == 1.0) {
                 err[cnt] = -nn.finalbias;
             } else {
                 err[cnt] = 0;
@@ -530,18 +530,6 @@ class NNBrain extends Brain implements Serializable {
             }
             return out_put;
         }
-
-        public float rtn_1st_layer(int arg) {
-            return result_1st_layer[arg];
-        }
-
-        public float rtn_2nd_layer(int arg) {
-            return result_2nd_layer[arg];
-        }
-
-        public float rtn_3rd_layer(int arg) {
-            return result_3rd_layer[arg];
-        }
     }
 }
 
@@ -634,8 +622,10 @@ class NNBrain_manynewrons extends NNBrain implements Serializable {
 }
 
 class NNBrain_Select extends NNBrain implements Serializable {
-
+    final float eta = 0.1f;
     int num_perceptron3rd = (int) (pow(2,4)+pow(2,4)+pow(2,3));
+    float[] in_put = new float[NUM_OF_PLAYERS - 1 + (int) (pow(2,4)+pow(2,4)+pow(2,3))];
+    float[] result_3rd_layer = new float[num_perceptron3rd];
     public NNBrain_Select() throws IOException, ClassNotFoundException {
         int cnt;
         File file = new File(FILE_PATH_NNBSelect);
@@ -650,7 +640,7 @@ class NNBrain_Select extends NNBrain implements Serializable {
             nn.perceptron3rd = new Neuron[num_perceptron3rd];
             for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
-                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
+                nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (int) (pow(2,4)+pow(2,4)+pow(2,3)));
                 nn.perceptron1st[cnt].initialize();
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
@@ -713,12 +703,12 @@ class NNBrain_Select extends NNBrain implements Serializable {
         }
         for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             nn.perceptron3rd[cnt].calc(nn.result_2nd_layer);
-            nn.result_3rd_layer[cnt] = nn.perceptron3rd[cnt].out_put;
+            result_3rd_layer[cnt] = nn.perceptron3rd[cnt].out_put;
         }
-        nn.result_3rd_layer = softmax(nn.result_3rd_layer);
+        result_3rd_layer = softmax(result_3rd_layer);
         for (cnt = 0; cnt < rtn_candidate_lists(mycard, card_field).size(); cnt++) {
-            if (nn.result_3rd_layer[cnt] > MAX && cnt < mycard.size()) {
-                MAX = nn.result_3rd_layer[cnt];
+            if (result_3rd_layer[cnt] > MAX && cnt < mycard.size()) {
+                MAX = result_3rd_layer[cnt];
                 out_put = rtn_candidate_lists(mycard, card_field).get(cnt);
             }
         }
@@ -738,9 +728,9 @@ class NNBrain_Select extends NNBrain implements Serializable {
         }
         for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
             if (ans_list[cnt] == 0.0) {
-                err[cnt] = nn.rtn_3rd_layer(cnt);
+                err[cnt] = result_3rd_layer[cnt];
             } else if (ans_list[cnt] == 1.0) {
-                err[cnt] = 1-nn.rtn_3rd_layer(cnt);
+                err[cnt] = 1-result_3rd_layer[cnt];
             } else {
                 err[cnt] = 0;
             }

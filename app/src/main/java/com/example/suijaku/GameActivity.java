@@ -253,36 +253,6 @@ public class GameActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        /*try {
-            if(char_list.contains("robot_select")) {
-                psn[cnt].algorhythm_to_choose_card = new NNBrain_Select();
-                psn[cnt].name="NNselect";
-                cnt++;
-            }
-            if(char_list.contains("robot_full_relu")){
-                psn[cnt].algorhythm_to_choose_card = new NNBrain_ReLu();
-                psn[cnt].name="ReLu子";
-                cnt++;
-            }
-            if(char_list.contains("robot_full_sigmoid")){
-                psn[cnt].algorhythm_to_choose_card = new NNBrain();
-                psn[cnt].name="ニューラルネットワーク";
-                cnt++;
-            }
-            if(char_list.contains("zako")){
-                psn[cnt].algorhythm_to_choose_card=new BasicBrain();
-                psn[cnt].name="ザコ";
-                cnt++;
-            }
-            if(char_list.contains("strong")){
-                psn[cnt].algorhythm_to_choose_card=new StrongerBrain();
-                psn[cnt].name="強い";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn_name[cnt].setText(psn[cnt].name);
         }
