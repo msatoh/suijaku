@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Check {
     boolean chk_kaidan(ArrayList<Card> card){
         int cnt;
+        if(card.size()==0){
+            return false;
+        }
         for(cnt=1;cnt<card.size();cnt++){
             if(card.get(cnt-1).mark_use!=card.get(cnt).mark_use){
                 return false;
