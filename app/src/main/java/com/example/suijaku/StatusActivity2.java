@@ -17,9 +17,14 @@ import androidx.core.view.GestureDetectorCompat;
 import com.example.suijaku.NNBrain;
 import com.example.suijaku.R;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import static android.graphics.Color.rgb;
+import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_Relu;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -79,7 +84,7 @@ class StatusDraw2 extends View {
         int num_1st=0,num_2nd=0,num_3rd=0;
         float[][] joint1stlayer = new float[0][],joint2ndlayer = new float[0][],joint3rdlayer = new float[0][];
         float max_param = 0.0f;
-        try {
+        try{
             NNBrain_ReLu networks = new NNBrain_ReLu();
             num_1st= networks.num_perceptron1st;
             num_2nd=networks.num_perceptron2nd;

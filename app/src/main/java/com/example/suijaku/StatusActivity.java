@@ -14,9 +14,13 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import static android.graphics.Color.rgb;
+import static com.example.suijaku.Cst.FILE_PATH;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -76,7 +80,7 @@ class StatusDraw extends View {
         int num_1st=0,num_2nd=0,num_3rd=0;
         float[][] joint1stlayer = new float[0][],joint2ndlayer = new float[0][],joint3rdlayer = new float[0][];
         float max_param = 0.0f;
-        try {
+        try{
             NNBrain networks = new NNBrain();
             num_1st= networks.num_perceptron1st;
             num_2nd=networks.num_perceptron2nd;
@@ -109,7 +113,7 @@ class StatusDraw extends View {
                 }
             }
             mpaint.setTextSize(36);
-            canvas.drawText("barin: sigmoid border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
+            canvas.drawText("brain: sigmoid border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

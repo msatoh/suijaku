@@ -154,7 +154,7 @@ public class TrainActivity extends AppCompatActivity {
                 psn[cnt].name = "COM" + cnt;
             }
         }
-        psn[0].name = "Masato";
+        psn[0].name = char_list;
         try {
             if (char_list.contains("robot_full_sigmoid")) {
                 psn[0].algorhythm_to_choose_card = new NNBrain();

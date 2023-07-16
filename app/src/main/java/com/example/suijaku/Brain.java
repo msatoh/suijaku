@@ -338,7 +338,7 @@ class StrongerBrain extends Brain {
 
 class NNBrain extends Brain implements Serializable {
     Random random = new Random();
-    final float eta = 0.05f;
+    final float eta = 0.01f;
     float[] in_put = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
     int num_perceptron1st = 13, num_perceptron2nd = 12, num_perceptron3rd = 11;
 
