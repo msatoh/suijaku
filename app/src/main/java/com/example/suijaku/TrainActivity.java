@@ -175,13 +175,13 @@ public class TrainActivity extends AppCompatActivity {
         psn[2].name = "強い";
         psn[2].algorhythm_to_choose_card = new StrongerBrain();
         try {
-            psn[3].algorhythm_to_choose_card = new NNBrain();
+            psn[3].algorhythm_to_choose_card = new NNBrain_Select();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        psn[3].name = "ニューラルネットワーク";
+        psn[3].name = "NNB_Select";
         psn[4].algorhythm_to_choose_card = new BasicBrain();
         psn[4].name = "ザコ";
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
