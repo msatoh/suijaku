@@ -126,7 +126,7 @@ public class TrainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         android.os.Debug.waitForDebugger();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_avtivity);
+        setContentView(R.layout.activity_train_avtivity);
         Intent get_intent = getIntent();
         char_list = get_intent.getStringExtra("selected_char_list");
         int cnt;

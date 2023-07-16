@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Check {
     boolean chk_kaidan(ArrayList<Card> card) {
         int cnt;
-        if (card.size() == 0) {
+        if (card.size() < 3) {
             return false;
         }
         for (cnt = 1; cnt < card.size(); cnt++) {

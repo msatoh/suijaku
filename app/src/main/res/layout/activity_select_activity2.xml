@@ -98,7 +98,7 @@
         app:srcCompat="@drawable/selectable_underline" />
 
     <ImageView
-        android:id="@+id/frame_robot_manyneurons"
+        android:id="@+id/frame_robot_genetic"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"

@@ -252,7 +252,7 @@ public class GameActivity extends AppCompatActivity {
         }
         psn[0].name="Masato";
         try {
-            assign_com((ArrayList<String>) char_list);
+            assign_com(char_list);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
