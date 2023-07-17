@@ -1,15 +1,16 @@
 # suijaku
 大貧民（追加ルールなし＋NPC機械学習）
 <BR><BR>
-  <h2>＜本体（大富豪機能）＞</h2>
-完成<BR>
-  
-<h2>＜キャラクター選択画面＞</h2>
-・雑魚、強い、シグモイドでフル学習、ReLuでフル学習、神経増やしたシグモイド<BR>
-<BR><BR>
-  
+  <h2>usage</h2>
+・まず「NPCを鍛える」でNPCを鍛えてください。
+
+<h3>キャラ</h3>
+・雑魚…出せるカードを手当たり次第に出す<BR>
+・強い…強いカードを出し惜しみして、最後の方（ほかのプレイヤーが上がりそうになったら）に出す<BR>
+・NeuralNetwork…選択肢がカード単位（output関数：sigmoid、神経多いバージョン/ReLu）、出せるカードBrain
+
 <h2>＜今後やること（上から順）＞</h2>
-  <li><s>もしかしたら最後softmaxが実装されてないかも</s>←softmaxは出力が1位に決まる際に実装するが今回2枚出すパターンもあるため対象外</li>
-<li>残ったカードリストから選択Brain作成<BR></li>
-  <li>遺伝アルゴリズムのBrain作成…candidate_cards_listsの中から選択させるようにし、出せる場合は必ず出せるようにする。（フル学習でない）</li>
-  <li>キャラクター選択を反映させる</li>
+・Status activityを見て、paramがinfの場合に備えてDELETEボタン実装<BR>
+・新規NNBrain作成時、まずSAVEも実装<BR>
+・robot_genetic削除、train_activityにmanyneuronsへ換装…robot_geneticはtrain_activityで世代数を入力した場合に実装とする。（但しrebot_geneticは他の題材で遺伝アルゴリズムの実装の経験を積んでから作る。）
+
