@@ -69,7 +69,7 @@ public class SelectActivity2 extends AppCompatActivity {
             } else {
                 Intent intent = new Intent(SelectActivity2.this, TrainActivity.class);
                 intent.putExtra("selected_char_li", selected_char);
-                intent.putExtra("number_of_generation", num_gen.toString());
+                intent.putExtra("number_of_gen", num_gen.toString());
                 startActivity(intent);
             }
         } catch (NumberFormatException e) {
