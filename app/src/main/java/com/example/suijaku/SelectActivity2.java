@@ -37,7 +37,7 @@ public class SelectActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_select_activity2);
         int cnt1;
         final int[] inner_cnt = new int[1];
-        final selection[] select = {new selection("robot_full_sigmoid"), new selection("robot_genetic"), new selection("robot_select"), new selection("robot_full_relu")};
+        final selection[] select = {new selection("robot_full_sigmoid"), new selection("robot_manyneurons"), new selection("robot_select"), new selection("robot_full_relu")};
         final TextView txt_name = findViewById(R.id.char_name);
         for (cnt1 = 0; cnt1 < 4; cnt1++) {
             final int finalCnt = cnt1;
@@ -62,13 +62,13 @@ public class SelectActivity2 extends AppCompatActivity {
     public void game_start(View view) {
         EditText num_gen = findViewById(R.id.editTextNumber);
         try {
-            if (selected_char == "robot_genetic" && Integer.valueOf(num_gen.getText().toString()) == 0) {
-                new AlertDialog.Builder(SelectActivity2.this).setMessage("世代数を入力してください(>0)").setPositiveButton("OK", null).show();
+            if (selected_char == "robot_select" && Integer.valueOf(num_gen.getText().toString()) > 0) {
+                new AlertDialog.Builder(SelectActivity2.this).setMessage("この機能はまだ未実装されていない").setPositiveButton("OK", null).show();
             } else if (selected_char == "") {
                 new AlertDialog.Builder(SelectActivity2.this).setMessage("キャラを選択してください").setPositiveButton("OK", null).show();
             } else {
                 Intent intent = new Intent(SelectActivity2.this, TrainActivity.class);
-                intent.putExtra("selected_char_list", selected_char);
+                intent.putExtra("selected_char_li", selected_char);
                 intent.putExtra("number_of_generation", num_gen.toString());
                 startActivity(intent);
             }
