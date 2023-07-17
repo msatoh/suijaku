@@ -9,7 +9,7 @@ import static com.example.suijaku.Cst.*;
 import static java.lang.Math.*;
 
 public class Brain {
-    public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_list, ArrayList<Card> field_card, ArrayList<Card> select_card) {
+    public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_li, ArrayList<Card> field_card, ArrayList<Card> select_card) {
     }
 
     class NN implements Serializable {
@@ -19,14 +19,14 @@ public class Brain {
         return new NN();
     }
 
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         return new ArrayList<>();
     }
 
     public ArrayList<ArrayList<Card>> add_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
         Check checker = new Check();
         ArrayList<Card> candidate_cards = new ArrayList<>();
-        ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
+        ArrayList<ArrayList<Card>> candidate_li = new ArrayList<>();
         int first = 1, second = 2, third = 3, fourth = 4;
         switch (size) {
             case 1:
@@ -34,7 +34,7 @@ public class Brain {
                     candidate_cards.clear();
                     candidate_cards.add(mycard.get(first));
                     if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                        candidate_list.add((ArrayList<Card>) candidate_cards.clone());
+                        candidate_li.add((ArrayList<Card>) candidate_cards.clone());
                     }
                 }
                 break;
@@ -45,7 +45,7 @@ public class Brain {
                     for (second = first + 1; second < mycard.size(); second++) {
                         candidate_cards.add(mycard.get(second));
                         if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                            candidate_list.add((ArrayList<Card>) candidate_cards.clone());
+                            candidate_li.add((ArrayList<Card>) candidate_cards.clone());
                         }
                         candidate_cards.remove(mycard.get(second));
                     }
@@ -61,7 +61,7 @@ public class Brain {
                         for (third = second + 1; third < mycard.size(); third++) {
                             candidate_cards.add(mycard.get(third));
                             if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                                candidate_list.add((ArrayList<Card>) candidate_cards.clone());
+                                candidate_li.add((ArrayList<Card>) candidate_cards.clone());
                             }
                             candidate_cards.remove(mycard.get(third));
                         }
@@ -81,7 +81,7 @@ public class Brain {
                             for (fourth = third + 1; fourth < mycard.size(); fourth++) {
                                 candidate_cards.add(mycard.get(fourth));
                                 if (checker.chk_if_decideable(candidate_cards, card_field)) {
-                                    candidate_list.add((ArrayList<Card>) candidate_cards.clone());
+                                    candidate_li.add((ArrayList<Card>) candidate_cards.clone());
                                 }
                                 candidate_cards.remove(mycard.get(fourth));
                             }
@@ -93,22 +93,22 @@ public class Brain {
                 }
                 break;
         }
-        return candidate_list;
+        return candidate_li;
     }
 
     public ArrayList<ArrayList<Card>> rtn_candidate_lists(ArrayList<Card> mycard, ArrayList<Card> card_field) {
-        ArrayList<ArrayList<Card>> candidate_list = new ArrayList<>();
+        ArrayList<ArrayList<Card>> candidate_li = new ArrayList<>();
         int cnt;
         if (card_field.size() == 0) {
             for (cnt = 1; cnt <= min(4, mycard.size()); cnt++) {
-                candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
+                candidate_li.addAll(add_card_by_sheets(mycard, card_field, cnt));
             }
         } else {
             for (cnt = 1; cnt <= card_field.size(); cnt++) {
-                candidate_list.addAll(add_card_by_sheets(mycard, card_field, cnt));
+                candidate_li.addAll(add_card_by_sheets(mycard, card_field, cnt));
             }
         }
-        return candidate_list;
+        return candidate_li;
     }
 }
 
@@ -185,7 +185,7 @@ class BasicBrain extends Brain {
     }
 
     @Override
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
         if (card_field.size() == 0) {
@@ -309,7 +309,7 @@ class StrongerBrain extends Brain {
     }
 
     @Override
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         Random random = new Random();
         int cnt;
         ArrayList<Card> empty_card = new ArrayList<>();
@@ -386,20 +386,20 @@ class NNBrain extends Brain implements Serializable {
 
     @Override
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> ans_cards) {
-        float[] ans_list = new float[num_perceptron3rd];
+        float[] ans_li = new float[num_perceptron3rd];
         float[] err = new float[num_perceptron3rd];
         float[] delta3 = new float[num_perceptron2nd];
         float[] delta2 = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
         int cnt, i, j, k;
         for (cnt = 0; cnt < ans_cards.size(); cnt++) {
             if (mycard.contains(ans_cards.get(cnt))) {
-                ans_list[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
+                ans_li[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
             }
         }
         for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
-            if (nn.result_3rd_layer[cnt] > nn.finalbias && ans_list[cnt] == 0.0) {
+            if (nn.result_3rd_layer[cnt] > nn.finalbias && ans_li[cnt] == 0.0) {
                 err[cnt] = nn.result_3rd_layer[cnt];
-            } else if (nn.result_3rd_layer[cnt] < nn.finalbias && ans_list[cnt] == 1.0) {
+            } else if (nn.result_3rd_layer[cnt] < nn.finalbias && ans_li[cnt] == 1.0) {
                 err[cnt] = -nn.finalbias;
             } else {
                 err[cnt] = 0;
@@ -478,7 +478,7 @@ class NNBrain extends Brain implements Serializable {
     }
 
     @Override
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         int cnt;
         in_put[0] = card_player1;
         in_put[1] = card_player2;
@@ -650,7 +650,7 @@ class NNBrain_Select extends NNBrain implements Serializable {
     }
 
     @Override
-    public ArrayList<Card> calculate_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_card_to_put(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         int cnt, pos = 4;
         in_put[0] = card_player1;
         in_put[1] = card_player2;
@@ -705,20 +705,20 @@ class NNBrain_Select extends NNBrain implements Serializable {
     }
     @Override
     public void back_propagation(int card_player1, int card_player2, int card_player3, int card_player4, ArrayList<Card> mycard, ArrayList<Card> card_field, ArrayList<Card> ans_cards) {
-        float[] ans_list = new float[num_perceptron3rd];
+        float[] ans_li = new float[num_perceptron3rd];
         float[] err = new float[num_perceptron3rd];
         float[] delta3 = new float[num_perceptron2nd];
         float[] delta2 = new float[NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2];
         int cnt, i, j, k;
         for (cnt = 0; cnt < ans_cards.size(); cnt++) {
             if (mycard.contains(ans_cards.get(cnt))) {
-                ans_list[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
+                ans_li[mycard.indexOf(ans_cards.get(cnt))] = 1.0f;
             }
         }
         for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
-            if (ans_list[cnt] == 0.0) {
+            if (ans_li[cnt] == 0.0) {
                 err[cnt] = result_3rd_layer[cnt];
-            } else if (ans_list[cnt] == 1.0) {
+            } else if (ans_li[cnt] == 1.0) {
                 err[cnt] = 1-result_3rd_layer[cnt];
             } else {
                 err[cnt] = 0;

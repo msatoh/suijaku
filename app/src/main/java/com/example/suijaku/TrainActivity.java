@@ -42,13 +42,13 @@ public class TrainActivity extends AppCompatActivity {
     Handler pass_card;
     Handler trash_card;
     final Rank rank_use = new Rank();
-    String char_list;
-    private ArrayList<Integer> used_list = new ArrayList<>();
+    String char_li;
+    private ArrayList<Integer> used_li = new ArrayList<>();
 
-    private void init_array(ArrayList<Integer> used_list_in) {
+    private void init_array(ArrayList<Integer> used_li_in) {
         int cnt;
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
-            used_list_in.add(cnt);
+            used_li_in.add(cnt);
         }
     }
 
@@ -56,11 +56,11 @@ public class TrainActivity extends AppCompatActivity {
         mark mark_in;
         Card a_card = new Card();
         Random mark_num_seed = new Random();
-        int rand_seed = mark_num_seed.nextInt(used_list.size());
-        int rand_param = used_list.get(rand_seed);
+        int rand_seed = mark_num_seed.nextInt(used_li.size());
+        int rand_param = used_li.get(rand_seed);
         int mark_num = rand_param / 13;
         int strength_num = rand_param % 13 + 1;
-        used_list.remove((Integer) rand_param);
+        used_li.remove((Integer) rand_param);
         switch (mark_num) {
             case 0:
                 mark_in = mark.heart;
@@ -128,7 +128,7 @@ public class TrainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_avtivity);
         Intent get_intent = getIntent();
-        char_list = get_intent.getStringExtra("selected_char_list");
+        char_li = get_intent.getStringExtra("selected_char_li");
         int cnt;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         pass_card = new Handler();
@@ -142,7 +142,7 @@ public class TrainActivity extends AppCompatActivity {
             com_card[cnt] = findViewById(getResources().getIdentifier("COM" + cnt + "_card", "id", getPackageName()));
             com_turn[cnt] = findViewById(getResources().getIdentifier("COM" + cnt + "_turn", "id", getPackageName()));
         }
-        init_array(used_list);
+        init_array(used_li);
         for (cnt = 0; cnt < NUM_OF_PLAYERS; cnt++) {
             psn[cnt] = new Player();
             psn_name[cnt] = findViewById(getResources().getIdentifier("man" + cnt + "_name", "id", getPackageName()));
@@ -154,15 +154,15 @@ public class TrainActivity extends AppCompatActivity {
                 psn[cnt].name = "COM" + cnt;
             }
         }
-        psn[0].name = char_list;
+        psn[0].name = char_li;
         try {
-            if (char_list.contains("robot_full_sigmoid")) {
+            if (char_li.contains("robot_full_sigmoid")) {
                 psn[0].algorhythm_to_choose_card = new NNBrain();
-            } else if (char_list.contains("robot_full_relu")) {
+            } else if (char_li.contains("robot_full_relu")) {
                 psn[0].algorhythm_to_choose_card = new NNBrain_ReLu();
-            } else if (char_list.contains("robot_select")) {
+            } else if (char_li.contains("robot_select")) {
                 psn[0].algorhythm_to_choose_card = new NNBrain_Select();
-            }else if (char_list.contains("robot_manyneurons")) {
+            }else if (char_li.contains("robot_manyneurons")) {
                 psn[0].algorhythm_to_choose_card = new NNBrain_manyneurons();
             }
         } catch (IOException e) {
@@ -190,13 +190,13 @@ public class TrainActivity extends AppCompatActivity {
         for (cnt = 0; cnt < NUM_OF_CARDS; cnt++) {
             psn[cnt % 5].insert_card(gen_rand_card());
         }
-        final boolean[] clicked = new boolean[psn[0].card_list.size()];
-        for (cnt = 0; cnt < psn[0].card_list.size(); cnt++) {
+        final boolean[] clicked = new boolean[psn[0].card_li.size()];
+        for (cnt = 0; cnt < psn[0].card_li.size(); cnt++) {
             clicked[cnt] = false;
-            p_card.get(cnt).setText(show_card(psn[0].card_list.get(cnt)));
+            p_card.get(cnt).setText(show_card(psn[0].card_li.get(cnt)));
         }
         for (cnt = 1; cnt < NUM_OF_PLAYERS; cnt++) {
-            com_card[cnt].setText("" + psn[cnt].card_list.size() + "枚");
+            com_card[cnt].setText("" + psn[cnt].card_li.size() + "枚");
         }
         for (cnt = 0; cnt < NUM_OF_CARDS / NUM_OF_PLAYERS + 1; cnt++) {
             final int finalcnt = cnt;
@@ -206,14 +206,14 @@ public class TrainActivity extends AppCompatActivity {
                         p_card.get(finalcnt).setTextColor(Color.BLUE);
                         p_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt] = true;
-                        psn[0].players_select_card_list.select_card.add(psn[0].card_list.get(finalcnt));
-                        psn[0].players_select_card_list.card_id_for_txtview.add(psn[0].card_list.indexOf(psn[0].card_list.get(finalcnt)));
+                        psn[0].players_select_card_li.select_card.add(psn[0].card_li.get(finalcnt));
+                        psn[0].players_select_card_li.card_id_for_txtview.add(psn[0].card_li.indexOf(psn[0].card_li.get(finalcnt)));
                     } else {
                         p_card.get(finalcnt).setTextColor(Color.BLACK);
                         p_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt] = false;
-                        psn[0].players_select_card_list.select_card.remove(psn[0].card_list.get(finalcnt));
-                        psn[0].players_select_card_list.card_id_for_txtview.remove((Integer) finalcnt);
+                        psn[0].players_select_card_li.select_card.remove(psn[0].card_li.get(finalcnt));
+                        psn[0].players_select_card_li.card_id_for_txtview.remove((Integer) finalcnt);
                     }
                 }
             });
@@ -222,37 +222,37 @@ public class TrainActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
                     final int[] localcnt = new int[1];
-                    if (checker.chk_if_decideable(psn[0].players_select_card_list.select_card, field_entity.field_card)) {
+                    if (checker.chk_if_decideable(psn[0].players_select_card_li.select_card, field_entity.field_card)) {
                         builder.setTitle("COMの捨てたカード")
-                                .setMessage(show_cards(psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card)))
+                                .setMessage(show_cards(psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card)))
                                 .setPositiveButton("ラーン", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        psn[0].algorhythm_to_choose_card.back_propagation(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card, psn[0].players_select_card_list.select_card);
+                                        psn[0].algorhythm_to_choose_card.back_propagation(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card, psn[0].players_select_card_li.select_card);
                                     }
                                 })
                                 .setNeutralButton("送る(自分の選択したカード)", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        field_entity.txt.setText(show_cards(psn[0].players_select_card_list.select_card));
-                                        field_entity.field_card = (ArrayList<Card>) psn[0].players_select_card_list.select_card.clone();
-                                        for (localcnt[0] = 0; localcnt[0] < psn[0].players_select_card_list.card_id_for_txtview.size(); localcnt[0]++) {
-                                            p_card.remove(psn[0].players_select_card_list.card_id_for_txtview.get(localcnt[0]));
+                                        field_entity.txt.setText(show_cards(psn[0].players_select_card_li.select_card));
+                                        field_entity.field_card = (ArrayList<Card>) psn[0].players_select_card_li.select_card.clone();
+                                        for (localcnt[0] = 0; localcnt[0] < psn[0].players_select_card_li.card_id_for_txtview.size(); localcnt[0]++) {
+                                            p_card.remove(psn[0].players_select_card_li.card_id_for_txtview.get(localcnt[0]));
                                         }
-                                        psn[0].players_select_card_list.card_id_for_txtview.clear();
-                                        for (localcnt[0] = 0; localcnt[0] < psn[0].players_select_card_list.select_card.size(); localcnt[0]++) {
-                                            psn[0].card_list.remove(psn[0].players_select_card_list.select_card.get(localcnt[0]));
+                                        psn[0].players_select_card_li.card_id_for_txtview.clear();
+                                        for (localcnt[0] = 0; localcnt[0] < psn[0].players_select_card_li.select_card.size(); localcnt[0]++) {
+                                            psn[0].card_li.remove(psn[0].players_select_card_li.select_card.get(localcnt[0]));
                                         }
-                                        for (localcnt[0] = 0; localcnt[0] < psn[0].card_list.size(); localcnt[0]++) {
-                                            p_card.get(localcnt[0]).setText(show_card(psn[0].card_list.get(localcnt[0])));
+                                        for (localcnt[0] = 0; localcnt[0] < psn[0].card_li.size(); localcnt[0]++) {
+                                            p_card.get(localcnt[0]).setText(show_card(psn[0].card_li.get(localcnt[0])));
                                             clicked[localcnt[0]] = false;
                                             p_card.get(localcnt[0]).setTextColor(Color.BLACK);
                                             p_card.get(localcnt[0]).setTypeface(Typeface.DEFAULT);
                                         }
-                                        for (localcnt[0] = psn[0].card_list.size(); localcnt[0] < psn[0].card_list.size() + psn[0].players_select_card_list.select_card.size(); localcnt[0]++) {
+                                        for (localcnt[0] = psn[0].card_li.size(); localcnt[0] < psn[0].card_li.size() + psn[0].players_select_card_li.select_card.size(); localcnt[0]++) {
                                             p_card.get(localcnt[0]).setText("");
                                         }
-                                        psn[0].players_select_card_list.select_card.clear();
+                                        psn[0].players_select_card_li.select_card.clear();
                                         MyThread passing_card = new MyThread();
                                         passing_card.start();
                                     }
@@ -260,23 +260,23 @@ public class TrainActivity extends AppCompatActivity {
                                 .setNegativeButton("送る(COMの選択したカード)", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        psn[0].players_select_card_list.card_id_for_txtview.clear();
-                                        field_entity.txt.setText(show_cards(psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card)));
-                                        field_entity.field_card = (ArrayList<Card>) psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card).clone();
-                                        for (localcnt[0] = 0; localcnt[0] < psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card).size(); localcnt[0]++) {
-                                            p_card.remove(psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card).get(localcnt[0]));
-                                            psn[0].card_list.remove(psn[0].algorhythm_to_choose_card.calculate_card_to_put(psn[1].card_list.size(), psn[2].card_list.size(), psn[3].card_list.size(), psn[4].card_list.size(), psn[0].card_list, field_entity.field_card).get(localcnt[0]));
+                                        psn[0].players_select_card_li.card_id_for_txtview.clear();
+                                        field_entity.txt.setText(show_cards(psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card)));
+                                        field_entity.field_card = (ArrayList<Card>) psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card).clone();
+                                        for (localcnt[0] = 0; localcnt[0] < psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card).size(); localcnt[0]++) {
+                                            p_card.remove(psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card).get(localcnt[0]));
+                                            psn[0].card_li.remove(psn[0].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(), psn[2].card_li.size(), psn[3].card_li.size(), psn[4].card_li.size(), psn[0].card_li, field_entity.field_card).get(localcnt[0]));
                                         }
-                                        for (localcnt[0] = 0; localcnt[0] < psn[0].card_list.size(); localcnt[0]++) {
-                                            p_card.get(localcnt[0]).setText(show_card(psn[0].card_list.get(localcnt[0])));
+                                        for (localcnt[0] = 0; localcnt[0] < psn[0].card_li.size(); localcnt[0]++) {
+                                            p_card.get(localcnt[0]).setText(show_card(psn[0].card_li.get(localcnt[0])));
                                             clicked[localcnt[0]] = false;
                                             p_card.get(localcnt[0]).setTextColor(Color.BLACK);
                                             p_card.get(localcnt[0]).setTypeface(Typeface.DEFAULT);
                                         }
-                                        for (localcnt[0] = psn[0].card_list.size(); localcnt[0] < psn[0].card_list.size() + psn[0].players_select_card_list.select_card.size(); localcnt[0]++) {
+                                        for (localcnt[0] = psn[0].card_li.size(); localcnt[0] < psn[0].card_li.size() + psn[0].players_select_card_li.select_card.size(); localcnt[0]++) {
                                             p_card.get(localcnt[0]).setText("");
                                         }
-                                        psn[0].players_select_card_list.select_card.clear();
+                                        psn[0].players_select_card_li.select_card.clear();
                                         MyThread passing_card = new MyThread();
                                         passing_card.start();
                                     }
@@ -318,7 +318,7 @@ public class TrainActivity extends AppCompatActivity {
                                 if (psn[0].is_pass) {
                                     psn_stat[0].setText("pass");
                                 }
-                                if (psn[0].card_list.size() == 0 && !psn[0].if_end) {
+                                if (psn[0].card_li.size() == 0 && !psn[0].if_end) {
                                     psn[0].if_end = true;
                                     rank_view.setText(rank_use.set_rank());
                                 }
@@ -342,18 +342,18 @@ public class TrainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if (!psn[finalperson_num].is_pass && !psn[finalperson_num].if_end) {
-                                    chosen_card[0] = psn[finalperson_num].algorhythm_to_choose_card.calculate_card_to_put(psn[(finalperson_num + 1) % 5].card_list.size(), psn[(finalperson_num + 2) % 5].card_list.size(), psn[(finalperson_num + 3) % 5].card_list.size(), psn[(finalperson_num + 4) % 5].card_list.size(), psn[finalperson_num].card_list, field_entity.field_card);
+                                    chosen_card[0] = psn[finalperson_num].algorhythm_to_choose_card.calc_card_to_put(psn[(finalperson_num + 1) % 5].card_li.size(), psn[(finalperson_num + 2) % 5].card_li.size(), psn[(finalperson_num + 3) % 5].card_li.size(), psn[(finalperson_num + 4) % 5].card_li.size(), psn[finalperson_num].card_li, field_entity.field_card);
                                     if (checker.chk_if_decideable(chosen_card[0], field_entity.field_card)) {
                                         for (inner_person_num[0] = 0; inner_person_num[0] < chosen_card[0].size(); inner_person_num[0]++) {
-                                            psn[finalperson_num].card_list.remove(chosen_card[0].get(inner_person_num[0]));
+                                            psn[finalperson_num].card_li.remove(chosen_card[0].get(inner_person_num[0]));
                                         }
                                         field_entity.txt.setText(show_cards(chosen_card[0]));
                                         field_entity.field_card = chosen_card[0];
-                                        if (psn[finalperson_num].card_list.size() == 0 && !psn[finalperson_num].if_end) {
+                                        if (psn[finalperson_num].card_li.size() == 0 && !psn[finalperson_num].if_end) {
                                             psn[finalperson_num].if_end = true;
                                             com_card[finalperson_num].setText(rank_use.set_rank());
                                         } else {
-                                            com_card[finalperson_num].setText("" + psn[finalperson_num].card_list.size() + "枚");
+                                            com_card[finalperson_num].setText("" + psn[finalperson_num].card_li.size() + "枚");
                                         }
                                     } else {
                                         psn[finalperson_num].is_pass = true;
@@ -391,13 +391,13 @@ public class TrainActivity extends AppCompatActivity {
 
     public void save_neuron(View view) throws IOException {
         String filepath = "";
-        if (char_list.contains("robot_full_sigmoid")) {
+        if (char_li.contains("robot_full_sigmoid")) {
             filepath = FILE_PATH;
-        } else if (char_list.contains("robot_full_relu")) {
+        } else if (char_li.contains("robot_full_relu")) {
             filepath = FILE_PATH_Relu;
-        } else if (char_list.contains("robot_select")) {
+        } else if (char_li.contains("robot_select")) {
             filepath = FILE_PATH_NNBSelect;
-        } else if (char_list.contains("robot_manyneurons")) {
+        } else if (char_li.contains("robot_manyneurons")) {
             filepath = FILE_PATH_manyneurons;
         }
         ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(filepath));
