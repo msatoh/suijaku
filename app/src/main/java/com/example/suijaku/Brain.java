@@ -9,7 +9,7 @@ import static com.example.suijaku.Cst.*;
 import static java.lang.Math.*;
 
 public class Brain {
-    public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_li, ArrayList<Card> field_card, ArrayList<Card> select_card) {
+    public void back_propagation(int size, int size1, int size2, int size3, ArrayList<Card> card_li, ArrayList<Card> field_card, ArrayList<Card> sel_card) {
     }
 
     class NN implements Serializable {
@@ -113,7 +113,7 @@ public class Brain {
 }
 
 class BasicBrain extends Brain {
-    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
+    public ArrayList<Card> sel_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size) {
         Check checker = new Check();
         ArrayList<Card> empty_card = new ArrayList<>();
         int first = 1, second = 2, third = 3, fourth = 4;
@@ -190,12 +190,12 @@ class BasicBrain extends Brain {
         ArrayList<Card> empty_card = new ArrayList<>();
         if (card_field.size() == 0) {
             for (cnt = min(4, mycard.size()); cnt > 0; cnt--) {
-                if (select_card_by_sheets(mycard, card_field, cnt).size() != 0) {
-                    return select_card_by_sheets(mycard, card_field, cnt);
+                if (sel_card_by_sheets(mycard, card_field, cnt).size() != 0) {
+                    return sel_card_by_sheets(mycard, card_field, cnt);
                 }
             }
         } else if (mycard.size() >= card_field.size()) {
-            return select_card_by_sheets(mycard, card_field, card_field.size());
+            return sel_card_by_sheets(mycard, card_field, card_field.size());
         }
         return empty_card;
     }
@@ -203,7 +203,7 @@ class BasicBrain extends Brain {
 
 class StrongerBrain extends Brain {
 
-    public ArrayList<Card> select_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size, boolean stronger) {
+    public ArrayList<Card> sel_card_by_sheets(ArrayList<Card> mycard, ArrayList<Card> card_field, int size, boolean stronger) {
         Check checker = new Check();
         int first, second = 2, third = 3, fourth = 4;
         ArrayList<Card> candidate_card = new ArrayList<>();
@@ -315,20 +315,20 @@ class StrongerBrain extends Brain {
         ArrayList<Card> empty_card = new ArrayList<>();
         if (card_field.size() == 0) {
             for (cnt = min(4, mycard.size()); cnt > 0; cnt--) {
-                if (select_card_by_sheets(mycard, card_field, cnt, false).size() != 0) {
+                if (sel_card_by_sheets(mycard, card_field, cnt, false).size() != 0) {
                     if (min(min(min(min(card_player1, card_player2), card_player3), card_player4), mycard.size()) <= 2) {
-                        return select_card_by_sheets(mycard, card_field, cnt, true);
+                        return sel_card_by_sheets(mycard, card_field, cnt, true);
                     } else {
-                        return select_card_by_sheets(mycard, card_field, cnt, false);
+                        return sel_card_by_sheets(mycard, card_field, cnt, false);
                     }
                 }
             }
         } else {
             if (mycard.size() >= card_field.size()) {
                 if (min(min(min(min(card_player1, card_player2), card_player3), card_player4), mycard.size()) <= 2) {
-                    return select_card_by_sheets(mycard, card_field, card_field.size(), true);
+                    return sel_card_by_sheets(mycard, card_field, card_field.size(), true);
                 } else {
-                    return select_card_by_sheets(mycard, card_field, card_field.size(), false);
+                    return sel_card_by_sheets(mycard, card_field, card_field.size(), false);
                 }
             }
         }
@@ -361,17 +361,17 @@ class NNBrain extends Brain implements Serializable {
             for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
-                nn.perceptron1st[cnt].initialize();
+                nn.perceptron1st[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(num_perceptron1st);
-                nn.perceptron2nd[cnt].initialize();
+                nn.perceptron2nd[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
-                nn.perceptron3rd[cnt].initialize();
+                nn.perceptron3rd[cnt].init();
             }
             nn.finalbias = random.nextFloat();
             ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
@@ -468,7 +468,7 @@ class NNBrain extends Brain implements Serializable {
             out_put = sigmoid(sum);
         }
 
-        public void initialize() {
+        public void init() {
             int inner_cnt;
             bias = random.nextFloat() * 2 - 1;
             for (inner_cnt = 0; inner_cnt < weight.length; inner_cnt++) {
@@ -552,17 +552,17 @@ class NNBrain_ReLu extends NNBrain implements Serializable {
             for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
-                nn.perceptron1st[cnt].initialize();
+                nn.perceptron1st[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(num_perceptron1st);
-                nn.perceptron2nd[cnt].initialize();
+                nn.perceptron2nd[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
-                nn.perceptron3rd[cnt].initialize();
+                nn.perceptron3rd[cnt].init();
             }
             nn.finalbias = random.nextFloat();
             ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
@@ -591,17 +591,17 @@ class NNBrain_manyneurons extends NNBrain implements Serializable {
             for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2);
-                nn.perceptron1st[cnt].initialize();
+                nn.perceptron1st[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(13);
-                nn.perceptron2nd[cnt].initialize();
+                nn.perceptron2nd[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(12);
-                nn.perceptron3rd[cnt].initialize();
+                nn.perceptron3rd[cnt].init();
             }
             nn.finalbias = random.nextFloat();
             ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
@@ -630,17 +630,17 @@ class NNBrain_Select extends NNBrain implements Serializable {
             for (cnt = 0; cnt < num_perceptron1st; cnt++) {
                 nn.perceptron1st[cnt] = new Neuron();
                 nn.perceptron1st[cnt].set_params(NUM_OF_PLAYERS - 1 + (int) (pow(2,4)+pow(2,4)+pow(2,3)));
-                nn.perceptron1st[cnt].initialize();
+                nn.perceptron1st[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
                 nn.perceptron2nd[cnt].set_params(num_perceptron1st);
-                nn.perceptron2nd[cnt].initialize();
+                nn.perceptron2nd[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
                 nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
-                nn.perceptron3rd[cnt].initialize();
+                nn.perceptron3rd[cnt].init();
             }
             nn.finalbias = random.nextFloat();
             ObjectOutputStream file_param = new ObjectOutputStream(new FileOutputStream(FILE_PATH_NNBSelect));
@@ -662,7 +662,7 @@ class NNBrain_Select extends NNBrain implements Serializable {
                 pos++;
             }
         }
-        return calc_select(in_put, mycard, card_field);
+        return calc_sel(in_put, mycard, card_field);
     }
 
     float[] softmax(float[] in) {
@@ -678,7 +678,7 @@ class NNBrain_Select extends NNBrain implements Serializable {
         return out;
     }
 
-    public ArrayList<Card> calc_select(float[] input, ArrayList<Card> mycard, ArrayList<Card> card_field) {
+    public ArrayList<Card> calc_sel(float[] input, ArrayList<Card> mycard, ArrayList<Card> card_field) {
         int cnt;
         float MAX = 0;
         ArrayList<Card> out_put = new ArrayList<>();

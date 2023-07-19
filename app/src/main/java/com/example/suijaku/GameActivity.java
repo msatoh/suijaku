@@ -27,13 +27,13 @@ enum mark {heart, spade, dia, club}
 
 class SelectedCardList{
     ArrayList<Integer> card_id_for_txtview= new ArrayList<>();
-    ArrayList<Card> select_card=new ArrayList<>();
+    ArrayList<Card> sel_card=new ArrayList<>();
 }
 
 class Player{
     String name;
     ArrayList<Card> card_li= new ArrayList<>();
-    SelectedCardList players_select_card_li=new SelectedCardList();
+    SelectedCardList players_sel_card_li=new SelectedCardList();
     Brain algorhythm_to_choose_card;
     boolean if_end=false;
     boolean is_pass=false;
@@ -280,14 +280,14 @@ public class GameActivity extends AppCompatActivity {
                         p_card.get(finalcnt).setTextColor(Color.BLUE);
                         p_card.get(finalcnt).setTypeface(Typeface.DEFAULT_BOLD);
                         clicked[finalcnt] = true;
-                        psn[0].players_select_card_li.select_card.add(psn[0].card_li.get(finalcnt));
-                        psn[0].players_select_card_li.card_id_for_txtview.add(psn[0].card_li.indexOf(psn[0].card_li.get(finalcnt)));
+                        psn[0].players_sel_card_li.sel_card.add(psn[0].card_li.get(finalcnt));
+                        psn[0].players_sel_card_li.card_id_for_txtview.add(psn[0].card_li.indexOf(psn[0].card_li.get(finalcnt)));
                     } else {
                         p_card.get(finalcnt).setTextColor(Color.BLACK);
                         p_card.get(finalcnt).setTypeface(Typeface.DEFAULT);
                         clicked[finalcnt] = false;
-                        psn[0].players_select_card_li.select_card.remove(psn[0].card_li.get(finalcnt));
-                        psn[0].players_select_card_li.card_id_for_txtview.remove((Integer) finalcnt);
+                        psn[0].players_sel_card_li.sel_card.remove(psn[0].card_li.get(finalcnt));
+                        psn[0].players_sel_card_li.card_id_for_txtview.remove((Integer) finalcnt);
                     }
                 }
             });
@@ -296,26 +296,26 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Check checker = new Check();
                     int localcnt;
-                    if (checker.chk_if_decideable(psn[0].players_select_card_li.select_card, field_entity.field_card)) {
-//                        Toast.makeText(getApplicationContext(), psn[0].players_select_card_li.select_card.equals(psn[3].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card))?"○":"×"+show_cards(psn[3].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card)), Toast.LENGTH_SHORT).show();
-//                        psn[3].algorhythm_to_choose_card.back_propagation(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card,psn[0].players_select_card_li.select_card);
-                        field_entity.txt.setText(show_cards(psn[0].players_select_card_li.select_card));
-                        field_entity.field_card = (ArrayList<Card>) psn[0].players_select_card_li.select_card.clone();
-                        for (localcnt = 0; localcnt < psn[0].players_select_card_li.card_id_for_txtview.size(); localcnt++) {
-                            p_card.remove(psn[0].players_select_card_li.card_id_for_txtview.get(localcnt));
-                            psn[0].card_li.remove(psn[0].players_select_card_li.select_card.get(localcnt));
+                    if (checker.chk_if_decideable(psn[0].players_sel_card_li.sel_card, field_entity.field_card)) {
+//                        Toast.makeText(getApplicationContext(), psn[0].players_sel_card_li.sel_card.equals(psn[3].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card))?"○":"×"+show_cards(psn[3].algorhythm_to_choose_card.calc_card_to_put(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card)), Toast.LENGTH_SHORT).show();
+//                        psn[3].algorhythm_to_choose_card.back_propagation(psn[1].card_li.size(),psn[2].card_li.size(),psn[3].card_li.size(),psn[4].card_li.size(),psn[0].card_li,field_entity.field_card,psn[0].players_sel_card_li.sel_card);
+                        field_entity.txt.setText(show_cards(psn[0].players_sel_card_li.sel_card));
+                        field_entity.field_card = (ArrayList<Card>) psn[0].players_sel_card_li.sel_card.clone();
+                        for (localcnt = 0; localcnt < psn[0].players_sel_card_li.card_id_for_txtview.size(); localcnt++) {
+                            p_card.remove(psn[0].players_sel_card_li.card_id_for_txtview.get(localcnt));
+                            psn[0].card_li.remove(psn[0].players_sel_card_li.sel_card.get(localcnt));
                         }
-                        psn[0].players_select_card_li.card_id_for_txtview.clear();
+                        psn[0].players_sel_card_li.card_id_for_txtview.clear();
                         for (localcnt = 0; localcnt < psn[0].card_li.size(); localcnt++) {
                             p_card.get(localcnt).setText(show_card(psn[0].card_li.get(localcnt)));
                             clicked[localcnt] = false;
                             p_card.get(localcnt).setTextColor(Color.BLACK);
                             p_card.get(localcnt).setTypeface(Typeface.DEFAULT);
                         }
-                        for (localcnt = psn[0].card_li.size(); localcnt < psn[0].card_li.size() + psn[0].players_select_card_li.select_card.size(); localcnt++) {
+                        for (localcnt = psn[0].card_li.size(); localcnt < psn[0].card_li.size() + psn[0].players_sel_card_li.sel_card.size(); localcnt++) {
                             p_card.get(localcnt).setText("");
                         }
-                        psn[0].players_select_card_li.select_card.clear();
+                        psn[0].players_sel_card_li.sel_card.clear();
 
                         MyThread passing_card = new MyThread();
                         passing_card.start();
