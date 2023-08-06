@@ -60,6 +60,10 @@ public class StatusActivity2 extends AppCompatActivity {
                 //    横方向の操作の場合
                 startActivity(new Intent(StatusActivity2.this, StatusActivity.class));
                 finish();
+            }else if(absY > absX && nowY-startY<-50) {
+                //    横方向の操作の場合
+                startActivity(new Intent(StatusActivity2.this, StatusActivity3.class));
+                finish();
             }
             return true;
         }

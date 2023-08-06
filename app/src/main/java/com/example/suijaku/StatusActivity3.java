@@ -118,7 +118,7 @@ class StatusDraw3 extends View {
             joint3rdlayer = new float[num_2nd][num_3rd];
             for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
                 for (j = 0; j < num_1st; j++) {
-                    joint1stlayer[i][j] = networks_nnbselect.rtn_nn().perceptron1st[j].weight[i];
+                    joint1stlayer[i][j] = networks_manyneurons.rtn_nn().perceptron1st[j].weight[i];
                     if (max_param_select < abs(joint1stlayer[i][j])) {
                         max_param_select = joint1stlayer[i][j];
                     }
@@ -126,7 +126,7 @@ class StatusDraw3 extends View {
             }
             for (i = 0; i < num_1st; i++) {
                 for (j = 0; j < num_2nd; j++) {
-                    joint2ndlayer[i][j] = networks_nnbselect.rtn_nn().perceptron2nd[j].weight[i];
+                    joint2ndlayer[i][j] = networks_manyneurons.rtn_nn().perceptron2nd[j].weight[i];
                     if (max_param_select < abs(joint2ndlayer[i][j])) {
                         max_param_select = joint2ndlayer[i][j];
                     }
@@ -134,7 +134,7 @@ class StatusDraw3 extends View {
             }
             for (i = 0; i <  num_2nd; i++) {
                 for (j = 0; j < num_3rd; j++) {
-                    joint3rdlayer[i][j] = networks_nnbselect.rtn_nn().perceptron3rd[j].weight[i];
+                    joint3rdlayer[i][j] = networks_manyneurons.rtn_nn().perceptron3rd[j].weight[i];
                     if (max_param_select < abs(joint3rdlayer[i][j])) {
                         max_param_select = joint3rdlayer[i][j];
                     }
