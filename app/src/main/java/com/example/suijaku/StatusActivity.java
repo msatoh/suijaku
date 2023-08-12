@@ -1,29 +1,33 @@
 package com.example.suijaku;
 
+import static android.graphics.Color.rgb;
+import static com.example.suijaku.Cst.NUM_OF_CARDS;
+import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
+import static java.lang.Math.abs;
+import static java.util.logging.Logger.global;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.window.layout.WindowMetrics;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-
-import static android.graphics.Color.rgb;
-import static com.example.suijaku.Cst.FILE_PATH;
-import static com.example.suijaku.Cst.NUM_OF_CARDS;
-import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
-import static java.lang.Math.abs;
+import java.util.logging.Logger;
 
 public class StatusActivity extends AppCompatActivity {
 
@@ -64,12 +68,25 @@ public class StatusActivity extends AppCompatActivity {
             return true;
         }
     }
+    public static int ScreenHeight;
+    public static int ScreenWidth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_avtivity);
         gestureDetector=new GestureDetectorCompat(this, new mOnGestureListener());
+        WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
+        Display disp = wm.getDefaultDisplay();
+
+        Point realSize = new Point();
+        if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+            disp.getRealSize(realSize);
+        }
+
+        ScreenWidth = realSize.x;
+        ScreenHeight = realSize.y;
     }
+
 }
 
 class StatusDraw extends View {
@@ -79,6 +96,7 @@ class StatusDraw extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
+
         super.onDraw(canvas);
         int mnt, i, j;
         int num_1st=0,num_2nd=0,num_3rd=0;
@@ -165,6 +183,7 @@ class StatusDraw extends View {
                 canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
             }
         }
-        canvas.drawText("max_param=" + max_param, 700, 1600, mpaint);
+        canvas.drawText("max_param=" + max_param, StatusActivity.ScreenWidth/2, StatusActivity.ScreenHeight-40, mpaint);
     }
+
 }

@@ -595,12 +595,12 @@ class NNBrain_manyneurons extends NNBrain implements Serializable {
             }
             for (cnt = 0; cnt < num_perceptron2nd; cnt++) {
                 nn.perceptron2nd[cnt] = new Neuron();
-                nn.perceptron2nd[cnt].set_params(13);
+                nn.perceptron2nd[cnt].set_params(num_perceptron1st);
                 nn.perceptron2nd[cnt].init();
             }
             for (cnt = 0; cnt < num_perceptron3rd; cnt++) {
                 nn.perceptron3rd[cnt] = new Neuron();
-                nn.perceptron3rd[cnt].set_params(12);
+                nn.perceptron3rd[cnt].set_params(num_perceptron2nd);
                 nn.perceptron3rd[cnt].init();
             }
             nn.finalbias = random.nextFloat();
