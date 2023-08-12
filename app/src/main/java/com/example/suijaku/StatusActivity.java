@@ -142,16 +142,16 @@ class StatusDraw extends View {
             e.printStackTrace();
         }
         for (mnt = 0; mnt < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mnt++) {
-            canvas.drawCircle(100, 150 + 60 * mnt, 20, mpaint);
+            canvas.drawCircle(50, 50 + (StatusActivity.ScreenHeight-265)/(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2)* mnt, 10, mpaint);
         }
         for (mnt = 0; mnt < num_1st; mnt++) {
-            canvas.drawCircle(400, 150 + 115 * mnt, 20, mpaint);
+            canvas.drawCircle(50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* mnt, 10, mpaint);
         }
         for (mnt = 0; mnt < 12; mnt++) {
-            canvas.drawCircle(700, 175 + 120 * mnt, 20, mpaint);
+            canvas.drawCircle(50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* mnt, 10, mpaint);
         }
         for (mnt = 0; mnt < 11; mnt++) {
-            canvas.drawCircle(1000, 225 + 125 * mnt, 20, mpaint);
+            canvas.drawCircle(StatusActivity.ScreenWidth-50, 100 + (StatusActivity.ScreenHeight-265)/12* mnt, 10, mpaint);
         }
         for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
             for (j = 0; j < num_1st; j++) {
@@ -160,7 +160,7 @@ class StatusDraw extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint1stlayer[i][j] * 255) / max_param), (int) (abs(joint1stlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(100, 150 + 60 * i, 400, 150 + 115 * j, mpaint);
+                canvas.drawLine(50, 50 + (StatusActivity.ScreenHeight-265)/(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2)* i, 50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* j, mpaint);
             }
         }
         for (i = 0; i < num_1st; i++) {
@@ -170,7 +170,7 @@ class StatusDraw extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint2ndlayer[i][j] * 255) / max_param), (int) (abs(joint2ndlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(400, 150 + 115 * i, 700, 175 + 120 * j, mpaint);
+                canvas.drawLine(50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* i, 50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* j, mpaint);
             }
         }
         for (i = 0; i < num_2nd; i++) {
@@ -180,10 +180,10 @@ class StatusDraw extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint3rdlayer[i][j] * 255) / max_param), (int) (abs(joint3rdlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
+                canvas.drawLine(50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* i, StatusActivity.ScreenWidth-50, 100 + (StatusActivity.ScreenHeight-265)/12* j, mpaint);
             }
         }
-        canvas.drawText("max_param=" + max_param, StatusActivity.ScreenWidth/2, StatusActivity.ScreenHeight-40, mpaint);
+        canvas.drawText("max_param=" + max_param, StatusActivity.ScreenWidth/2, StatusActivity.ScreenHeight-260, mpaint);
     }
 
 }
