@@ -60,20 +60,12 @@ public class SelectActivity2 extends AppCompatActivity {
     }
 
     public void game_start(View view) {
-        EditText num_gen = findViewById(R.id.editTextNumber);
-        try {
-            if (selected_char == "robot_select" && Integer.valueOf(num_gen.getText().toString()) > 0) {
-                new AlertDialog.Builder(SelectActivity2.this).setMessage("この機能はまだ未実装されていない").setPositiveButton("OK", null).show();
-            } else if (selected_char == "") {
+            if (selected_char == "") {
                 new AlertDialog.Builder(SelectActivity2.this).setMessage("キャラを選択してください").setPositiveButton("OK", null).show();
             } else {
                 Intent intent = new Intent(SelectActivity2.this, TrainActivity.class);
                 intent.putExtra("selected_char_li", selected_char);
-                intent.putExtra("number_of_gen", num_gen.toString());
                 startActivity(intent);
             }
-        } catch (NumberFormatException e) {
-            new AlertDialog.Builder(SelectActivity2.this).setMessage("世代数を入力してください").setPositiveButton("OK", null).show();
-        }
     }
 }
