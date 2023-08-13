@@ -25,6 +25,7 @@
         android:onClick="del_nnbs"
         android:text="DELETE NNBSelect"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -37,6 +38,7 @@
         android:layout_marginBottom="30dp"
         android:onClick="del_manyn"
         android:text="DELETE Manyneurons"
+        android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_del_bbns" />

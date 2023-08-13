@@ -20,8 +20,13 @@ import androidx.core.view.GestureDetectorCompat;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static android.graphics.Color.rgb;
+import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_Relu;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -79,9 +84,22 @@ public class StatusActivity2 extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             disp.getRealSize(realSize);
         }
-
         ScreenWidth = realSize.x;
         ScreenHeight = realSize.y;
+    }
+    public void del_nn_ReLu(View view){
+        Path p = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            p = Paths.get(FILE_PATH_Relu);
+        }
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Files.deleteIfExists(p);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }
 

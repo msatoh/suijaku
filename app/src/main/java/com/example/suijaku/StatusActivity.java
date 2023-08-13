@@ -1,6 +1,8 @@
 package com.example.suijaku;
 
 import static android.graphics.Color.rgb;
+import static com.example.suijaku.Cst.FILE_PATH;
+import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -27,6 +29,9 @@ import androidx.core.view.GestureDetectorCompat;
 import androidx.window.layout.WindowMetrics;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public class StatusActivity extends AppCompatActivity {
@@ -86,7 +91,20 @@ public class StatusActivity extends AppCompatActivity {
         ScreenWidth = realSize.x;
         ScreenHeight = realSize.y;
     }
+    public void del_nn(View view){
+        Path p = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            p = Paths.get(FILE_PATH);
+        }
 
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Files.deleteIfExists(p);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
 }
 
 class StatusDraw extends View {
