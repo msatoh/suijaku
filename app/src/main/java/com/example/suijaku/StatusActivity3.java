@@ -1,6 +1,12 @@
 package com.example.suijaku;
 
-import static android.graphics.Color.rgb;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.IOException;
+
+import static com.example.suijaku.Cst.FILE_PATH_NNBSelect;
+import static com.example.suijaku.Cst.FILE_PATH_manyneurons;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -10,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -61,6 +68,34 @@ public class StatusActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_avtivity3);
         gestureDetector=new GestureDetectorCompat(this, new mOnGestureListener());
+    }
+    public void del_nnbs(View view) {
+        Path p = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            p = Paths.get(FILE_PATH_NNBSelect);
+        }
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Files.deleteIfExists(p);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+    public void del_manyn(View view){
+            Path q = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                q = Paths.get(FILE_PATH_manyneurons);
+            }
+
+            try{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Files.deleteIfExists(q);
+                }
+            }catch(IOException e) {
+                System.out.println(e);
+            }
     }
 }
 

@@ -54,7 +54,6 @@ class Player{
         }
     }
 }
-
 class Card{
     mark mark_use;
     String num;
@@ -83,7 +82,6 @@ class Card{
     }
 
 }
-
 class Rank{
     int iterator = 0;
     String[] rank = {"", "大富豪", "富豪", "平民", "貧民", "大貧民"};
@@ -92,7 +90,6 @@ class Rank{
         return rank[iterator];
     }
 }
-
 class Field{
     TextView txt;
     ArrayList<Card> field_card=new ArrayList<>();

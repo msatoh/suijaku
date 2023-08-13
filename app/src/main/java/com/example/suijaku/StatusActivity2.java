@@ -4,27 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 
-import com.example.suijaku.NNBrain;
-import com.example.suijaku.R;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import static android.graphics.Color.rgb;
-import static com.example.suijaku.Cst.FILE_PATH;
-import static com.example.suijaku.Cst.FILE_PATH_Relu;
 import static com.example.suijaku.Cst.NUM_OF_CARDS;
 import static com.example.suijaku.Cst.NUM_OF_PLAYERS;
 import static java.lang.Math.abs;
@@ -68,11 +65,23 @@ public class StatusActivity2 extends AppCompatActivity {
             return true;
         }
     }
+    public static int ScreenHeight;
+    public static int ScreenWidth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_avtivity2);
         gestureDetector=new GestureDetectorCompat(this, new mOnGestureListener());
+        WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
+        Display disp = wm.getDefaultDisplay();
+
+        Point realSize = new Point();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            disp.getRealSize(realSize);
+        }
+
+        ScreenWidth = realSize.x;
+        ScreenHeight = realSize.y;
     }
 }
 
@@ -120,24 +129,23 @@ class StatusDraw2 extends View {
                     }
                 }
             }
-            mpaint.setTextSize(36);
-            canvas.drawText("brain: relu border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
+            mpaint.setTextSize(24);
+            canvas.drawText("brain: relu border=" + networks.rtn_nn().finalbias, 50, StatusActivity.ScreenHeight-270, mpaint);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        for (mnt = 0; mnt < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mnt++) {
-            canvas.drawCircle(100, 150 + 60 * mnt, 20, mpaint);
+        }        for (mnt = 0; mnt < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; mnt++) {
+            canvas.drawCircle(50, 50 + (StatusActivity.ScreenHeight-265)/(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2)* mnt, 10, mpaint);
         }
         for (mnt = 0; mnt < num_1st; mnt++) {
-            canvas.drawCircle(400, 150 + 115 * mnt, 20, mpaint);
+            canvas.drawCircle(50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* mnt, 10, mpaint);
         }
-        for (mnt = 0; mnt < num_2nd; mnt++) {
-            canvas.drawCircle(700, 175 + 120 * mnt, 20, mpaint);
+        for (mnt = 0; mnt < 12; mnt++) {
+            canvas.drawCircle(50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* mnt, 10, mpaint);
         }
-        for (mnt = 0; mnt < num_3rd; mnt++) {
-            canvas.drawCircle(1000, 225 + 125 * mnt, 20, mpaint);
+        for (mnt = 0; mnt < 11; mnt++) {
+            canvas.drawCircle(StatusActivity.ScreenWidth-50, 100 + (StatusActivity.ScreenHeight-265)/12* mnt, 10, mpaint);
         }
         for (i = 0; i < NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2; i++) {
             for (j = 0; j < num_1st; j++) {
@@ -146,7 +154,7 @@ class StatusDraw2 extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint1stlayer[i][j] * 255) / max_param), (int) (abs(joint1stlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(100, 150 + 60 * i, 400, 150 + 115 * j, mpaint);
+                canvas.drawLine(50, 50 + (StatusActivity.ScreenHeight-265)/(NUM_OF_PLAYERS - 1 + (NUM_OF_CARDS / NUM_OF_PLAYERS) * 2)* i, 50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* j, mpaint);
             }
         }
         for (i = 0; i < num_1st; i++) {
@@ -156,7 +164,7 @@ class StatusDraw2 extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint2ndlayer[i][j] * 255) / max_param), (int) (abs(joint2ndlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(400, 150 + 115 * i, 700, 175 + 120 * j, mpaint);
+                canvas.drawLine(50+StatusActivity.ScreenWidth/3, 50 + (StatusActivity.ScreenHeight-265)/num_1st* i, 50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* j, mpaint);
             }
         }
         for (i = 0; i < num_2nd; i++) {
@@ -166,9 +174,9 @@ class StatusDraw2 extends View {
                 } else {
                     mpaint.setColor(rgb(255, (int) (abs(joint3rdlayer[i][j] * 255) / max_param), (int) (abs(joint3rdlayer[i][j] * 255) / max_param)));
                 }
-                canvas.drawLine(700, 175 + 120 * i, 1000, 225 + 125 * j, mpaint);
+                canvas.drawLine(50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* i, StatusActivity.ScreenWidth-50, 100 + (StatusActivity.ScreenHeight-265)/12* j, mpaint);
             }
         }
-        canvas.drawText("max_param=" + max_param, 700, 1600, mpaint);
+        canvas.drawText("max_param=" + max_param, (float) (StatusActivity.ScreenWidth*0.6), StatusActivity.ScreenHeight-270, mpaint);
     }
 }

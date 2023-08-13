@@ -134,8 +134,8 @@ class StatusDraw extends View {
                     }
                 }
             }
-            mpaint.setTextSize(36);
-            canvas.drawText("brain: sigmoid border=" + networks.rtn_nn().finalbias, 50, 1600, mpaint);
+            mpaint.setTextSize(24);
+            canvas.drawText("brain: sigmoid border=" + networks.rtn_nn().finalbias, 50, StatusActivity.ScreenHeight-270, mpaint);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -183,7 +183,7 @@ class StatusDraw extends View {
                 canvas.drawLine(50+2*StatusActivity.ScreenWidth/3, 100 + (StatusActivity.ScreenHeight-265)/13* i, StatusActivity.ScreenWidth-50, 100 + (StatusActivity.ScreenHeight-265)/12* j, mpaint);
             }
         }
-        canvas.drawText("max_param=" + max_param, StatusActivity.ScreenWidth/2, StatusActivity.ScreenHeight-260, mpaint);
+        canvas.drawText("max_param=" + max_param, (float) (StatusActivity.ScreenWidth*0.6), StatusActivity.ScreenHeight-270, mpaint);
     }
 
 }
