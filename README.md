@@ -9,9 +9,9 @@
 クリックすると、キャラクター選択画面に遷移する。<BR>
 キャラクターをクリックすると、キャラクターの枠が黄色くハイライトされ、選択されたことになる。選択を解除したい場合はもう一度クリックする。
 #### キャラ
-* 雑魚![zako](app/src/main/res/drawable/zako.jpg)…出せるカードを手当たり次第に出す<BR>
-* 強い![strong](app/src/main/res/drawable/strong.jpg)…強いカードを出し惜しみして、最後の方（ほかのプレイヤーが上がりそうになったら）に出す<BR>
-* NeuralNetwork![robot](app/src/main/res/drawable/robot_full_sigmoid.jpg)…選択肢がカード単位（output関数：sigmoid![robot](app/src/main/res/drawable/robot_full_sigmoid.jpg)、神経多いバージョン![manyneurons](app/src/main/res/drawable/robot_manyneurons.jpg)/ReLu![ReLu](app/src/main/res/drawable/robot_full_relu.jpg)）、出せるカードBrain![select](app/src/main/res/drawable/robot_select.jpg)
+* 雑魚<img src=app/src/main/res/drawable/zako.jpg width=100>…出せるカードを手当たり次第に出す<BR>
+* 強い<img src=app/src/main/res/drawable/strong.jpg width=100>)…強いカードを出し惜しみして、最後の方（ほかのプレイヤーが上がりそうになったら）に出す<BR>
+* NeuralNetwork<img src =app/src/main/res/drawable/robot_full_sigmoid.jpg width=100>)…選択肢がカード単位（output関数：sigmoid<img src=app/src/main/res/drawable/robot_full_sigmoid.jpg width=100>、神経多いバージョン<img src=app/src/main/res/drawable/robot_manyneurons.jpg width=100>/ReLu<img src=app/src/main/res/drawable/robot_full_relu.jpg width=100>）、出せるカードBrain<img src=app/src/main/res/drawable/robot_select.jpg width=100>
 
 「ゲーム開始」ボタンを押すと、ゲームが開始される。
 
